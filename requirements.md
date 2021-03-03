@@ -7,9 +7,28 @@
 
 ####Clarifications:
 
-- 
+- does each transaction file count as a day
 - 
     - 
+    
+###Transactions:
+- we'll need to save and load each user to and from a .txt
+    - will have to hold every attribute
+    
+##Sell:
+- the price is the price after discount percentage if present
+
+##Buy:
+- needs a game name and a seller name
+
+##Refund:
+
+##AddCredit:
+-limit of 1000 per day
+
+##AuctionSale:
+-applies a discount to the price
+
 ### Users:
 #### Requirements:
 - username(=< 15 chars, UNIQUE), account balance(=<999,999), and inventory of games that they own or have put up for purchase.
@@ -45,12 +64,14 @@
     - Standard Both
       - Features: Buy, Sell, Addfunds(inherit), refund
   
-    -
+    -Have a parent User class with all the methodologies
 #### Clarifications:
 - whether users can have a negative account balance [they cannot]).
 - can admin only addfunds, any possibility of withdrawal of funds for user?
 - When does an Admin delete a USER?
 - Do we implement a feature of add NEW games to the inventory of the seller? Perhaps have the Admin implement this transaction
+
+- are we supposed to keep each user from each run of a DTTF
 
 ### Code Smells:
 #### Requirements:
@@ -104,3 +125,5 @@
 
 #### Clarifications:
 
+###Marketplace
+- a hashmap of all the availiable sellers with their games for sale as the values
