@@ -31,13 +31,13 @@
     - User(Abstract):
       - Features: Addfunds
   
-    -Higher Priv(Admin);
-      -Features: Create User, Delete User given username(username != current admin name)
+    - Higher Priv(Admin)
+        - Features: Create User, Delete User given username(username != current admin name)
         Addfunds(Override), given username and amount.
         Trigger AuctionSale
   
     - Lower Priv(NEED TO FIGURE OUT CLASS STRUCTURE);
-      -Features: Buy, Sell, Addfunds(inherit), refund
+      - Features: Buy, Sell, Addfunds(inherit), refund
     - Standard Buy only;
       - Features: Buy, refund, Addfunds(inherit)
     - Standard Seller
@@ -51,6 +51,7 @@
 - can admin only addfunds, any possibility of withdrawal of funds for user?
 - When does an Admin delete a USER?
 - Do we implement a feature of add NEW games to the inventory of the seller? Perhaps have the Admin implement this transaction
+
 ### Code Smells:
 #### Requirements:
 - not to hard code values into your program(NO MAGIC #s)
@@ -58,7 +59,9 @@
 
 ### Game:
 #### Requirements:
-- Game name(=< 25 chracters), Price(=<), Sell( true = up for sale, false = in the inventory not for sale)
+- Game name(=< 25 chracters)
+- Price(=<),
+- Sell( true = up for sale, false = in the inventory not for sale)
 
 #### Clarifications:
 - Upon auctionSale trigger ALL games go on sale or add special attributes/sub-classes?
@@ -66,17 +69,20 @@
 
 ### Transactions:
 #### Requirements:
-  - CREATE-01/DELETE-01: ex: "02 Epic Games      SS 000456.89" Username + Balance + Usertype needs to be valid
+  - CREATE-01/DELETE-02: ex: "02 Epic Games      SS 000456.89" Username + Balance + Usertype needs to be valid
   - Login-00/Logout-10:  ex: "00 Epic Games      SS 000456.89" Username + Balance needs to be valid
   - Add credit-06: ex: "06 Epic Games      SS 000999.89" Username + Credit/day needs to be valid
 
   - Sell-03: ex: "03 My Epic Game              Epic Games 00.00 999.99" Game name, Game name, Username + Game cost needs to be valid
   - Refund-05 ex: 
   - Buy-04 ex:
+    
+  - Need to verify the length for game name in all the transaction logs - the maximum length of a game name is 25 characters
+
 
 #### Clarifications:
-- Need to verify the lenght for game name in all the transaction logs
 - For the sell transaction the 6 character price is the selling price including the discount?
+  - I think we should check and match with prior transactions -DCT
 - So if a game is put up for sale on March 2nd 11:59PM can it be put up for being purchased at March 3rd 12:00AM or do we put it up at March 3rd 11:59PM? Is this requirement calendar specific or time-specific?
 - Add credit: again 1000.00/day is limit date specific or time-specific(wait 24hrs before next add)?
 - Is there a default scenario for when Admin deletes a user? Perhaps when no inventory and no balance
