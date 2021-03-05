@@ -18,7 +18,7 @@ public class AbstractUser {
     }
 
     public void buy(){
-
+// test test test test test test test
     }
 
     public void sell(){
@@ -34,6 +34,6 @@ public class AbstractUser {
     }
 
     public void delete{
-        
+
     }
 }
