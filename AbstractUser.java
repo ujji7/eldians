@@ -2,10 +2,8 @@ import java.util.ArrayList;
 import Application;
 import Marketplace;
 
-
-
-
-
+//we need an auction sale method - i implemented it at bottom check it out
+// also look at readme for add credit - there is another implementations for admin type
 
 //Back End Error Recording:
 //        All recorded errors should be of the form: ERROR: \\<msg\\>
@@ -76,12 +74,65 @@ public class AbstractUser {
         //return result;
     }
 
-    public void buy(){
-// test test test test test test test
-
+    /** Return true if the user is selling this game in the market.
+     *
+     * @param game Game to check for if user is selling in market
+     * @return true if user selling game, else false
+     */
+    //helper for buy
+    private boolean sellingGame(Game game) {
+        if (Marketplace.getGamesOnSale().containsKey(this)) { //user is selling a game in the mkt place
+            for (Game g : Marketplace.getGamesOnSale().get(this)) {
+                if (g.getUniqueID() == game.getUniqueID()) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
-    public void sell(){
+    /** Remove the amount from the user's account, if it does not reduce the user's balance to below the minimum amount.
+     *
+     * @param amount funds to be removed
+     */
+    //HELPER FOR BUY
+    private void removeFunds(Float amount) {
+        if (this.canTransferFunds(amount)) {
+            this.accountBalance = this.accountBalance - (double) amount;
+        }
+    }
+
+    /** Buy a game from a seller and add it to user's inventory, if the game is not already in the user's inventory.
+     *
+     * @param seller the supplier of the game
+     * @param game the name of the game
+     */
+    public void buy(AbstractUser seller, Game game){
+        if (!seller.sellingGame(game)) {  //check if seller is selling this game on market
+            System.out.println(seller.getUsername() + "is not selling " + game.name + " on the market.");
+        }
+        else if (this.inventory.contains(game)) { //check that game isn't already in inventory
+            System.out.println(this.username + " already owns " + game.name + ". Cannot buy it again.");
+        }
+
+        float price = game.getPrice();
+        if (Marketplace.getAuctionSale() != 0.00f) { //if the sale isn't 0 - check if auction sale is on
+            price = (float) (price * (1 - Marketplace.getAuctionSale())); //how to ensure decimal places remain at 2?
+        }
+        else if (!(this.canTransferFunds(price) && seller.canAcceptFunds(price))) { //not enough money
+            System.out.println("There are not enough funds to be transferred");
+        }
+        else {
+            this.removeFunds(price);
+            seller.addCredit(price);
+            this.inventory.add(game);
+            System.out.println(this.username + " has bought " + game.name + " from " + seller.getUsername() + " for "
+            + price + ".");
+        }
+    }
+
+    // I JUST PUT THIS TYPE SIGNATURE TO MAKE ANOTHER FUNCTION WORK YOU CAN EDIT IT LATER
+    public void sell(Game game){
 
     }
 
@@ -107,7 +158,7 @@ public class AbstractUser {
         }
         // buyer unable to transfer funds
         else{
-            System.out.println("ERROR: \\ < Failed COnstraint: seller.getUsername() + " could not make a refund to " +
+            System.out.println("ERROR: \\ < Failed Constraint: " + seller.getUsername() + " could not make a refund to " +
                     buyer.getUsername() + " for $" + amount + " due to insufficient funds. > //");
         }
         return result;
@@ -126,27 +177,27 @@ public class AbstractUser {
         if(MINFUNDS <= credit || credit <= MAXFUNDS){
             switch (type) {
                 case 'AA':
-                    AdminUser newUser = AdminUser(username, credit);
+                    AdminUser newUser = new AdminUser(username, credit);
                     break;
                 case 'FS':
-                    FullStandardUser newUser = FullStandardUser(username, credit);
+                    FullStandardUser newUser = new FullStandardUser(username, credit);
                     break;
                 case 'BS':
-                    BuyUser newUser = BuyUser(username, credit);
+                    BuyUser newUser = new BuyUser(username, credit);
                     break;
                 case 'SS':
-                    SellUser newUser = SellUser(username, credit);
+                    SellUser newUser = new SellUser(username, credit);
                     break;
             }
             if(!Application.userList.contains(newUser)) {
-                Application.addUser(newUser)
+                Application.addUser(newUser);
                 System.out.println("A new user was created: \n" + newUser.toString());
             }
             System.out.println("ERROR: \\< Failed Constraint: New User could not be created since" +
                     "a User already exists with given name. >//");
             }
         System.out.println("ERROR: \\< Failed Constraint: New User could not be created since "
-        + string(credit) + "amount is invalid. >//");
+        + Float.toString(credit) + "amount is invalid. >//");
 
     }
 
@@ -170,5 +221,12 @@ public class AbstractUser {
      */
     private boolean canAcceptFunds(float amount){
         return this.accountBalance + amount <= MAXFUNDS;
+    }
+
+    /** Prints that the user cannot implement an auction sale.
+     * @param amount amount by which to reduce prices of games by.
+     */
+    public void auctionSale(float amount) {
+        System.out.println(this.getUsername() + "cannot implement an auction sale.");
     }
 }
