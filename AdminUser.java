@@ -9,16 +9,24 @@ public class AdminUser extends AbstractUser {
         this.accountBalance = credit;
     }
 
-    /** Add credit to account.
+    /** Add credit to an account.
      *
      * @param amount The amount of funds to be added to the User's account
      */
-    @Override
-    public void addCredit(float amount) {
-        //another implementation
+
+    public void addCreditTo(float amount, AbstractUser user) {
+        user.addCredit(amount);
     }
 
+
+
+
     /** If there is currently no reduced price on games, turn on a sale for this amount. Else, turn off the sale.
+     *
+     *
+     *                  ---- WITH THE NEW UNDERSTANDING according to Piazza @692
+     *                  ---- THIS will be implemented in Applicaiton/MarketPlace
+     *                  ---- The setting up of Sale percentage is completed and done in Game
      *
      * @param amount amount by which to reduce prices of games by.
      */

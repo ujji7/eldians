@@ -20,9 +20,11 @@ public class AbstractUser {
     public String username;
     public double accountBalance;
     public ArrayList<Game> inventory;
-    public static final double MAXFUNDS = 999999.99;
+    public static final double MAXFUNDS = 999999.99f;
     // can change minFunds to allow overdrafts for future improvements
-    public static final float MINFUNDS = 0;
+    public static final float MINFUNDS = 0f;
+    public static final float DAILYLIMIT = 1000f;
+    public static final float NEWFUNDSTODAY = 0f;
 
     public AbstractUser(String username){
         this.username = username;
@@ -58,18 +60,23 @@ public class AbstractUser {
 
     /**
      * Adds the amount of funds to be added to the User's account and prints out the Status
+     *
+     *                      ---BREAK IT INTO HELPER MAKE A HELPER TO ADD FUNDS
+     *
      * @param amount The amount of funds to be added to the User's account
      */
     public void addCredit(float amount){
         //boolean result = true;
         if(this.canAcceptFunds(amount)){
+
             this.setAccountBalance(this.getAccountBalance() + amount);
             System.out.println("$" + amount + " added to" + this.username);
         }
         else {
             // ACCORDING TO PIAZZA max out the balance and prompt user (VERIFY IT doe)
             this.setAccountBalance(MAXFUNDS);
-            System.out.println(this.username + " balance was Maxed up upon addition of more funds!");
+            System.out.println("ERROR: \\ < Failed Constraint: "+ this.username +
+                    " balance was Maxed up upon addition of more funds!");
         }
         System.out.println("New account balance is $" + this.getAccountBalance());
         //return result;
@@ -255,6 +262,12 @@ public class AbstractUser {
     private boolean canAcceptFunds(float amount){
         return this.accountBalance + amount <= MAXFUNDS;
     }
+
+
+    private boolean dailyLimitCheck(float amount){
+        return this.NEWFUNDSTODAY + amount <= DAILYLIMIT;
+    }
+
 
     /** Prints that the user cannot implement an auction sale.
      * @param amount amount by which to reduce prices of games by.
