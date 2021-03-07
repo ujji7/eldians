@@ -102,6 +102,20 @@ public class AbstractUser {
         }
     }
 
+    /** Return true if the game is already in the user's inventory.
+     *
+     * @param game game to check for in inventory
+     * @return true if game in inventory, else false
+     */
+    private boolean gameInInventory(Game game) {
+        for (Game g : this.inventory) {
+            if (g.getName().equals(game.getName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /** Buy a game from a seller and add it to user's inventory, if the game is not already in the user's inventory.
      *
      * @param seller the supplier of the game
@@ -113,17 +127,14 @@ public class AbstractUser {
         if (!seller.sellingGame(game)) {  //check if seller is selling this game on market
             System.out.println(seller.getUsername() + "is not selling " + game.getName() + " on the market.");
         }
-                            //------ CHECK NAMES as 2 suppliers with the same game will have diff Game objects but User
-                            //-- will then be able to have 2 games of the same title -Uzair
-        else if (this.inventory.contains(game)) { //check that game isn't already in inventory
+
+        else if (gameInInventory(game)) { //check that game isn't already in inventory
             System.out.println(this.username + " already owns " + game.getName() + ". Cannot buy it again.");
         }
-                            //--- Discount percentage is attribute of the game and the Sale toggle is the attribute of the Market
-                            //-- Check discount toggle in the market, if yes price = Gameprice * (1-disCount)
+
         float price = game.getPrice();
-        if (saleToggle) { //if the sale isn't 0 - check if auction sale is on
-            price = (float)Math.round((price * (1 - game.getDiscount()))*100) / 100; //how to ensure decimal places remain at 2?
-                                                                                    //---Done but verify it -Uzair
+        if (saleToggle) { //check if auction sale is on
+            price = (float)Math.round((price * (1 - game.getDiscount()))*100) / 100; // decimal places remain at 2
         }
         else if (!(this.canTransferFunds(price) && seller.canAcceptFunds(price))) { //not enough money
             System.out.println("There are not enough funds to be transferred");
@@ -137,7 +148,7 @@ public class AbstractUser {
         }
     }
 
-    // I JUST PUT THIS TYPE SIGNATURE TO MAKE ANOTHER FUNCTION WORK YOU CAN EDIT IT LATER
+    // I JUST PUT THIS TYPE SIGNATURE TO MAKE ANOTHER FUNCTION WORK YOU CAN EDIT IT LATER - bharathi
     public void sell(Game game){
 
     }
