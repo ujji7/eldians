@@ -1,15 +1,17 @@
 public class Game{
-    public String name;
-    public float price;
-    public String supplierID;
-    public int uniqueID;
+    private String name;
+    private float price;
+    private String supplierID;
+    private int uniqueID;
+    private double discount;
 
 
-    public Game(String name, float price, String supplierID, int uniqueID){
+    public Game(String name, float price, String supplierID, int uniqueID, double discount){
         this.name = name;
         this.price = price;
         this.supplierID = supplierID;
         this.uniqueID = uniqueID;
+        this.discount = discount;
     }
 
     public String getName(){
@@ -28,7 +30,10 @@ public class Game{
         return this.uniqueID;
     }
 
-    // will need to override the .equal() method to check if this is the game
+    public double getDiscount(){return this.discount;}
+
+    // will need to override the .equal() method to check if this is the game for addition of game in inventory
+
 
 
 
