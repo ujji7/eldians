@@ -1,15 +1,22 @@
 import java.util.HashMap;
 public class Marketplace {
-    public float auctionSale;
+    public boolean auctionSale = true;
     public HashMap<AbstractUser, Game[]> gamesOnSale;
 
     public Marketplace() {
-        this.auctionSale = 0.00f;
         this.gamesOnSale = new HashMap<AbstractUser, Game[]>();
+
     }
 
-    public float getAuctionSale(){
+    public boolean getAuctionSale(){
         return this.auctionSale;
+    }
+
+    /**
+     * Toggle the Sale in the market
+     */
+    private void toggleSale(){
+        this.auctionSale = !this.auctionSale;
     }
 
     public HashMap<AbstractUser, Game[]> getGamesOnSale() {
