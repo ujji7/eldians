@@ -34,6 +34,13 @@ public class Game{
 
     // will need to override the .equal() method to check if this is the game for addition of game in inventory
 
+    public float getPriceWithDiscount(boolean saleToggle) {
+        float chargedPrice = this.price;
+        if (saleToggle) { //check if auction sale is on and get correct price
+            chargedPrice = (float) Math.round((price * (1 - this.discount)) * 100) / 100; // decimal places remain at 2
+        }
+        return chargedPrice;
+    }
 
 
 

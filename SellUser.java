@@ -19,8 +19,9 @@ public class SellUser extends AbstractUser {
      * @param seller the supplier of the game
      * @param game the name of the game
      */
+
     @Override
-    public void buy(AbstractUser seller, Game game){
+    public void buy(AbstractUser seller, Game game, boolean saleToggle){
         System.out.println(this.username + " cannot buy games.");
     }
 

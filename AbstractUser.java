@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import Application;
 import Marketplace;
+//I made in game that returns the price with discount applied since we'll probs need it in many places.
 
 //we need an auction sale method - i implemented it at bottom check it out
 // also look at readme for add credit - there is another implementations for admin type
@@ -95,10 +96,11 @@ public class AbstractUser {
      *
      * @param amount funds to be removed
      */
-    //HELPER FOR BUY
+    //HELPER FOR BUY - I DON'T ACTUALLY USE THIS HELPER ANYMORE AND NOW THIS SEEMS A BIT REDUNDANT WE CAN
+    // DELETE THIS HELPER LATER ON UNLESS SOMEONE ELSE USES IT
     private void removeFunds(Float amount) {
         if (this.canTransferFunds(amount)) {
-            this.accountBalance = this.accountBalance - (double) amount;
+            this.accountBalance = this.accountBalance - (double) amount; //should this be a double? what happens here?
         }
     }
 
@@ -107,6 +109,7 @@ public class AbstractUser {
      * @param game game to check for in inventory
      * @return true if game in inventory, else false
      */
+    //HELPER FOR BUY
     private boolean gameInInventory(Game game) {
         for (Game g : this.inventory) {
             if (g.getName().equals(game.getName())) {
@@ -114,6 +117,19 @@ public class AbstractUser {
             }
         }
         return false;
+    }
+
+    /** Remove the amount price from account balance and add the game to inventory. Print out message with details.
+     *
+     * @param seller that game is bought from
+     * @param price amount to be removed from account balance
+     * @param game to be added to inventory
+     */
+    private void payAndAddGame(AbstractUser seller, float price, Game game) {
+        this.accountBalance -= price;
+        this.inventory.add(game);
+        System.out.println(this.username + " has bought " + game.getName() + " from " + seller.getUsername() + " for "
+                + price + ".");
     }
 
     /** Buy a game from a seller and add it to user's inventory, if the game is not already in the user's inventory.
@@ -132,19 +148,19 @@ public class AbstractUser {
             System.out.println(this.username + " already owns " + game.getName() + ". Cannot buy it again.");
         }
 
-        float price = game.getPrice();
-        if (saleToggle) { //check if auction sale is on
-            price = (float)Math.round((price * (1 - game.getDiscount()))*100) / 100; // decimal places remain at 2
-        }
-        else if (!(this.canTransferFunds(price) && seller.canAcceptFunds(price))) { //not enough money
-            System.out.println("There are not enough funds to be transferred");
-        }
         else {
-            this.removeFunds(price);
-            seller.addCredit(price);
-            this.inventory.add(game);
-            System.out.println(this.username + " has bought " + game.getName() + " from " + seller.getUsername() + " for "
-            + price + ".");
+            float price = game.getPriceWithDiscount(saleToggle);
+            if (!this.canTransferFunds(price)) { //buyer does not have enough money
+                System.out.println(this.username + " does not have enough funds to buy " + game.getName() + ". ");
+            }
+            else if (!seller.canAcceptFunds(price)) { //seller's account maxed out
+                this.payAndAddGame(seller, price, game);
+                seller.accountBalance = MAXFUNDS;
+            }
+            else { // make normal add
+                this.payAndAddGame(seller, price, game);
+                seller.accountBalance += price;
+            }
         }
     }
 
