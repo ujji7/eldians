@@ -12,9 +12,10 @@ public class BuyUser extends AbstractUser {
     /** Prints that the user cannot sell a game.
      *
      * @param game game to be sold
+     * @param market Marketplace game will be sold on
      */
     @Override
-    public void sell(Game game){
+    public void sell(Game game, Marketplace market){
         System.out.println(this.username + " cannot sell games.");
     }
 

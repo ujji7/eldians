@@ -1,11 +1,12 @@
 import java.util.HashMap;
+import java.util.ArrayList;
+
 public class Marketplace {
     public boolean auctionSale = true;
-    public HashMap<AbstractUser, Game[]> gamesOnSale;
+    public HashMap<AbstractUser, ArrayList<Game>> gamesOnSale;
 
     public Marketplace() {
-        this.gamesOnSale = new HashMap<AbstractUser, Game[]>();
-
+        this.gamesOnSale = new HashMap<AbstractUser, ArrayList<Game>>();
     }
 
     public boolean getAuctionSale(){
