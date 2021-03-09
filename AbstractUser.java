@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import Application;
 import Marketplace;
+import jdk.swing.interop.SwingInterOpUtils;
 //I made in game that returns the price with discount applied since we'll probs need it in many places.
 
 //we need an auction sale method - i implemented it at bottom check it out
@@ -15,11 +16,13 @@ import Marketplace;
 //        that caused the error.
 /**
  * Abstract class for User objects.
+ *                                      ------NEED TO MAKE IT INTO AN ABS CLASS
  */
 public class AbstractUser {
     public String username;
     public double accountBalance;
     public ArrayList<Game> inventory;
+    public double newFunds;
     public static final double MAXFUNDS = 999999.99f;
     // can change minFunds to allow overdrafts for future improvements
     public static final float MINFUNDS = 0f;
@@ -28,8 +31,10 @@ public class AbstractUser {
 
     public AbstractUser(String username){
         this.username = username;
+                                             // why is this 0? should we change the constructor
         this.accountBalance = 0;
         this.inventory = new ArrayList<Game>();
+        this.newFunds = 0;
 
     }
 
@@ -59,21 +64,21 @@ public class AbstractUser {
 
 
     /**
-     * Adds the amount of funds to be added to the User's account and prints out the Status
+     * Transfer the requsted funds to the user's account
+     * Max out the fudns if the addition of funds results in an overflow of funds
      *
-     *                      ---BREAK IT INTO HELPER MAKE A HELPER TO ADD FUNDS
-     *
-     * @param amount The amount of funds to be added to the User's account
+     * @param amount The value of funds to be added
      */
-    public void addCredit(float amount){
+    public void transferFunds(float amount){
         //boolean result = true;
+        // check if we can add the funds
         if(this.canAcceptFunds(amount)){
-
+            // check if we can remove funds
             this.setAccountBalance(this.getAccountBalance() + amount);
             System.out.println("$" + amount + " added to" + this.username);
         }
         else {
-            // ACCORDING TO PIAZZA max out the balance and prompt user (VERIFY IT doe)
+            // ACCORDINGa TO PIAZZA @666 max out the balance and prompt user    //change it later
             this.setAccountBalance(MAXFUNDS);
             System.out.println("ERROR: \\ < Failed Constraint: "+ this.username +
                     " balance was Maxed up upon addition of more funds!");
@@ -81,6 +86,31 @@ public class AbstractUser {
         System.out.println("New account balance is $" + this.getAccountBalance());
         //return result;
     }
+
+
+                                    //NEED TO MAKE A HELPER TO ISSUE REFUND AMOUNTS
+                                    // Need a helper to round off floats for wach transaction
+
+
+    /**
+     * Adds the amount of funds to be added to the User's account and prints out the Status
+     *
+     * @param amount The amount of funds to be added to the User's account
+     */
+    public void addCredit(float amount) {
+        // check the constraints of daily limit
+        double fundsToday = this.newFunds;
+        if (this.dailyLimitCheck(amount)) {
+            // checking other constraints and then attempting to add the funds
+            this.transferFunds(amount);
+        } else {
+            // According to piazza @701                         /change it later
+            System.out.println("ERROR: \\ < Failed Constraint: " + this.username +
+                    " daily limit be reached! No funds were added");
+        }
+    }
+
+
 
     /** Return true if the user is selling this game in the market.
      *
@@ -198,7 +228,7 @@ public class AbstractUser {
 
             // Report to console (or Observer if implemented later)
             System.out.println("Game: " + game.getName() + " is now being sold by " + this.getUsername() + " for $" +
-                    game.getPrice() + " at a " + game.getDiscount+"% discount, will be availble for purchase tomorrow");
+                    game.getPrice() + " at a " + game.getDiscount()+"% discount, will be availble for purchase tomorrow");
         }
     }
 
@@ -253,9 +283,10 @@ public class AbstractUser {
         boolean canSendMoney = seller.canTransferFunds(amount);
         if(canSendMoney) {
             // remove the credits from the seller's account
-            seller.addCredit(-amount);
+            seller.transferFunds(-amount);                  //-----FAILS when seller has less funds
+                                            //seller.issueFunds(float amount, AbstractUser user)
             // add the funds regardless of maxing out
-            buyer.addCredit(amount);
+            buyer.transferFunds(amount);        // remove this when above is done
             result = true;
             System.out.println(seller.getUsername() + " made a refund to "
                     + buyer.getUsername() + " for $" + amount);
