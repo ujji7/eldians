@@ -11,6 +11,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 // source for how to test print statements
 //https://stackoverflow.com/questions/1119385/junit-test-for-system-out-println
@@ -47,6 +48,7 @@ public class AbstractUserTest {
         String result = "Game: Monopoly" + " is now being sold by " + "boots" + " for $" +
                 "23.50" + " at a " + "0" +"% discount, will be available for purchase tomorrow.";
         assertEquals(result, outContent.toString());
+        assertEquals(monopoly ,market.getGamesOnSale().get(sellUser1)[0]);
     }
 
     @Test
@@ -54,10 +56,38 @@ public class AbstractUserTest {
         buyUser1.sell(monopoly, market);
         String result = "ERROR: \\ < Failed Constraint: "+ "dora" + " cannot sell games.";
         assertEquals(result, outContent.toString());
+        assertNull(market.getGamesOnSale().get(sellUser1));
     }
 
+    @Test
+    public void testSellFromBothUser() {
+        fullStandardUser1.sell(monopoly, market);
+        String result = "Game: Monopoly" + " is now being sold by " + "swiper" + " for $" +
+                "23.50" + " at a " + "0" +"% discount, will be available for purchase tomorrow.";
+        assertEquals(result, outContent.toString());
+        assertEquals(monopoly ,market.getGamesOnSale().get(fullStandardUser1)[0]);
+    }
 
+    @Test
+    public void testSellFromAdminUser() {
+        adminUser1.sell(monopoly, market);
+        String result = "Game: Monopoly" + " is now being sold by " + "diego" + " for $" +
+                "23.50" + " at a " + "0" +"% discount, will be available for purchase tomorrow.";
+        assertEquals(result, outContent.toString());
+        assertEquals(monopoly ,market.getGamesOnSale().get(adminUser1)[0]);
+    }
 
+    @Test
+    public void testSellFromSellButAlreadySelling() {
+        sellUser1.sell(monopoly, market);
+        String result = "Game: Monopoly" + " is now being sold by " + "diego" + " for $" +
+                "23.50" + " at a " + "0" +"% discount, will be available for purchase tomorrow.";
+        assertEquals(result, outContent.toString());
+    }
+
+    // tests to check validness of game
+
+    //tests to check if seller is already in market or not
 
 
 }
