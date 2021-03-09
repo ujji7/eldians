@@ -1,3 +1,4 @@
+package main;
 /** Full standard type user that extends the Abstract User class. A ful standard user can both buy and sell games.And
  * it cannot create or delete users.
  *

@@ -1,22 +1,29 @@
-/** This is a buy type user that extends the Abstract User class. A Buy type user cannot sell games, only buy. And
+package main;
+/** Admin type user that extends the Abstract USer class. A sell type user cannot buy games, only sell. And
  * it cannot create or delete users.
  *
  */
-public class BuyUser extends AbstractUser {
+public class SellUser extends AbstractUser {
 
-    public BuyUser(String username, Float credit) {
+    /**
+     *
+     * @param username
+     * @param credit
+     */
+    public SellUser(String username, Float credit) {
         super(username);
         this.accountBalance = credit;
     }
 
-    /** Prints that the user cannot sell a game.
+    /** Prints that this user cannot buy a game.
      *
-     * @param game game to be sold
-     * @param market Marketplace game will be sold on
+     * @param seller the supplier of the game
+     * @param game the name of the game
      */
+
     @Override
-    public void sell(Game game, Marketplace market){
-        System.out.println(this.username + " cannot sell games.");
+    public void buy(AbstractUser seller, Game game, boolean saleToggle){
+        System.out.println(this.username + " cannot buy games.");
     }
 
     /** Prints that the user cannot create a user
@@ -50,5 +57,4 @@ public class BuyUser extends AbstractUser {
         System.out.println(this.username + " cannot issue a refund.");
         return false;
     }
-
 }

@@ -1,3 +1,4 @@
+package main;
 /** Admin type user that extends the Abstract User class. An admin has the highest privileges.
  *
  */
