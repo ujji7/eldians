@@ -1,6 +1,10 @@
 import java.util.ArrayList;
 import Application;
 import Marketplace;
+
+//BUY USER NOW HAS CORRECT FORMAT OF ERRORS - WHEN WE SWITCH those error codes to abstract and the abstract code
+//to admin, we can use buy user's code
+
 //I made in game that returns the price with discount applied since we'll probs need it in many places.
 
 //we need an auction sale method - i implemented it at bottom check it out
@@ -149,24 +153,26 @@ public class AbstractUser {
     public void buy(AbstractUser seller, Game game, boolean saleToggle){
         if (!seller.sellingGame(game)) {  //check if seller is selling this game on market - THIS CAN JUST BE IN MRKTPLC
             //marketplace.containsKey(seller) && marketplace.get(seller).get(game)
-            System.out.println(seller.getUsername() + "is not selling " + game.getName() + " on the market.");
+            System.out.println("ERROR: \\ < Failed Constraint: "+ seller.getUsername() + "is not selling " + game.getName() + " on the market.");
         }
 
         else if (gameInInventory(game)) { //check that game isn't already in inventory
             //this.inventory.contains(game)
-            System.out.println(this.username + " already owns " + game.getName() + ". Cannot buy it again.");
+            System.out.println("ERROR: \\ < Failed Constraint: "+ this.username + " already owns " + game.getName() + ". Cannot buy it again.");
         }
 
         else {
             float price = game.getPriceWithDiscount(saleToggle);
             if (!this.canTransferFunds(price)) { //buyer does not have enough money
-                System.out.println(this.username + " does not have enough funds to buy " + game.getName() + ". ");
+                System.out.println("ERROR: \\ < Failed Constraint: "+ this.username + " does not have enough funds to buy " + game.getName() + ". ");
             }
             else if (!seller.canAcceptFunds(price)) { //seller's account maxed out
                 this.payAndAddGame(seller, price, game);
                 seller.accountBalance = MAXFUNDS;
+                System.out.println("ERROR: \\ < Failed Constraint: "+ this.username +
+                        "'s balance was Maxed out upon sale of game.");
             }
-            else { // make normal add
+            else { // make normal add and print message
                 this.payAndAddGame(seller, price, game);
                 seller.accountBalance += price;
             }

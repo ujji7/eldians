@@ -17,7 +17,7 @@ public class BuyUser extends AbstractUser {
     //THIS DOES NOT FOLLOW THE RIGHT FORMAT
     @Override
     public void sell(Game game, Marketplace market){
-        System.out.println(this.username + " cannot sell games.");
+        System.out.println("ERROR: \\ < Failed Constraint: "+ this.username + " cannot sell games.");
     }
 
     /** Prints that the user cannot create a user
@@ -31,7 +31,7 @@ public class BuyUser extends AbstractUser {
 
     @Override
     public void create(String username, String type, Float credit){
-        System.out.println(this.username + " cannot create another user.");
+        System.out.println("ERROR: \\ < Failed Constraint: "+ this.username + " cannot create another user.");
     }
 
     /**Prints that this user cannot delete another user.
@@ -40,7 +40,7 @@ public class BuyUser extends AbstractUser {
 
     @Override
     public void delete(){
-        System.out.println(this.username + " cannot delete another user.");
+        System.out.println("ERROR: \\ < Failed Constraint: "+ this.username + " cannot delete another user.");
     }
 
     /** Prints that this user cannot issue a refund.
@@ -54,7 +54,7 @@ public class BuyUser extends AbstractUser {
     //THIS DOES NOT FOLLOW THE RIGHT FORMAT
 
     public boolean refund(AbstractUser buyer, AbstractUser seller, float amount){
-        System.out.println(this.username + " cannot issue a refund.");
+        System.out.println("ERROR: \\ < Failed Constraint: "+ this.username + " cannot issue a refund.");
         return false;
     }
 
