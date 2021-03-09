@@ -4,7 +4,7 @@ import Marketplace;
 //I made in game that returns the price with discount applied since we'll probs need it in many places.
 
 //we need an auction sale method - i implemented it at bottom check it out
-// also look at readme for add credit - there is another implementations for admin type
+// also look at readme for add credit - there is another implementations for admin type - DONE
 
 //Back End Error Recording:
 //        All recorded errors should be of the form: ERROR: \\<msg\\>
@@ -69,7 +69,7 @@ public class AbstractUser {
         //boolean result = true;
         if(this.canAcceptFunds(amount)){
 
-            this.setAccountBalance(this.getAccountBalance() + amount);
+            this.setAccountBalance(this.getAccountBalance() + amount); // this can be this.accountBalance += amount
             System.out.println("$" + amount + " added to" + this.username);
         }
         else {
@@ -147,11 +147,13 @@ public class AbstractUser {
      */
 
     public void buy(AbstractUser seller, Game game, boolean saleToggle){
-        if (!seller.sellingGame(game)) {  //check if seller is selling this game on market
+        if (!seller.sellingGame(game)) {  //check if seller is selling this game on market - THIS CAN JUST BE IN MRKTPLC
+            //marketplace.containsKey(seller) && marketplace.get(seller).get(game)
             System.out.println(seller.getUsername() + "is not selling " + game.getName() + " on the market.");
         }
 
         else if (gameInInventory(game)) { //check that game isn't already in inventory
+            //this.inventory.contains(game)
             System.out.println(this.username + " already owns " + game.getName() + ". Cannot buy it again.");
         }
 
