@@ -1,5 +1,6 @@
 package main;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 //I made in game that returns the price with discount applied since we'll probs need it in many places.

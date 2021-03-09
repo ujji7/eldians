@@ -31,12 +31,12 @@ public class AdminUser extends AbstractUser {
      *
      * @param amount amount by which to reduce prices of games by.
      */
-    @Override
-    public void auctionSale(float amount) {
-        if (Marketplace.getAuctionSale = 0.00f) {//this should be .equals(00.0) not setting
-            Marketplace.AuctionSale = amount;
-        } else {
-            Marketplace.getAuctionSale = 0.00f;
-        }
-    }
+//    @Override
+//    public void auctionSale(float amount) {
+//        if (Marketplace.getAuctionSale() = 0.00f) {//this should be .equals(00.0) not setting
+//            Marketplace.AuctionSale() = amount;
+//        } else {
+//            Marketplace.getAuctionSale() = 0.00f;
+//        }
+//    }
 }

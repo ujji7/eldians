@@ -1,8 +1,4 @@
-<<<<<<< HEAD:src/main/Marketplace.java
 package main;
-=======
-package a2-eldians;
->>>>>>> 0354e2c28cf5977ee5173c70182b6a12e7d36815:Marketplace.java
 import java.util.HashMap;
 import java.util.ArrayList;
 
