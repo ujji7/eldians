@@ -35,14 +35,12 @@ public class Game{
 
     // will need to override the .equal() method to check if this is the game for addition of game in inventory
 
-    public float getPriceWithDiscount(boolean saleToggle) {
-        float chargedPrice = this.price;
+    public float getPriceWithDiscount(boolean saleToggle) { //a more appropriate name would be onSale
+        float chargedPrice = this.price;//if you are using an attribute you don't need to make it a local var
         if (saleToggle) { //check if auction sale is on and get correct price
+            //just make this the return, you don't need thar var
             chargedPrice = (float) Math.round((price * (1 - this.discount)) * 100) / 100; // decimal places remain at 2
         }
         return chargedPrice;
     }
-
-
-
 }

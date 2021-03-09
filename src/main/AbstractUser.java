@@ -1,10 +1,23 @@
 package main;
 import java.util.ArrayList;
 
+
 //I made in game that returns the price with discount applied since we'll probs need it in many places.
 
 //we need an auction sale method - i implemented it at botfitom check it out
 // also look at readme for add credit - there is another implementations for admin type
+
+
+
+
+//BUY USER NOW HAS CORRECT FORMAT OF ERRORS - WHEN WE SWITCH those error codes to abstract and the abstract code
+//to admin, we can use buy user's code
+
+//I made in game that returns the price with discount applied since we'll probs need it in many places.
+
+//we need an auction sale method - i implemented it at bottom check it out
+// also look at readme for add credit - there is another implementations for admin type - DONE
+
 
 //Back End Error Recording:
 //        All recorded errors should be of the form: ERROR: \\<msg\\>
@@ -15,11 +28,13 @@ import java.util.ArrayList;
 //        that caused the error.
 /**
  * Abstract class for User objects.
+ *                                      ------NEED TO MAKE IT INTO AN ABS CLASS
  */
 public class AbstractUser {
     public String username;
     public double accountBalance;
     public ArrayList<Game> inventory;
+    public double newFunds;
     public static final double MAXFUNDS = 999999.99f;
     // can change minFunds to allow overdrafts for future improvements
     public static final float MINFUNDS = 0f;
@@ -28,8 +43,10 @@ public class AbstractUser {
 
     public AbstractUser(String username){
         this.username = username;
+                                             // why is this 0? should we change the constructor
         this.accountBalance = 0;
         this.inventory = new ArrayList<Game>();
+        this.newFunds = 0;
 
     }
 
@@ -59,21 +76,20 @@ public class AbstractUser {
 
 
     /**
-     * Adds the amount of funds to be added to the User's account and prints out the Status
+     * Transfer the requsted funds to the user's account
+     * Max out the fudns if the addition of funds results in an overflow of funds
      *
-     *                      ---BREAK IT INTO HELPER MAKE A HELPER TO ADD FUNDS
-     *
-     * @param amount The amount of funds to be added to the User's account
+     * @param amount The value of funds to be added
      */
-    public void addCredit(float amount){
+    public void transferFunds(float amount){
         //boolean result = true;
+        // check if we can add the funds
         if(this.canAcceptFunds(amount)){
-
-            this.setAccountBalance(this.getAccountBalance() + amount);
+            this.setAccountBalance(this.getAccountBalance() + amount); // this can be this.accountBalance += amount
             System.out.println("$" + amount + " added to" + this.username);
         }
         else {
-            // ACCORDING TO PIAZZA max out the balance and prompt user (VERIFY IT doe)
+            // ACCORDINGa TO PIAZZA @666 max out the balance and prompt user    //change it later
             this.setAccountBalance(MAXFUNDS);
             System.out.println("ERROR: \\ < Failed Constraint: "+ this.username +
                     " balance was Maxed up upon addition of more funds!");
@@ -81,6 +97,31 @@ public class AbstractUser {
         System.out.println("New account balance is $" + this.getAccountBalance());
         //return result;
     }
+
+
+                                    //NEED TO MAKE A HELPER TO ISSUE REFUND AMOUNTS
+                                    // Need a helper to round off floats for wach transaction
+
+
+    /**
+     * Adds the amount of funds to be added to the User's account and prints out the Status
+     *
+     * @param amount The amount of funds to be added to the User's account
+     */
+    public void addCredit(float amount) {
+        // check the constraints of daily limit
+        double fundsToday = this.newFunds;
+        if (this.dailyLimitCheck(amount)) {
+            // checking other constraints and then attempting to add the funds
+            this.transferFunds(amount);
+        } else {
+            // According to piazza @701                         /change it later
+            System.out.println("ERROR: \\ < Failed Constraint: " + this.username +
+                    " daily limit be reached! No funds were added");
+        }
+    }
+
+
 
     /** Return true if the user is selling this game in the market.
      *
@@ -147,27 +188,31 @@ public class AbstractUser {
      */
 
     public void buy(AbstractUser seller, Game game, boolean saleToggle){
-      /*
-        if (!seller.sellingGame(game)) {  //check if seller is selling this game on market
-            System.out.println(seller.getUsername() + "is not selling " + game.getName() + " on the market.");
+
+        if (!seller.sellingGame(game)) {  //check if seller is selling this game on market - THIS CAN JUST BE IN MRKTPLC
+            //marketplace.containsKey(seller) && marketplace.get(seller).get(game)
+            System.out.println("ERROR: \\ < Failed Constraint: " + seller.getUsername() + "is not selling " + game.getName() + " on the market.");
         }
-       */
 
 
-         if (gameInInventory(game)) { //check that game isn't already in inventory
-            System.out.println(this.username + " already owns " + game.getName() + ". Cannot buy it again.");
+        else if (gameInInventory(game)) { //check that game isn't already in inventory
+            //this.inventory.contains(game)
+            System.out.println("ERROR: \\ < Failed Constraint: "+ this.username + " already owns " + game.getName() + ". Cannot buy it again.");
+
         }
 
         else {
             float price = game.getPriceWithDiscount(saleToggle);
             if (!this.canTransferFunds(price)) { //buyer does not have enough money
-                System.out.println(this.username + " does not have enough funds to buy " + game.getName() + ". ");
+                System.out.println("ERROR: \\ < Failed Constraint: "+ this.username + " does not have enough funds to buy " + game.getName() + ". ");
             }
             else if (!seller.canAcceptFunds(price)) { //seller's account maxed out
                 this.payAndAddGame(seller, price, game);
                 seller.accountBalance = MAXFUNDS;
+                System.out.println("ERROR: \\ < Failed Constraint: "+ this.username +
+                        "'s balance was Maxed out upon sale of game.");
             }
-            else { // make normal add
+            else { // make normal add and print message
                 this.payAndAddGame(seller, price, game);
                 seller.accountBalance += price;
             }
@@ -201,7 +246,7 @@ public class AbstractUser {
 
             // Report to console (or Observer if implemented later)
             System.out.println("Game: " + game.getName() + " is now being sold by " + this.getUsername() + " for $" +
-                    game.getPrice() + " at a " + game.getDiscount+"% discount, will be availble for purchase tomorrow");
+                    game.getPrice() + " at a " + game.getDiscount()+"% discount, will be availble for purchase tomorrow");
         }
     }
 
@@ -256,9 +301,10 @@ public class AbstractUser {
         boolean canSendMoney = seller.canTransferFunds(amount);
         if(canSendMoney) {
             // remove the credits from the seller's account
-            seller.addCredit(-amount);
+            seller.transferFunds(-amount);                  //-----FAILS when seller has less funds
+                                            //seller.issueFunds(float amount, AbstractUser user)
             // add the funds regardless of maxing out
-            buyer.addCredit(amount);
+            buyer.transferFunds(amount);        // remove this when above is done
             result = true;
             System.out.println(seller.getUsername() + " made a refund to "
                     + buyer.getUsername() + " for $" + amount);
