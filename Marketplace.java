@@ -1,3 +1,4 @@
+package a2-eldians;
 import java.util.HashMap;
 import java.util.ArrayList;
 
@@ -23,5 +24,6 @@ public class Marketplace {
     public HashMap<AbstractUser, Game[]> getGamesOnSale() {
         return this.gamesOnSale;
     }
+    // this is just returning the marketplace change the method name
     // for some reason the data types cannot be accessed in abstract class - something to do with packages and main?
 }
