@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
+
 //I made in game that returns the price with discount applied since we'll probs need it in many places.
 
 //we need an auction sale method - i implemented it at botfitom check it out
@@ -233,7 +234,7 @@ public class AbstractUser {
         // if game doesn't follow contraints end here
         if (!this.sellConstraints(game)) return;
 
-        map = market.gamesOnSale; // var for less typing
+        HashMap<AbstractUser, ArrayList<Game>> map = market.getGamesOnSale(); // var for less typing
         // if user has previously put games on the market, add to list of games
         if (map.containsKey(this)) {
             map.get(this).add(game);
@@ -256,33 +257,39 @@ public class AbstractUser {
      *
      * @param game, Game being sold.
      */
-    private void sellConstraints(Game game) {
+    private boolean sellConstraints(Game game) {
+
+        String gameName = game.getName();
+        String userName = this.getUsername();
+        int gamePrice = game.getPrice();
+        double gameDiscount = game.getDiscount();
+
         // check if game price is gt max game price
         float maxPrice = 999.99f;
-        if (game.getPrice() > maxPrice) {
-            System.out.println("ERROR: \\ < Failed Constraint: " this.getUsername() + " could not sell " +
-                    game.getName() + " for $" + game.getPrice() + " as it exceeds the maximum sale price. > //");
+        if (gamePrice > maxPrice) {
+            System.out.println("ERROR: \\ < Failed Constraint: " + userName + " could not sell " +
+                    gameName + " for $" + gamePrice + " as it exceeds the maximum sale price. > //");
             return false;
         }
         // Check if game name is gt max name length
         int maxNameLength = 25;
-        if (game.getName().length > maxNameLength) {
-            System.out.println("ERROR: \\ < Failed Constraint: " this.getUsername() + " could not sell " +
-                    game.getName() + " for $" + game.getPrice() + " as it exceeds the maximum name length. > //");
+        if (gameName.length() > maxNameLength) {
+            System.out.println("ERROR: \\ < Failed Constraint: " + userName + " could not sell " +
+                    gameName + " for $" + gamePrice + " as it exceeds the maximum name length. > //");
             return false;
         }
         // Check if game discount is gt max discount amount
         double maxDiscount = 90;
-        if (game.getDiscount() > maxDiscount) {
-            System.out.println("ERROR: \\ < Failed Constraint: " this.getUsername() + " could not sell " +
-                    game.getName() + " with " + game.getDiscount() + "% discount as it exceeds the maximum discount " +
+        if (gameDiscount > maxDiscount) {
+            System.out.println("ERROR: \\ < Failed Constraint: " + userName + " could not sell " +
+                    gameName + " with " + gameDiscount + "% discount as it exceeds the maximum discount " +
                     "amount. > //");
             return false;
         }
         // If game is already on market, do not put another on market (end here)
         if (this.sellingGame(game)) {
-            System.out.println("ERROR: \\ < Failed Constraint: " this.getUsername() + " could not sell " +
-                    game.getName() + " as User is already selling this exact game > //");
+            System.out.println("ERROR: \\ < Failed Constraint: " + userName + " could not sell " +
+                    gameName + " as User is already selling this exact game > //");
             return false;
         }
         // passes all checks / follows all constraints
