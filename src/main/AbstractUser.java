@@ -77,8 +77,8 @@ public class AbstractUser {
 
 
     /**
-     * Transfer the requsted funds to the user's account
-     * Max out the fudns if the addition of funds results in an overflow of funds
+     * Transfer the requested funds to the user's account
+     * Max out the funds if the addition of funds results in an overflow of funds
      *
      * @param amount The value of funds to be added
      */
@@ -130,9 +130,9 @@ public class AbstractUser {
      * @return true if user selling game, else false
      */
     //helper for buy
-    private boolean sellingGame(Game game) {
-        if (Marketplace.getGamesOnSale().containsKey(this)) { //user is selling a game in the mkt place
-            for (Game g : Marketplace.getGamesOnSale().get(this)) {
+    private boolean sellingGame(Game game, Marketplace market) {
+        if (market.getGamesOnSale().containsKey(this)) { //user is selling a game in the mkt place
+            for (Game g : market.getGamesOnSale().get(this)) {
                 if (g.getUniqueID() == game.getUniqueID()) {
                     return true;
                 }
@@ -190,13 +190,13 @@ public class AbstractUser {
 
     public void buy(AbstractUser seller, Game game, boolean saleToggle){
 
-        if (!seller.sellingGame(game)) {  //check if seller is selling this game on market - THIS CAN JUST BE IN MRKTPLC
-            //marketplace.containsKey(seller) && marketplace.get(seller).get(game)
-            System.out.println("ERROR: \\ < Failed Constraint: " + seller.getUsername() + "is not selling " + game.getName() + " on the market.");
-        }
+//        if (!seller.sellingGame(game)) {  //check if seller is selling this game on market - THIS CAN JUST BE IN MRKTPLC
+//            //marketplace.containsKey(seller) && marketplace.get(seller).get(game)
+//            System.out.println("ERROR: \\ < Failed Constraint: " + seller.getUsername() + "is not selling " + game.getName() + " on the market.");
+//        }
 
 
-        else if (gameInInventory(game)) { //check that game isn't already in inventory
+        if (gameInInventory(game)) { //check that game isn't already in inventory
             //this.inventory.contains(game)
             System.out.println("ERROR: \\ < Failed Constraint: "+ this.username + " already owns " + game.getName() + ". Cannot buy it again.");
 
@@ -231,7 +231,7 @@ public class AbstractUser {
     public void sell(Game game, Marketplace market){
 
         // if game doesn't follow contraints end here
-        if (!this.sellConstraints(game)) return;
+        if (!this.sellConstraints(game, market)) return;
 
         map = market.gamesOnSale; // var for less typing
         // if user has previously put games on the market, add to list of games
@@ -256,7 +256,7 @@ public class AbstractUser {
      *
      * @param game, Game being sold.
      */
-    private void sellConstraints(Game game) {
+    private void sellConstraints(Game game, Marketplace market) {
         // check if game price is gt max game price
         float maxPrice = 999.99f;
         if (game.getPrice() > maxPrice) {
@@ -280,7 +280,7 @@ public class AbstractUser {
             return false;
         }
         // If game is already on market, do not put another on market (end here)
-        if (this.sellingGame(game)) {
+        if (this.sellingGame(game, market)) {
             System.out.println("ERROR: \\ < Failed Constraint: " this.getUsername() + " could not sell " +
                     game.getName() + " as User is already selling this exact game > //");
             return false;
