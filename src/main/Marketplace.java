@@ -21,7 +21,7 @@ public class Marketplace {
         this.auctionSale = !this.auctionSale;
     }
 
-    public HashMap<AbstractUser, Game[]> getGamesOnSale() {
+    public HashMap<AbstractUser, ArrayList<Game>> getGamesOnSale() {
         return this.gamesOnSale;
     }
     // this is just returning the marketplace change the method name
