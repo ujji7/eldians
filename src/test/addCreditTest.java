@@ -40,6 +40,7 @@ public class addCreditTest {
         sellUser = new SellUser("Megan", 9000.00f);
         fsUser = new FullStandardUser("Nicki", 1000.00f);
         adminUser = new AdminUser("Rihanna", 1.00f);
+        nearMax = new BuyUser("SZA", 998990.99f);
     }
 
     @AfterEach
@@ -92,7 +93,17 @@ public class addCreditTest {
     public void testAmountToMax(){
         float amount = 1009.00f;
         nearMax.addCredit(amount);
+        String result = "$" + amount + " added to" + sellUser.username;
+        assertEquals(result, outContent.toString());
     }
-    // account + amount > MAX
 
+    // account + amount > MAX
+    @Test
+    public void testAmountPassMax(){
+        float amount = 2009.00f;
+        nearMax.addCredit(amount);
+        String result = "ERROR: \\ < Failed Constraint: " + nearMax.username +
+                " daily limit be reached! No funds were added";
+        assertEquals(result, outContent.toString());
+    }
 }
