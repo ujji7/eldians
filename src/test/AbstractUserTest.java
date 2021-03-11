@@ -84,11 +84,17 @@ public class AbstractUserTest {
 
     //check this out
     @Test
-    public void testSellFromSellButAlreadySelling() {
+    public void testSellFromSellButAlreadyBought() {
         sellUser1.sell(monopoly, market);
-        String result = "Game: Monopoly" + " is now being sold by " + "diego" + " for $" +
+        fullStandardUser1.buy(sellUser1, monopoly, false);
+        fullStandardUser1.sell(monopoly, market);
+        String result = "Game: Monopoly" + " is now being sold by " + "boots" + " for $" +
                 "23.50" + " at a " + "0" +"% discount, will be available for purchase tomorrow.";
-        assertEquals(result, outContent.toString());
+        String result2 = "swiper" + " has bought " + "Monopoly" + " from " + "boots" + " for "
+                + "23.50" + ".";
+        String result3 = "ERROR: \\ < Failed Constraint: " + "boots" + " could not sell " +
+                "Monopoly" + " as User has bought this exact game. > //";
+        assertEquals(result+result2+result3, outContent.toString());
     }
 
     // tests to check validness of game
