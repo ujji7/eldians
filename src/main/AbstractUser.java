@@ -31,6 +31,8 @@ import java.util.HashMap;
 /**
  * Abstract class for User objects.
  *                                      ------NEED TO MAKE IT INTO AN ABS CLASS
+ *                                      ------Need to have multiple constructor VS Builder
+ *                                      -----As we will be requiring a constructors with given inventories
  */
 public class AbstractUser {
     public String username;
@@ -51,6 +53,17 @@ public class AbstractUser {
         this.newFunds = 0;
 
     }
+
+    public AbstractUser(String username, float balance){
+        this(username);
+        this.accountBalance = balance;
+    }
+
+    public AbstractUser(String username, float balance, ArrayList<Game> inventory){
+        this(username, balance);
+        this.inventory = inventory;
+    }
+
 
     /**
      * Sets the account balance for our User
@@ -87,14 +100,21 @@ public class AbstractUser {
         //boolean result = true;
         // check if we can add the funds
         if(this.canAcceptFunds(amount)){
-            this.setAccountBalance(this.getAccountBalance() + amount); // this can be this.accountBalance += amount
-            System.out.println("$" + amount + " added to" + this.username);
+            if(this.newFunds + amount <= DAILYLIMIT) {
+                this.setAccountBalance(this.getAccountBalance() + amount); // this can be this.accountBalance += amount
+                System.out.println("$" + amount + " added to" + this.username);
+            }
+            // Verify from piazza if this is right!
+            else {
+                System.out.println("Couldn't process addition of funds as " +this.getUsername()+
+                        " account will be maxed out upon addition of funds.");
+            }
         }
         else {
             // ACCORDINGa TO PIAZZA @666 max out the balance and prompt user    //change it later
             this.setAccountBalance(MAXFUNDS);
             System.out.println("ERROR: \\ < Failed Constraint: "+ this.username +
-                    " balance was Maxed up upon addition of more funds!");
+                    "'s balance was Maxed up upon addition of more funds!");
         }
         System.out.println("New account balance is $" + this.getAccountBalance());
         //return result;
@@ -203,11 +223,14 @@ public class AbstractUser {
 
         }
 
-        else {
+        else {                                                  // Needs to be implemented in transferFunds()
+
             float price = game.getPriceWithDiscount(saleToggle);
             if (!this.canTransferFunds(price)) { //buyer does not have enough money
                 System.out.println("ERROR: \\ < Failed Constraint: "+ this.username + " does not have enough funds to buy " + game.getName() + ". ");
             }
+                                                        // Needs to be implemented in transferFunds()
+
             else if (!seller.canAcceptFunds(price)) { //seller's account maxed out
                 this.payAndAddGame(seller, price, game);
                 seller.accountBalance = MAXFUNDS;
@@ -366,7 +389,13 @@ public class AbstractUser {
 
     }
 
-    public void delete(){
+    /**
+     * Given the UserID and account balance delete the user's account
+     *
+     *
+     */
+    public void delete(AbstractUser user, float amount){
+        System.out.println("ERROR: \\< Failed Constraint: Current User is not allowed to delete someone's account. >//");
 
     }
 
