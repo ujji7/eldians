@@ -1,5 +1,6 @@
 package Test;
 
+import jdk.jfr.StackTrace;
 import main.*;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -318,6 +319,5 @@ public class AbstractUserTest {
     // Wrong user trying to call it(All non-priv types)
     // Toggle discount off
     // Toggle discount onn
-
 }
 
