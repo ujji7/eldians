@@ -16,6 +16,7 @@ public class addCreditTest {
     SellUser sellUser;
     FullStandardUser fsUser;
     AdminUser adminUser;
+    BuyUser nearMax;
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final PrintStream originalOut = System.out;
 //    Marketplace marketplace;
@@ -85,5 +86,13 @@ public class addCreditTest {
         String result = "$" + amount + " added to" + sellUser.username;
         assertEquals(result, outContent.toString());
     }
+
+    //account + amount == MAX
+    @Test
+    public void testAmountToMax(){
+        float amount = 1009.00f;
+        nearMax.addCredit(amount);
+    }
+    // account + amount > MAX
 
 }
