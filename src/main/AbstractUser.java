@@ -261,7 +261,7 @@ public class AbstractUser {
 
         String gameName = game.getName();
         String userName = this.getUsername();
-        int gamePrice = game.getPrice();
+        float gamePrice = game.getPrice();
         double gameDiscount = game.getDiscount();
 
         // check if game price is gt max game price
