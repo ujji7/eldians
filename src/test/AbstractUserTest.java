@@ -82,6 +82,7 @@ public class AbstractUserTest {
         assertEquals(monopolyAdmin ,market.getGamesOnSale().get(adminUser1)[0]);
     }
 
+    //check this out
     @Test
     public void testSellFromSellButAlreadySelling() {
         sellUser1.sell(monopoly, market);
@@ -129,7 +130,7 @@ public class AbstractUserTest {
     }
 
     @Test
-    public void testSellConstraintsNameExactLength() {
+    public void testSellConstraintsNameExactLength() { //25 characters
         Game monopolyHigh = new Game("Monopoly2.0Monopoly2.0Mon", 12.0f, "boots", 2, 00.0);
         sellUser1.sell(monopolyHigh, market);
         String result = "Game: Monopoly" + " is now being sold by " + "boots" + " for $" +
@@ -194,6 +195,5 @@ public class AbstractUserTest {
         assertEquals(monopoly ,market.getGamesOnSale().get(sellUser1)[0]);
         assertEquals(monopolyHigh, market.getGamesOnSale().get(sellUser1)[1]);
     }
-
 }
 
