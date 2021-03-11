@@ -16,55 +16,39 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 // source for how to test print statements
 //https://stackoverflow.com/questions/1119385/junit-test-for-system-out-println
 
-public class AbstractUserTest {
-    AdminUser adminUser1;
-    BuyUser buyUser1;
-    SellUser sellUser1;
-    FullStandardUser fullStandardUser1;
+public class RefundTests {
+
     BuyUser refundUser1;
     SellUser refundUser2;
     BuyUser refundUser3;
     SellUser refundUser4;
-    Game monopoly;
-    Marketplace market;
+    BuyUser refundUserMax;
+    SellUser refundSellToMax;
+    BuyUser refundBuy;
+    SellUser refundSell;
+    FullStandardUser refundFS;
+
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final PrintStream originalOut = System.out;
 
     @BeforeEach
     public void setUpStreams() {
         System.setOut(new PrintStream(outContent));
-        adminUser1 = new AdminUser("diego", 0.00f);
-        buyUser1 = new BuyUser("dora", 34.08f);
-        sellUser1 = new SellUser("boots", 34.13f);
-        fullStandardUser1 = new FullStandardUser("swiper", 32.40f);
-        monopoly = new Game("Monopoly", 23.5f, "sellUser1", 1, 00);
-        market = new Marketplace();
 
         refundUser1 = new BuyUser("Armin", 0.00f);
         refundUser2 = new SellUser("Bertholdt", 0.00f);
         refundUser3 = new BuyUser("Reiner", 13.35f);
         refundUser4 = new SellUser("Ymir", 25.65f);
-
+        refundUserMax = new BuyUser("Eren", 999999.99f);
+        refundSellToMax = new SellUser("Mikasa", 101.00f);
+        refundBuy = new BuyUser("Hange", 100.00f);
+        refundSell = new SellUser("Erwin", 100.00f);
+        refundFS = new FullStandardUser("Levi", 100.00f);
     }
 
     @AfterEach
     public void restoreStreams() {
         System.setOut(originalOut);
-    }
-
-    @Test
-    public void testSellEasy() {
-        sellUser1.sell(monopoly, market);
-        String result = "Game: Monopoly" + " is now being sold by " + "boots" + " for $" +
-                "23.50" + " at a " + "0" +"% discount, will be available for purchase tomorrow.";
-        assertEquals(result, outContent.toString());
-    }
-
-    @Test
-    public void testSellFromBuyUser() {
-        buyUser1.sell(monopoly, market);
-        String result = "ERROR: \\ < Failed Constraint: "+ "dora" + " cannot sell games.";
-        assertEquals(result, outContent.toString());
     }
 
     /**
@@ -95,18 +79,48 @@ public class AbstractUserTest {
     }
 
     /**
-     * Tests that a non admin user cannot issue a refund.
+     * Tests that BuyUser cannot issue a refund.
      */
-    /**
     @Test
-    public void testNonAdminRefund() {
-        boolean worked = refundUser1.
+    public void testBuyRefund() {
+        boolean worked = refundBuy.refund(refundSell, refundFS, 1.00f);
+        String result = "ERROR: \\ < Failed Constraint: " + refundBuy.getUsername() + " does not have the ability to " +
+                "issue " + "a refund.";
+        assertEquals(worked, false);
+        assertEquals(result, outContent.toString());
     }
-    */
 
+    /**
+     * Tests that a SellUser cannot issue a refund.
+     */
+    @Test
+    public void testBuyRefund() {
+        boolean worked = refundSell.refund(refundBuy, refundFS, 1.00f);
+        String result = "ERROR: \\ < Failed Constraint: " + refundBuy.getUsername() + " does not have the ability to " +
+                "issue " + "a refund.";
+        assertEquals(worked, false);
+        assertEquals(result, outContent.toString());
+    }
 
+    /**
+     * Tests that a FullStandardUser cannot issue a refund.
+     */
+    @Test
+    public void testBuyRefund() {
+        boolean worked = refundFS.refund(refundBuy, refundSell, 1.00f);
+        String result = "ERROR: \\ < Failed Constraint: " + refundBuy.getUsername() +
+                " does not have the ability to issue a refund.";
+        assertEquals(worked, false);
+        assertEquals(result, outContent.toString());
+    }
 
-
-
+    /**
+     * Tests that a User who has max AccountBalance cannot recieve a refund
+     */
+    @Test
+    public void testMaxRefund() {
+        boolean worked = adminUser1.refund(refundUserMax, refundSellToMax, 1.00f);
+        String result = "ERROR: \\ < Failed Constraint: "+ refundUserMax.getUsername() +
+                " balance was Maxed up upon addition of more funds!";
+    }
 }
-
