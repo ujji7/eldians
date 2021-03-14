@@ -15,8 +15,8 @@
 05 admin2          fullStanU2      045000.00
 05 admin2          stanSellU1      045000.00
 05 admin2          admin1          000000.01
-03 Valorant            admin2          20.00 023.56
-03 Apex                admin2          10.00 100.00
+03 Valorant                  admin2          20.00 023.56
+03 Apex                      admin2          10.00 100.00
 06 admin2          AA 000565.00
 06 admin1          AA 000456.00
 06 stanBuyU1       BS 000300.00
@@ -24,7 +24,7 @@
 06 fullStanU1      FS 000500.00
 10 admin2          AA 123465.00
 00 admin1          AA 983409.00
-04 Apex                admin2          admin1         
-04 Valorant            admin2          admin1         
+04 Apex                      admin2          admin1         
+04 Valorant                  admin2          admin1         
 07 admin1          AA 123000.00
 10 admin1          AA 000000.00

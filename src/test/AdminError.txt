@@ -82,35 +82,35 @@ AC fullStanU3      FS 300000.00
 00 admin2          AA 000124.00
 10 admin2          AA 000124.00
 00 admin1          AA 000124.00
-03 Valorant            admin2         20.00 023.56
+03 Valorant                  admin2         20.00 023.56
 10 admin1          AA 000124.00
 00 admin2          AA 000124.00
 10 admin2          AA 000124.00
 00 admin1          AA 000124.00
-03 Valorant            admin2         20.00 023.56 
+03 Valorant                  admin2         20.00 023.56 
 10 admin1          AA 000124.00
 00 admin2          AA 000124.00
 10 admin2          AA 000124.00
 00 admin1          AA 000124.00
-03 Valorant            admin2          20000 023.56
+03 Valorant                  admin2          20000 023.56
 10 admin1          AA 000124.00
 00 admin2          AA 000124.00
 10 admin2          AA 000124.00
 00 admin1          AA 000124.00
-03 Valorant            admin2          2a.00 023.56
+03 Valorant                  admin2          2a.00 023.56
 10 admin1          AA 000124.00
 00 admin2          AA 000124.00
 10 admin2          AA 000124.00
 00 admin1          AA 000124.00
-03 Valorant            admin2          20.00 000056
+03 Valorant                  admin2          20.00 000056
 10 admin1          AA 000124.00
 00 admin2          AA 000124.00
 10 admin2          AA 000124.00
 00 admin1          AA 000124.00
-03 Valorant            admin2          20.00 02a.56
+03 Valorant                  admin2          20.00 02a.56
 10 admin1          AA 000124.00
 00 admin2          AA 000124.00
 10 admin2          AA 000124.00
 00 admin1          AA 000124.00
-03 123                 admin2          20.00 023.56
+03 123                       admin2          20.00 023.56
 10 admin1          AA 000124.00
