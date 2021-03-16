@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class Marketplace {
     public boolean auctionSale = true;
+    private float discount;
     public HashMap<AbstractUser, ArrayList<Game>> gamesOnSale;
 
     public Marketplace() {
@@ -19,6 +20,14 @@ public class Marketplace {
      */
     private void toggleSale(){
         this.auctionSale = !this.auctionSale;
+    }
+
+    private void setDiscount(float percentage){
+        this.discount = percentage;
+    }
+
+    public float getDiscount(){
+        return this.discount;
     }
 
     public HashMap<AbstractUser, ArrayList<Game>> getGamesOnSale() {

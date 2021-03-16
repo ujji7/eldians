@@ -44,6 +44,8 @@ public class AbstractUser {
     public static final float MINFUNDS = 0f;
     public static final float DAILYLIMIT = 1000f;
     public static final float NEWFUNDSTODAY = 0f;
+    public ArrayList<String> transactionHistory;
+    public Character type;
 
     public AbstractUser(String username){
         this.username = username;
@@ -59,9 +61,14 @@ public class AbstractUser {
         this.accountBalance = balance;
     }
 
-    public AbstractUser(String username, float balance, ArrayList<Game> inventory){
+    public AbstractUser(String username, float balance, ArrayList<Game> games){
         this(username, balance);
-        this.inventory = inventory;
+        this.inventory = games;
+    }
+
+    public AbstractUser(String username, float balance, ArrayList<Game> inventory), Arraylist<String> transactions){
+    this(username,balance, inventory);
+    this.transactionHistory = transactions;
     }
 
 
@@ -428,5 +435,10 @@ public class AbstractUser {
      */
     public void auctionSale(float amount) {
         System.out.println(this.getUsername() + "cannot implement an auction sale.");
+    }
+
+    @Override
+    public String getClass(){
+        switch (this instanceOf AdminUser)
     }
 }
