@@ -1,2 +1,4 @@
-package Transactions;public class Transaction {
+package Transactions;
+
+public interface Transaction {
 }
