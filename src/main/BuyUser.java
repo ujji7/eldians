@@ -40,7 +40,7 @@ public class BuyUser extends AbstractUser {
     //THIS DOES NOT FOLLOW THE RIGHT FORMAT
 
     @Override
-    public void delete(){
+    public void delete(AbstractUser user, float amount){
         System.out.println("ERROR: \\ < Failed Constraint: "+ this.username + " does not have the ability to delete another user.");
     }
 
