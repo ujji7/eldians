@@ -34,7 +34,7 @@ import java.util.HashMap;
  *                                      ------Need to have multiple constructor VS Builder
  *                                      -----As we will be requiring a constructors with given inventories
  */
-public class AbstractUser {
+public abstract class AbstractUser {
     public String username;
     public double accountBalance;
     public ArrayList<Game> inventory;
@@ -363,19 +363,25 @@ public class AbstractUser {
      */
     public void create(String username, String type, Float credit){
         if(MINFUNDS <= credit || credit <= MAXFUNDS){
+            AbstractUser newUser;
             switch (type) {
-                case 'AA':
-                    AdminUser newUser = new AdminUser(username, credit);
+                case "AA":
+                    newUser = new AdminUser(username, credit);
                     break;
-                case 'FS':
-                    FullStandardUser newUser = new FullStandardUser(username, credit);
+                case "FS":
+                    newUser = new FullStandardUser(username, credit);
                     break;
-                case 'BS':
-                    BuyUser newUser = new BuyUser(username, credit);
+                case "BS":
+                    newUser = new BuyUser(username, credit);
                     break;
-                case 'SS':
-                    SellUser newUser = new SellUser(username, credit);
+                case "SS":
+                    newUser = new SellUser(username, credit);
                     break;
+                default:
+                    // if user isn't initialized we stop the create function
+                    System.out.println("ERROR: \\< Failed Constraint: New User could not be created since user type " +
+                            "does not exist. > //");
+                    return;
             }
             if(!Application.userList.contains(newUser)) {
                 Application.addUser(newUser);
