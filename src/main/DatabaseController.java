@@ -4,6 +4,8 @@ import java.nio.channels.FileLock;
 import java.util.ArrayList;
 import java.io.*;
 import java.util.Objects;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class DatabaseController {
     private static final String FILENAMEGAME = "Game.txt";
@@ -12,6 +14,7 @@ public class DatabaseController {
     private RandomAccessFile fileUser;
     private static final String FILENAMEMARKETPLACE = "Marketplace.txt";
     private RandomAccessFile fileMarketplace;
+    private Gson gson;
 
     public DatabaseController(){
         try { fileGame = new RandomAccessFile(FILENAMEGAME, "rw");
@@ -20,62 +23,30 @@ public class DatabaseController {
             FileLock ignoreduser = fileUser.getChannel().lock();
             fileMarketplace = new RandomAccessFile(FILENAMEMARKETPLACE, "rw");
             FileLock ignoredmarketplace = fileMarketplace.getChannel().lock();
+            GsonBuilder builder = new GsonBuilder();
+            Gson gson = builder.create();
         } catch (IOException e) {
                 e.printStackTrace();
             }
 
     }
 
-
-//    private void fileOpener(File file, String filename) {
-//        if (file.getName().equals(filename)) {
-//            switch (file.getName()) {
-//                case FILENAMEGAME:
-//                    if (!(fileGame = new File(filename)).exists()) {
-//                        try {
-//                            fileGame.createNewFile();
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//                        break;
-//                    }
-//                case FILENAMEUSER:
-//                    if (!(fileUser = new File(filename)).exists()) {
-//                        try {
-//                            fileUser.createNewFile();
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//                        break;
-//                    }
-//                case FILENAMEMARKETPLACE:
-//                    if (!(fileMarketplace = new File(filename)).exists()) {
-//                        try {
-//                            fileMarketplace.createNewFile();
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//                        break;
-//                    }
-//            }
-//        } else {
-//            System.out.println("INVALID FILENAME");
-//        }
-//    }
-
-
     public void writeMarket(Marketplace market) throws IOException {
         //discount
         //Seller,[Game1, Game2,...,GameX]
         //"Valve",[10057,10067]
-        appendData(fileMarketplace, String.valueOf(market.getAuctionSale()));
-        appendData(fileMarketplace, String.valueOf(market.getDiscount()));
+
+
+        appendData(fileMarketplace, gson.toJson(market.getAuctionSale()));
         for (AbstractUser seller: market.getGamesOnSale().keySet()
              ) {
-            ArrayList<String> data = collectMarketplaceData(seller, market.getGamesOnSale().get(seller));
-            for (String item: data) {
-                appendData(fileMarketplace, item);
-            }
+            appendData(fileMarketplace, gson.toJson(seller));
+            appendData(fileMarketplace, gson.toJson(market.getGamesOnSale().get(seller)));
+
+//            ArrayList<String> data = collectMarketplaceData(seller, market.getGamesOnSale().get(seller));
+//            for (String item: data) {
+//                appendData(fileMarketplace, item);
+//            }
         }
         fileMarketplace.close();
     }
@@ -86,13 +57,13 @@ public class DatabaseController {
 
 //        try (RandomAccessFile reader = new RandomAccessFile(FILENAMEGAME, "rw");
 //             FileLock ignored = reader.getChannel().lock()) {
-        for (AbstractUser user : userList) {
-            if (!user.username.isEmpty()) {
-                ArrayList<String> data = collectUserData(user);
-                for (String item:
-                     data) {
-                    appendData(fileUser, item);
-                }
+        try {
+            for (AbstractUser user : userList) {
+                if (!user.username.isEmpty()) {
+//                ArrayList<String> data = collectUserData(user);
+//                for (String item:
+//                     data) {
+                    appendData(fileUser, gson.toJson(user));
 //
 //                // Step 3.1: Format our string to write to the file with yyyy-mm-dd text
 //                String line = String.format("%s,%c,%a,[%s],[%s]\n", user.username, user.type,
@@ -101,9 +72,12 @@ public class DatabaseController {
 //                fileUser.seek(fileUser.length());
 //                // Step 3.3 Write your data to the file
 //                fileUser.writeChars(line);
+                }
             }
+            fileUser.close();
+        }catch (IOException e) {
+            e.printStackTrace();
         }
-        fileUser.close();
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
@@ -116,16 +90,19 @@ public class DatabaseController {
 
 //        try (RandomAccessFile reader = new RandomAccessFile(FILENAMEGAME, "rw");
 //             FileLock ignored = reader.getChannel().lock()) {
-        for (Game game : gameList) {
-            if (!game.getName().isEmpty()) {
-                ArrayList<String> data = collectGameData(game);
-                for (String item : data
-                ) {
-                    appendData(fileGame, item);
+        try {
+            for (Game game : gameList) {
+                if (!game.getName().isEmpty()) {
+//                ArrayList<String> data = collectGameData(game);
+//                for (String item : data
+//                ) {
+                    appendData(fileGame, gson.toJson(game));
                 }
             }
+            fileGame.close();
+        }catch (IOException e) {
+            e.printStackTrace();
         }
-        fileGame.close();
     }
 
     private ArrayList<String> collectMarketplaceData(AbstractUser user, ArrayList<Game> games){
@@ -167,11 +144,17 @@ public class DatabaseController {
             for (Game game : user.inventory) {
                 data.add(String.valueOf(game.getUniqueID()));
             }
+        }else{
+            data.add("\n");
         }
         data.add("transactionHistory");
         if(!user.transactionHistory.isEmpty()){
             data.addAll(user.transactionHistory);
+        }else{
+            data.add("\n");
         }
+        data.add("\n");
+        data.add("\n");
         return data;
     }
 
@@ -180,7 +163,43 @@ public class DatabaseController {
         filename.seek(filename.length());
         filename.writeChars(data);
     }
+
+//    private void fileOpener(File file, String filename) {
+//        if (file.getName().equals(filename)) {
+//            switch (file.getName()) {
+//                case FILENAMEGAME:
+//                    if (!(fileGame = new File(filename)).exists()) {
+//                        try {
+//                            fileGame.createNewFile();
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                        break;
+//                    }
+//                case FILENAMEUSER:
+//                    if (!(fileUser = new File(filename)).exists()) {
+//                        try {
+//                            fileUser.createNewFile();
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                        break;
+//                    }
+//                case FILENAMEMARKETPLACE:
+//                    if (!(fileMarketplace = new File(filename)).exists()) {
+//                        try {
+//                            fileMarketplace.createNewFile();
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                        break;
+//                    }
+//            }
+//        } else {
+//            System.out.println("INVALID FILENAME");
+//        }
 //    }
+
 //    private String userPadder(AbstractUser user){
 //        String name = user.username;
 //        String type = String.valueOf(user.type);
@@ -230,4 +249,32 @@ public class DatabaseController {
         return String.format("name\n%s\nprice\n%s\nsupplierID\n%s\n uniqueID\n%s\ndiscount\n%s\n",game.getName()
                 ,game.getPrice(),game.getSupplierID(), game.getUniqueID(), game.getDiscount());
     }
+
+    public static void main(String[] args) throws IOException {
+        Game g1 = new Game("Spiritfarer", 39.00f, "Nintendo", 111, 20.00);
+        Game g2 = new Game("Mariokart", 89.00f, "Nintendo", 112, 20.00);
+        Game g3 = new Game("Spyro", 59.00f, "Nintendo", 113, 20.00);
+
+        AdminUser AA = new AdminUser("Danielle", 10000.00f);
+        BuyUser BS = new BuyUser("Ben", 1888.00f);
+        SellUser SS = new SellUser("Porie", 333.00f);
+
+        ArrayList<Game> games = new ArrayList<Game>();
+        games.add(g1);
+        games.add(g2);
+        games.add(g3);
+
+        ArrayList<AbstractUser> users = new ArrayList<AbstractUser>();
+        users.add(AA);
+        users.add(BS);
+        users.add(SS);
+
+        DatabaseController DBC = new DatabaseController();
+
+        DBC.writeGame(games);
+
+        DBC.writeUser(users);
+
+    }
 }
+
