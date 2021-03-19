@@ -1,9 +1,10 @@
-package main;
+//package main;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+//import Game;
 
 import java.lang.reflect.Type;
 
@@ -59,6 +60,7 @@ public class DeserializeGame implements JsonDeserializer<Game> {
         if (!correctTypes(jsonObject)) { //check that all values exist and are of correct type
             return null;
         }
+
 
         String name = jsonObject.get("name").getAsString();
         Float price = jsonObject.get("price").getAsFloat();
