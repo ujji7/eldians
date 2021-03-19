@@ -1,0 +1,99 @@
+[
+  {
+    "name": "YesCounter-Strike" ,
+    "price": 20.99,
+    "seller": "Valve",
+    "gameID": 10057,
+    "discount": 10.06
+  },
+  {
+    "name": "YesHalf-Life" ,
+    "price": 23.45,
+    "seller": "Valve",
+    "gameID": 10067,
+    "discount": 0.00
+  },
+
+  {"named": "NoHalf-LifeHeaderWrong" ,
+    "price": 23.45,
+    "seller": "Valve",
+    "gameID": 10037,
+    "discount": 0
+  },
+
+  {"name": "NoHalf-LifePriceType" ,
+    "price": "two",
+    "seller": "Valve",
+    "gameID": 10032,
+    "discount": 20
+  },
+  {
+    "name": "NoHalf-LifeTooLong12345678901223455689" ,
+    "price": 23.45,
+    "seller": "Valve",
+    "gameID": 10077,
+    "discount": 89.0
+  },
+
+  {"bob": "",
+    "name": "YesHalf-LifeButBobInFront" ,
+    "price": 23.45,
+    "seller": "Valve",
+    "gameID": 10087,
+    "discount": 85
+  },
+
+  {"name": "YesHalf-LifeAfterBob" ,
+    "price": 23.45,
+    "seller": "Valve",
+    "gameID": 10097,
+    "discount": 85
+  },
+
+  {"name": "YesHalfDiscLimit" ,
+    "price": 23.45,
+    "seller": "Valve",
+    "gameID": 10017,
+    "discount": 90
+  },
+
+  {"name": "NoHalfDiscHigh" ,
+    "price": 23.45,
+    "seller": "Valve",
+    "gameID": 10027,
+    "discount": 90.1
+  },
+
+  {"name": "NoHalfMissing" ,
+    "seller": "Valve",
+    "gameID": 10047,
+    "discount": 20
+  },
+
+  {"named": "NoHalf-LifeBottomHeaderWrong" ,
+    "price": 23.45,
+    "seller": "Valve",
+    "gameID": 10031,
+    "disc": 0
+  },
+
+  {"named": "NoHalf-LifePriceNull" ,
+    "price": null,
+    "seller": "Valve",
+    "gameID": 10033,
+    "disc": 0
+  },
+
+  {"name": "NoHalf-LifeNoSeller" ,
+    "price": "two",
+    "gameID": 10034,
+    "discount": 20
+  },
+  {
+    "name": "NoHalfNonUnique" ,
+    "price": 23.45,
+    "seller": "Valve",
+    "gameID": 10067,
+    "discount": 0.00
+  }
+]

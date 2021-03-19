@@ -1,0 +1,29 @@
+<dependencies>
+<!--    <dependency>-->
+<!--        <groupId>com.googlecode.json-simple</groupId>-->
+<!--        <artifactId>json-simple</artifactId>-->
+<!--        <version>1.1.1</version>-->
+<!--    </dependency> 301 to 305-->
+
+    <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+    <dependency>
+        <groupId>com.google.code.gson</groupId>
+        <artifactId>gson</artifactId>
+        <version>2.8.6</version>
+    </dependency>
+
+    <!--    https://code.google.com/archive/p/json-simple/downloads first one is our jar to download 1.1.1 released in 2012-->
+<!--    Click File from the toolbar-->
+<!--    Project Structure (CTRL + SHIFT + ALT + S on Windows/Linux, ⌘ + ; on Mac OS X)-->
+<!--    Select Modules at the left panel-->
+<!--    Dependencies tab-->
+<!--    '+' → JARs or directories-->
+<!--    Go to where you stored the downloaded jar file and select it. -->
+<!--    Click apply-->
+<!--    Click ok.-->
+<!--    It should work now-->
+<!--    https://crunchify.com/how-to-read-json-object-from-file-in-java/-->
+<!--    https://www.youtube.com/watch?v=wDBvXVHO15U&list=PLZyYwlxbwvDcK9SJTbdIllduJyYLQykMz-->
+
+
+</dependencies>
