@@ -1,0 +1,118 @@
+[  { "name": "YesValve2",
+    "type": "BS",
+    "credit": 105.56,
+    "inventory": [10057],
+    "transaction history": ["Bought Counter-Strike from Madeo"]
+  },
+
+  { "name": "NoMadeoBuy",
+    "type": "SS",
+    "credit": 105.50,
+    "inventory": [10057],
+    "transaction history": ["Bought Counter-Strike from Valve"]
+  },
+
+  { "name": "NoValve",
+    "type": "BS",
+    "credit": 105.56,
+    "inventory": [10067],
+    "transactio history": ["Bought Counter-Strike from Madeo"]
+  },
+
+  { "name": "YesValve23",
+    "type": "BS",
+    "credit": 105.56,
+    "inventory": [10057, 10067],
+    "transaction history": ["Bought Counter-Strike from Valve", "Bought Half-Life from Valve"]
+  },
+
+  { "name": "YesMadeo",
+    "type": "BS",
+    "credit": 105.56,
+    "inventory": [],
+    "transaction history": ["Bought Counter-Strike from Madeo"]
+  },
+
+  { "name": "YesMadeoNoBuy",
+    "type": "SS",
+    "credit": 105.56,
+    "inventory": [],
+    "transaction history": []
+  },
+
+  { "name": "YesValve2",
+    "type": "BS",
+    "credit": 105.56,
+    "inventory": [10057],
+    "transaction history": ["No, because same name. Bought Half-Life from Valve"]
+  },
+
+  { "name": "YesNoTrans",
+    "type": "BS",
+    "credit": 105.56,
+    "inventory": [10067],
+    "transaction history": []
+  },
+  { "name": "YesRegular",
+    "type": "BS",
+    "credit": 105.56,
+    "inventory": [10057],
+    "transaction history": ["Bought Half-Life from Valve"]
+  },
+  { "name": "YesGameNoExist",
+    "type": "BS",
+    "credit": 999,
+    "inventory": [345],
+    "transaction history": []
+  },
+
+  { "name": "NoWrongType",
+    "type": "All",
+    "credit": 999,
+    "inventory": [345],
+    "transaction history": []
+  },
+  { "name": "NoInvWrongType",
+    "type": "AA",
+    "credit": 999.5,
+    "inventory": ["hi there"],
+    "transaction history": []
+  },
+  { "name": "NoInvWrongType",
+    "type": "AA",
+    "credit": 999.9,
+    "inventory": "hi there",
+    "transaction history": []
+  },
+
+  { "name": "YesCreditLimit",
+    "type": "BS",
+    "credit": 999999.99,
+    "inventory": [10067],
+    "transaction history": []
+  },
+  { "name": "NoCreditOver",
+  "type": "BS",
+  "credit": 1000000.00,
+  "inventory": [10067],
+  "transaction history": []
+},
+  { "name": "YesCreditInt",
+    "type": "BS",
+    "credit": 999,
+    "inventory": [10067],
+    "transaction history": []
+  },
+  {"name": "YesValve",
+  "type": "SS",
+  "credit": 105.56,
+  "inventory": [],
+  "transaction history": ["Sold Counter-Strike from Madeo"]
+  },
+  { "name": "YesOneInv",
+    "type": "BS",
+    "credit": 99.5,
+    "inventory": [10067, 10057, "hi there"],
+    "transaction history": []
+  }
+]
