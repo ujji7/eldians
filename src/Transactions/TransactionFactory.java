@@ -4,6 +4,13 @@ import java.util.ArrayList;
 
 public class TransactionFactory {
 
+    /**
+     * Return a Transaction object specified by the given arraylist where the first element is the transaction code
+     * matching with one of the Transaction implementations
+     *
+     * @param attr ArrayList<String> of attributes for the Transaction being built
+     * @return Transaction object
+     */
     public Transaction buildTransaction(ArrayList<String> attr) {
         String transactionCode = attr.get(0);
         String attr1 = attr.get(1);
@@ -52,8 +59,18 @@ public class TransactionFactory {
                 transac = new AuctionSale(attr1, attr2, attr3);
                 break;
 
-            // Logout 10-Username-Type-Funds
+            // RemoveGame 08-GameName-OwnerName
             case "08":
+                transac = new RemoveGame(attr1, attr2);
+                break;
+
+            // Gift 09-GameName-OwnerName-ReceiverName
+            case "09":
+                transac = new Gift(attr1, attr2, attr3);
+                break;
+
+            // Logout 10-Username-Type-Funds
+            case "10":
                 transac = new Logout(attr1, attr2, attr3);
                 break;
 
