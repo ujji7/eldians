@@ -52,7 +52,7 @@
 
   {"name": "YesHalfDiscLimit" ,
     "price": 23.45,
-    "seller": "Valve",
+    "seller": "YesValve",
     "gameID": 10017,
     "discount": 90
   },
@@ -94,6 +94,12 @@
     "price": 23.45,
     "seller": "Valve",
     "gameID": 10067,
+    "discount": 0.00
+  },
+  { "name": "YesDiffSell" ,
+    "price": 23.45,
+    "seller": "Bob",
+    "gameID": 10035,
     "discount": 0.00
   }
 ]

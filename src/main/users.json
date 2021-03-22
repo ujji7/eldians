@@ -102,6 +102,17 @@
     "credit": 999,
     "inventory": [10067],
     "transaction history": []
+  },
+  {"name": "YesValve",
+  "type": "SS",
+  "credit": 105.56,
+  "inventory": [],
+  "transaction history": ["Sold Counter-Strike from Madeo"]
+  },
+  { "name": "YesOneInv",
+    "type": "BS",
+    "credit": 99.5,
+    "inventory": [10067, 10057, "hi there"],
+    "transaction history": []
   }
-
 ]

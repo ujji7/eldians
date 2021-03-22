@@ -1,0 +1,14 @@
+{
+  "auctionSale": false,
+  "gamesOnSale": {
+    "YesValve": [
+      10057,
+      10067,
+      10087,
+      10097,
+      10017
+    ],
+    "Bob":[10035],
+    "Name is way too long":[10035]
+  }
+}
