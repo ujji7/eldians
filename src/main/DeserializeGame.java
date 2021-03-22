@@ -4,14 +4,27 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-//import Game;
 
 import java.lang.reflect.Type;
 
-public class DeserializeGame implements JsonDeserializer<Game> {
-
 //https://howtodoinjava.com/gson/custom-serialization-deserialization/
 
+public class DeserializeGame implements JsonDeserializer<Game> {
+    private final String name = "name";
+    private final String price = "price";
+    private final String seller = "seller";
+    private final String gameID = "gameID";
+    private final String discount = "discount";
+
+    /**
+     *
+     * @param name name of game
+     * @param price price of game
+     * @param seller game seller
+     * @param gameID unique game id of game
+     * @param discount discount applied to game
+     * @return Game object with given parameters
+     */
     private static Game makeGame(String name, Float price, String seller, Integer gameID, Float discount) {
 
         if (name.length() > 25) { //check name
@@ -26,22 +39,19 @@ public class DeserializeGame implements JsonDeserializer<Game> {
         return new Game(name, price, seller, gameID, discount);
     }
 
-    //        https://stackoverflow.com/questions/15920212/how-to-check-the-type-of-a-value-from-a-jsonobject/15920281
+    // https://stackoverflow.com/questions/15920212/how-to-check-the-type-of-a-value-from-a-jsonobject/15920281
     public Boolean correctTypes(JsonObject jsonObject) {
-        if (!(jsonObject.has("name") && jsonObject.has("price") &&
-                jsonObject.has("seller") && jsonObject.has("gameID") &&
-                jsonObject.has("discount"))) {
+        if (!(jsonObject.has(name) && jsonObject.has(price) && jsonObject.has(seller) && jsonObject.has(gameID) &&
+                jsonObject.has(discount))) {
             return false;
         }
 
-        JsonElement nameObj = jsonObject.get("name");
-
         try {
-            String name = nameObj.getAsString();
-            Float price = jsonObject.get("price").getAsFloat();
-            String seller = jsonObject.get("seller").getAsString();
-            Integer gameId = jsonObject.get("gameID").getAsInt();
-            Float discount = jsonObject.get("discount").getAsFloat();
+            jsonObject.get(name).getAsString();
+            jsonObject.get(price).getAsFloat();
+            jsonObject.get(seller).getAsString();
+            jsonObject.get(gameID).getAsInt();
+            jsonObject.get(discount).getAsFloat();
 
         } catch (Exception e) {
             return false;
@@ -52,22 +62,19 @@ public class DeserializeGame implements JsonDeserializer<Game> {
     @Override
     public Game deserialize(JsonElement json, Type typeOfT,
                             JsonDeserializationContext context) throws JsonParseException {
+
         JsonObject jsonObject = json.getAsJsonObject();
-
-        //put all values.opt into verifier: Returns the value mapped by name, or null if no such mapping exists.
-
 
         if (!correctTypes(jsonObject)) { //check that all values exist and are of correct type
             return null;
         }
 
+        String nameGame = jsonObject.get(name).getAsString();
+        Float priceGame = jsonObject.get(price).getAsFloat();
+        String sellerGame = jsonObject.get(seller).getAsString();
+        Integer gameIDGame = jsonObject.get(gameID).getAsInt();
+        Float discountGame = jsonObject.get(discount).getAsFloat();
 
-        String name = jsonObject.get("name").getAsString();
-        Float price = jsonObject.get("price").getAsFloat();
-        String seller = jsonObject.get("seller").getAsString();
-        Integer gameID = jsonObject.get("gameID").getAsInt();
-        Float discount = jsonObject.get("discount").getAsFloat();
-
-        return makeGame(name, price, seller, gameID, discount);
+        return makeGame(nameGame, priceGame, sellerGame, gameIDGame, discountGame);
     }
 }
