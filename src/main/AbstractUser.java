@@ -64,6 +64,21 @@ public class AbstractUser {
         this.inventory = inventory;
     }
 
+    /**
+     * Rounds the transaction between the values to 2 decimal places
+     *
+     * @param value
+     * @return float rounded to 2 decimal places
+     */
+    private float roundCalculations(float value){
+        float result = value;
+
+        result = (float) Math.round(result * 100) / 100;
+        return result;
+
+
+    }
+
 
     /**
      * Sets the account balance for our User
@@ -111,7 +126,7 @@ public class AbstractUser {
             }
         }
         else {
-            // ACCORDINGa TO PIAZZA @666 max out the balance and prompt user    //change it later
+            // ACCORDING TO PIAZZA @666 max out the balance and prompt user    //change it later
             this.setAccountBalance(MAXFUNDS);
             System.out.println("ERROR: \\ < Failed Constraint: "+ this.username +
                     "'s balance was Maxed up upon addition of more funds!");
@@ -142,6 +157,8 @@ public class AbstractUser {
                     " daily limit be reached! No funds were added");
         }
     }
+
+
 
 
 
