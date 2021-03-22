@@ -13,6 +13,7 @@ public class SellUser extends AbstractUser {
     public SellUser(String username, Float credit) {
         super(username);
         this.accountBalance = credit;
+        this.type = "SS";
     }
 
     /** Prints that this user cannot buy a game.
@@ -37,7 +38,7 @@ public class SellUser extends AbstractUser {
     //THIS DOES NOT FOLLOW THE RIGHT FORMAT
 
     @Override
-    public void create(String username, String type, Float credit){
+    public void create(String username, String type, Float credit, Application application){
         System.out.println(this.username + " cannot create another user.");
     }
 
@@ -46,7 +47,7 @@ public class SellUser extends AbstractUser {
     //THIS DOES NOT FOLLOW THE RIGHT FORMAT
 
     @Override
-    public void delete(){
+    public void delete(AbstractUser user, float amount){
         System.out.println(this.username + " cannot delete another user.");
     }
 

@@ -34,25 +34,28 @@ import java.util.HashMap;
  *                                      ------Need to have multiple constructor VS Builder
  *                                      -----As we will be requiring a constructors with given inventories
  */
-public class AbstractUser {
+public abstract class AbstractUser {
     public String username;
+    public String password;
     public double accountBalance;
     public ArrayList<Game> inventory;
     public double newFunds;
+    public String type;
+    ArrayList<String> transactionHistory;
     public static final double MAXFUNDS = 999999.99f;
     // can change minFunds to allow overdrafts for future improvements
     public static final float MINFUNDS = 0f;
     public static final float DAILYLIMIT = 1000f;
     public static final float NEWFUNDSTODAY = 0f;
-    public ArrayList<String> transactionHistory;
-    public Character type;
 
     public AbstractUser(String username){
         this.username = username;
-                                             // why is this 0? should we change the constructor
+        // why is this 0? should we change the constructor
         this.accountBalance = 0;
         this.inventory = new ArrayList<Game>();
         this.newFunds = 0;
+        this.transactionHistory = new ArrayList<String>();
+        this.type = "  ";
 
     }
 
@@ -61,14 +64,9 @@ public class AbstractUser {
         this.accountBalance = balance;
     }
 
-    public AbstractUser(String username, float balance, ArrayList<Game> games){
+    public AbstractUser(String username, float balance, ArrayList<Game> inventory){
         this(username, balance);
-        this.inventory = games;
-    }
-
-    public AbstractUser(String username, float balance, ArrayList<Game> inventory), Arraylist<String> transactions){
-    this(username,balance, inventory);
-    this.transactionHistory = transactions;
+        this.inventory = inventory;
     }
 
 
@@ -128,8 +126,8 @@ public class AbstractUser {
     }
 
 
-                                    //NEED TO MAKE A HELPER TO ISSUE REFUND AMOUNTS
-                                    // Need a helper to round off floats for wach transaction
+    //NEED TO MAKE A HELPER TO ISSUE REFUND AMOUNTS
+    // Need a helper to round off floats for wach transaction
 
 
     /**
@@ -202,7 +200,7 @@ public class AbstractUser {
      * @param price amount to be removed from account balance
      * @param game to be added to inventory
      */
-    private void payAndAddGame(AbstractUser seller, float price, Game game) {
+    private void payAndAddGame(AbstractUser seller, double price, Game game) {
         this.accountBalance -= price;
         this.inventory.add(game);
         System.out.println(this.username + " has bought " + game.getName() + " from " + seller.getUsername() + " for "
@@ -232,11 +230,11 @@ public class AbstractUser {
 
         else {                                                  // Needs to be implemented in transferFunds()
 
-            float price = game.getPriceWithDiscount(saleToggle);
+            double price = game.getPriceWithDiscount(saleToggle);
             if (!this.canTransferFunds(price)) { //buyer does not have enough money
                 System.out.println("ERROR: \\ < Failed Constraint: "+ this.username + " does not have enough funds to buy " + game.getName() + ". ");
             }
-                                                        // Needs to be implemented in transferFunds()
+            // Needs to be implemented in transferFunds()
 
             else if (!seller.canAcceptFunds(price)) { //seller's account maxed out
                 this.payAndAddGame(seller, price, game);
@@ -264,17 +262,17 @@ public class AbstractUser {
         // if game doesn't follow contraints end here
         if (!this.sellConstraints(game, market)) return;
 
-        HashMap<AbstractUser, ArrayList<Game>> map = market.getGamesOnSale(); // var for less typing
+        HashMap<String, ArrayList<Game>> map = market.getGamesOnSale(); // var for less typing
         // if user has previously put games on the market, add to list of games
-        if (map.containsKey(this)) {
-            map.get(this).add(game);
+        if (map.containsKey(this.username)) {
+            map.get(this.username).add(game);
         } else {
             // Create a new ArrayList
             ArrayList<Game> gameList = new ArrayList<Game>();
             // Add game to the ArrayList
             gameList.add(game);
             // Insert the new Key-Value pairing to the market
-            map.put(this, gameList);
+            map.put(this.username, gameList);
 
             // Report to console (or Observer if implemented later)
             System.out.println("Game: " + game.getName() + " is now being sold by " + this.getUsername() + " for $" +
@@ -294,7 +292,7 @@ public class AbstractUser {
 
         String gameName = game.getName();
         String userName = this.getUsername();
-        float gamePrice = game.getPrice();
+        double gamePrice = game.getPrice();
         double gameDiscount = game.getDiscount();
 
         // check if game price is gt max game price
@@ -344,7 +342,7 @@ public class AbstractUser {
         if(canSendMoney) {
             // remove the credits from the seller's account
             seller.transferFunds(-amount);                  //-----FAILS when seller has less funds
-                                            //seller.issueFunds(float amount, AbstractUser user)
+            //seller.issueFunds(float amount, AbstractUser user)
             // add the funds regardless of maxing out
             buyer.transferFunds(amount);        // remove this when above is done
             result = true;
@@ -368,31 +366,37 @@ public class AbstractUser {
      * @param credit a float representing the amount of credits to add to the newly
      *               created user's account balance
      */
-    public void create(String username, String type, Float credit){
+    public void create(String username, String type, Float credit, Application application){
         if(MINFUNDS <= credit || credit <= MAXFUNDS){
+            AbstractUser newUser;
             switch (type) {
-                case 'AA':
-                    AdminUser newUser = new AdminUser(username, credit);
+                case "AA":
+                    newUser = new AdminUser(username, credit);
                     break;
-                case 'FS':
-                    FullStandardUser newUser = new FullStandardUser(username, credit);
+                case "FS":
+                    newUser = new FullStandardUser(username, credit);
                     break;
-                case 'BS':
-                    BuyUser newUser = new BuyUser(username, credit);
+                case "BS":
+                    newUser = new BuyUser(username, credit);
                     break;
-                case 'SS':
-                    SellUser newUser = new SellUser(username, credit);
+                case "SS":
+                    newUser = new SellUser(username, credit);
                     break;
+                default:
+                    // if user isn't initialized we stop the create function
+                    System.out.println("ERROR: \\< Failed Constraint: New User could not be created since user type " +
+                            "does not exist. > //");
+                    return;
             }
-            if(!Application.userList.contains(newUser)) {
-                Application.addUser(newUser);
+            if(!(application.users.contains(newUser))) {
+                application.addUser(newUser);
                 System.out.println("A new user was created: \n" + newUser.toString());
             }
             System.out.println("ERROR: \\< Failed Constraint: New User could not be created since" +
                     "a User already exists with given name. >//");
-            }
+        }
         System.out.println("ERROR: \\< Failed Constraint: New User could not be created since "
-        + Float.toString(credit) + "amount is invalid. >//");
+                + Float.toString(credit) + "amount is invalid. >//");
 
     }
 
@@ -411,7 +415,7 @@ public class AbstractUser {
      * @param amount the value of funds to check are present for our user
      * @return true if the amount is avalible false otherwise
      */
-    private boolean canTransferFunds(float amount){
+    private boolean canTransferFunds(double amount){
         return this.accountBalance - amount >= MINFUNDS;
     }
 
@@ -420,7 +424,7 @@ public class AbstractUser {
      * @param amount the amount of funds to be added
      * @return true if the funds can be added false otherwise
      */
-    private boolean canAcceptFunds(float amount){
+    private boolean canAcceptFunds(double amount){
         return this.accountBalance + amount <= MAXFUNDS;
     }
 
@@ -435,10 +439,5 @@ public class AbstractUser {
      */
     public void auctionSale(float amount) {
         System.out.println(this.getUsername() + "cannot implement an auction sale.");
-    }
-
-    @Override
-    public String getClass(){
-        switch (this instanceOf AdminUser)
     }
 }

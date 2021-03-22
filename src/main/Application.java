@@ -1,18 +1,35 @@
 package main;
+import javax.imageio.IIOException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Application {
-    public ArrayList<AbstractUser> userList;
     public Marketplace market;
+    public Marketplace yesterdaysMarketplace;
+    public ArrayList<AbstractUser> users;
+    public ArrayList<Game> games;
+    public AbstractUser login;
 
     public Application(){
-        this.userList = new ArrayList<>();
+        this.users = new ArrayList<>();
     }
 
     public void addUser(AbstractUser user){
-        userList.add(user);
+        users.add(user);
+    }
+
+    private void eodWrite() {
+        DatabaseController databaseController = new DatabaseController();
+        try {
+            databaseController.writeGame(this.games);
+            databaseController.writeUser(this.users);
+            databaseController.writeMarket(this.market);
+        }catch (IOException e){
+            System.out.println("Cannot write files");
+        }
     }
 }
+
 
 
 

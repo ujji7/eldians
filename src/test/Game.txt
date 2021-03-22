@@ -1,0 +1,11 @@
+name
+
+price
+
+supplierID
+
+uniqueID
+
+discount
+
+name

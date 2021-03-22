@@ -3,16 +3,17 @@ package main;
 import java.nio.channels.FileLock;
 import java.util.ArrayList;
 import java.io.*;
+import java.util.HashMap;
 import java.util.Objects;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class DatabaseController {
-    private static final String FILENAMEGAME = "Game.txt";
+    private static final String FILENAMEGAME = "Game.json";
     private RandomAccessFile fileGame;
-    private static final String FILENAMEUSER = "User.txt";
+    private static final String FILENAMEUSER = "User.json";
     private RandomAccessFile fileUser;
-    private static final String FILENAMEMARKETPLACE = "Marketplace.txt";
+    private static final String FILENAMEMARKETPLACE = "Marketplace.json";
     private RandomAccessFile fileMarketplace;
     private Gson gson;
 
@@ -24,7 +25,7 @@ public class DatabaseController {
             fileMarketplace = new RandomAccessFile(FILENAMEMARKETPLACE, "rw");
             FileLock ignoredmarketplace = fileMarketplace.getChannel().lock();
             GsonBuilder builder = new GsonBuilder();
-            Gson gson = builder.create();
+            gson = builder.create();
         } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -36,69 +37,33 @@ public class DatabaseController {
         //Seller,[Game1, Game2,...,GameX]
         //"Valve",[10057,10067]
 
-
-        appendData(fileMarketplace, gson.toJson(market.getAuctionSale()));
-        for (AbstractUser seller: market.getGamesOnSale().keySet()
-             ) {
-            appendData(fileMarketplace, gson.toJson(seller));
-            appendData(fileMarketplace, gson.toJson(market.getGamesOnSale().get(seller)));
+        appendData(fileMarketplace, gson.toJson(market));
+//        appendData(fileMarketplace, gson.toJson(market.getAuctionSale()));
+//        for (AbstractUser seller: market.getGamesOnSale().keySet()
+//             ) {
+//            appendData(fileMarketplace, gson.toJson(seller));
+//            appendData(fileMarketplace, gson.toJson(market.getGamesOnSale().get(seller)));
 
 //            ArrayList<String> data = collectMarketplaceData(seller, market.getGamesOnSale().get(seller));
 //            for (String item: data) {
 //                appendData(fileMarketplace, item);
 //            }
-        }
+//        }
         fileMarketplace.close();
     }
 
     public void writeUser(ArrayList<AbstractUser> userList) throws IOException {
-        //Name,type,fundsAvailble,inventory[],transactionHistory[],
-        //Madeo,BS,105.50,[gid1,gid2,gid3],["Bought Counter-Strike from Valve","Sold Half Life to John Doe"]
-
-//        try (RandomAccessFile reader = new RandomAccessFile(FILENAMEGAME, "rw");
-//             FileLock ignored = reader.getChannel().lock()) {
         try {
-            for (AbstractUser user : userList) {
-                if (!user.username.isEmpty()) {
-//                ArrayList<String> data = collectUserData(user);
-//                for (String item:
-//                     data) {
-                    appendData(fileUser, gson.toJson(user));
-//
-//                // Step 3.1: Format our string to write to the file with yyyy-mm-dd text
-//                String line = String.format("%s,%c,%a,[%s],[%s]\n", user.username, user.type,
-//                        user.accountBalance, user.inventory, user.transactionHistory);
-//                // Step 3.2: Seek to the end of the file BEFORE writing else you will be overwriting it
-//                fileUser.seek(fileUser.length());
-//                // Step 3.3 Write your data to the file
-//                fileUser.writeChars(line);
-                }
-            }
+            appendData(fileUser, gson.toJson(userList));
             fileUser.close();
         }catch (IOException e) {
             e.printStackTrace();
         }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
     }
 
     public void writeGame(ArrayList<Game> gameList) throws IOException {
-        //Name,Seller,Price,discount,gid
-        //"Counter-Strike","Valve",20.99,10.06,10057
-        //Game(String name, float price, String supplierID, int uniqueID, double discount
-
-//        try (RandomAccessFile reader = new RandomAccessFile(FILENAMEGAME, "rw");
-//             FileLock ignored = reader.getChannel().lock()) {
         try {
-            for (Game game : gameList) {
-                if (!game.getName().isEmpty()) {
-//                ArrayList<String> data = collectGameData(game);
-//                for (String item : data
-//                ) {
-                    appendData(fileGame, gson.toJson(game));
-                }
-            }
+            appendData(fileGame, gson.toJson(gameList));
             fileGame.close();
         }catch (IOException e) {
             e.printStackTrace();
@@ -160,8 +125,8 @@ public class DatabaseController {
 
     private void appendData(RandomAccessFile filename, String data) throws IOException {
         //https://www.journaldev.com/921/java-randomaccessfile-example
-        filename.seek(filename.length());
-        filename.writeChars(data);
+//        filename.seek(filename.length());
+        filename.writeBytes(data);
     }
 
 //    private void fileOpener(File file, String filename) {
@@ -251,23 +216,82 @@ public class DatabaseController {
     }
 
     public static void main(String[] args) throws IOException {
-        Game g1 = new Game("Spiritfarer", 39.00f, "Nintendo", 111, 20.00);
-        Game g2 = new Game("Mariokart", 89.00f, "Nintendo", 112, 20.00);
-        Game g3 = new Game("Spyro", 59.00f, "Nintendo", 113, 20.00);
+        Game g1 = new Game("Spiritfarer", 39.00, "Nintendo", 111, 20.00);
+        Game g2 = new Game("Mariokart", 89.00, "Nintendo", 112, 20.00);
+        Game g3 = new Game("Spyro", 59.00, "PlayStation", 113, 20.00);
+        Game g4 = new Game("MarioParty", 59.00, "Nintendo", 114, 20.00);
+        Game g5 = new Game("CSGO", 59.00, "Steam", 115, 20.00);
+        Game g6 = new Game("Valhiem", 59.00, "Steam", 116, 20.00);
+        Game g7 = new Game("COD", 59.00, "PlayStation", 117, 20.00);
+
+
+
 
         AdminUser AA = new AdminUser("Danielle", 10000.00f);
         BuyUser BS = new BuyUser("Ben", 1888.00f);
         SellUser SS = new SellUser("Porie", 333.00f);
+        SellUser N = new SellUser("Nintendo", 44444.00f);
+        SellUser S = new SellUser("Steam", 2.00f);
+        SellUser P = new SellUser("Playstation", 5.00f);
+
+        BS.password = "BUTTS";
+
+        N.password = "Mario";
+
+        BS.inventory.add(g1);
+        BS.inventory.add(g2);
+
+        S.inventory.add(g6);
+        S.inventory.add(g5);
+
+        P.inventory.add(g3);
+        P.inventory.add(g7);
+
+        ArrayList<String> transhist = new ArrayList<String>();
+
+        String bs = "[buyUsername] has bought [gameName] from [sellerUsername] for [price].";
+        String ac = "[Username] has added [credit] to their account balance; Balance: [Account Balance]";
+
+        transhist.add(bs);
+        transhist.add(ac);
+        transhist.add(bs);
+        transhist.add(ac);
+        transhist.add(bs);
+        transhist.add(ac);
+        transhist.add(bs);
+        transhist.add(ac);
+
+        AA.transactionHistory = transhist;
+        BS.transactionHistory = transhist;
 
         ArrayList<Game> games = new ArrayList<Game>();
         games.add(g1);
         games.add(g2);
         games.add(g3);
+        games.add(g4);
+        games.add(g5);
+        games.add(g6);
+        games.add(g7);
+
 
         ArrayList<AbstractUser> users = new ArrayList<AbstractUser>();
         users.add(AA);
         users.add(BS);
         users.add(SS);
+        users.add(N);
+        users.add(P);
+        users.add(S);
+
+        Marketplace m = new Marketplace();
+        m.auctionSale = false;
+        HashMap<String, ArrayList<Game>> gos = new HashMap<String, ArrayList<Game>>();
+        gos.put(SS.username, games);
+        gos.put(AA.username, games);
+        gos.put(N.username, games);
+        gos.put(S.username, games);
+        gos.put(P.username, games);
+
+        m.gamesOnSale = gos;
 
         DatabaseController DBC = new DatabaseController();
 
@@ -275,6 +299,7 @@ public class DatabaseController {
 
         DBC.writeUser(users);
 
+        DBC.writeMarket(m);
     }
 }
 

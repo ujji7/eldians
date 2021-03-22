@@ -8,6 +8,7 @@ public class BuyUser extends AbstractUser {
     public BuyUser(String username, Float credit) {
         super(username);
         this.accountBalance = credit;
+        this.type = "BS";
     }
 
     /** Prints that the user cannot sell a game.
@@ -31,7 +32,7 @@ public class BuyUser extends AbstractUser {
     //THIS DOES NOT FOLLOW THE RIGHT FORMAT
 
     @Override
-    public void create(String username, String type, Float credit){
+    public void create(String username, String type, Float credit, Application application){
         System.out.println("ERROR: \\ < Failed Constraint: "+ this.username + " does not have the ability to create another user.");
     }
 
@@ -40,7 +41,7 @@ public class BuyUser extends AbstractUser {
     //THIS DOES NOT FOLLOW THE RIGHT FORMAT
 
     @Override
-    public void delete(){
+    public void delete(AbstractUser user, float amount){
         System.out.println("ERROR: \\ < Failed Constraint: "+ this.username + " does not have the ability to delete another user.");
     }
 
