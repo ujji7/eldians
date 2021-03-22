@@ -39,6 +39,7 @@ public abstract class AbstractUser {
     public double accountBalance;
     public ArrayList<Game> inventory;
     public double newFunds;
+    public TransactionHistory transactionHistory;
     public static final double MAXFUNDS = 999999.99f;
     // can change minFunds to allow overdrafts for future improvements
     public static final float MINFUNDS = 0f;
@@ -51,7 +52,7 @@ public abstract class AbstractUser {
         this.accountBalance = 0;
         this.inventory = new ArrayList<Game>();
         this.newFunds = 0;
-
+        this.transactionHistory = new TransactionHistory();
     }
 
     public AbstractUser(String username, float balance){
@@ -70,7 +71,9 @@ public abstract class AbstractUser {
      * @param balance the amount to balance to-be in the user's account
      */
     public void setAccountBalance(double balance){
+
         this.accountBalance = balance;
+        this.transactionHistory.addTransaction("User: " + this.username + " added $" + balance + " to their account");
     }
 
     /**
@@ -240,6 +243,8 @@ public abstract class AbstractUser {
             else { // make normal add and print message
                 this.payAndAddGame(seller, price, game);
                 seller.accountBalance += price;
+                this.transactionHistory.addTransaction("User: " + this.username + " bought " + game.getName() + " from "
+                        + seller.getUsername());
             }
         }
     }
@@ -269,7 +274,9 @@ public abstract class AbstractUser {
             // Insert the new Key-Value pairing to the market
             map.put(this, gameList);
 
-            // Report to console (or Observer if implemented later)
+            // Report to console and transactionHistory
+            this.transactionHistory.addTransaction("User: " + this.username + " is now selling " + game.getName() +
+                    " for " + game.getPrice());
             System.out.println("Game: " + game.getName() + " is now being sold by " + this.getUsername() + " for $" +
                     game.getPrice() + " at a " + game.getDiscount()+"% discount, will be availble for purchase tomorrow");
         }
@@ -385,6 +392,8 @@ public abstract class AbstractUser {
             }
             if(!Application.userList.contains(newUser)) {
                 Application.addUser(newUser);
+                this.transactionHistory.addTransaction("User: " + this.username + " has created user " +
+                    newUser.getUsername());
                 System.out.println("A new user was created: \n" + newUser.toString());
             }
             System.out.println("ERROR: \\< Failed Constraint: New User could not be created since" +
