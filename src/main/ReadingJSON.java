@@ -1,4 +1,4 @@
-//package main;
+package main;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
@@ -28,6 +28,7 @@ public class ReadingJSON {
             }
         }
     }
+
     private static void filesOpener() {
         individualFileOpener(Game, fileNameGame);
         individualFileOpener(User, fileNameUser);

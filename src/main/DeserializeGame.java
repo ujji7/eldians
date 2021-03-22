@@ -1,4 +1,4 @@
-//package main;
+package main;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
