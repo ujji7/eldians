@@ -2,13 +2,13 @@ package Transactions;
 
 public class Buy implements Transaction {
 
+    String game;
     String buyer;
     String seller;
-    Float credit;
 
-    public Buy(String b, String s, String c) {
+    public Buy(String g, String b, String s) {
+        this.game = g;
         this.buyer = b;
         this.seller = s;
-        this.credit = Float.parseFloat(c);
     }
 }
