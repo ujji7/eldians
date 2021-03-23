@@ -2,18 +2,18 @@ package main;
 
 public class UserFactory {
 
-    public AbstractUser makeFruit(String type) {
+    public AbstractUser makeUser(String type) {
 
         AbstractUser user = null;
 
         if (type.equals("Admin")) {
-            fruit = new AdminUser();
+            user = new AdminUser();
         } else if (type.equals("Sell")) {
-            fruit = new Sell();
+            user = new Sell();
         } else if (type.equals("Buy")) {
-            fruit = new Buy();
+            user = new Buy();
         } else if (type.equals("Full")) {
-            fruit = new FullStandardUser();
+            user = new FullStandardUser();
         }
 
         return user;
