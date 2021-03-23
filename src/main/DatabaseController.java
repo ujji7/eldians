@@ -1,42 +1,81 @@
 package main;
 
+import java.nio.channels.FileLock;
 import java.util.ArrayList;
-
 import java.io.*;
-import java.text.SimpleDateFormat;
-import java.text.ParseException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.HashMap;
+import java.util.Objects;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class DatabaseController {
+    private static final String FILENAMEGAME = "Game.json";
+    private static File fileGame, fileUser, fileMarketplace;
+    private static final String FILENAMEUSER = "User.json";
+    private static final String FILENAMEMARKETPLACE = "Marketplace.json";
+    private Gson gson;
 
-    private static File Game, User, Marketplace;
-    private static String fileNameGame = "Game.txt";
-    private static String fileNameUser = "User.txt";
-    private static String fileNameMarketplace = "Marketplace.txt";
+    public DatabaseController(){
+        fileGame = new File(FILENAMEGAME);
+//            FileLock ignoredgame = fileGame.getChannel().lock();
+        fileUser = new File(FILENAMEUSER);
+//            FileLock ignoreduser = fileUser.getChannel().lock();
+        fileMarketplace = new File(FILENAMEMARKETPLACE);
+//            FileLock ignoredmarketplace = fileMarketplace.getChannel().lock();
+        GsonBuilder builder = new GsonBuilder();
+        gson = builder.create();
 
+    }
+
+    public void writeMarket(Marketplace market) throws IOException {
+        appendData(fileMarketplace, market);
+    }
+
+    public void writeUser(ArrayList<AbstractUser> userList) throws IOException {
+        try {
+            appendData(fileUser, userList);
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void writeGame(ArrayList<Game> gameList) throws IOException {
+        try {
+            appendData(fileGame, gameList);
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void appendData(File filename, Object data) throws IOException {
+        //https://www.journaldev.com/921/java-randomaccessfile-example
+//        filename.seek(filename.length());
+        FileWriter writer = new FileWriter(filename);
+        writer.write(gson.toJson(data));
+        writer.close();
+    }
 
     //Read the 3 files if exist, otherwise create new files to be used to store
     private static void fileOpener() {
-        if (!(Game = new File(fileNameGame)).exists()) { //if game file exists, we can assume all 3 ones exist
+        if (!(fileGame = new File(FILENAMEGAME)).exists()) { //if game file exists, we can assume all 3 ones exist
             try {
-                Game.createNewFile();
+                fileGame.createNewFile();
             } catch (IOException o) {
                 o.printStackTrace();
             }
         }
 
-        if (!(User = new File(fileNameUser)).exists()) { //if game file exists, we can assume all 3 ones exist
+        if (!(fileUser = new File(FILENAMEUSER)).exists()) { //if game file exists, we can assume all 3 ones exist
             try {
-                User.createNewFile();
+                fileUser.createNewFile();
             } catch (IOException o) {
                 o.printStackTrace();
             }
         }
 
-        if (!(Marketplace = new File(fileNameMarketplace)).exists()) { //if game file exists, we can assume all 3 ones exist
+        if (!(fileMarketplace = new File(FILENAMEMARKETPLACE)).exists()) { //if game file exists, we can assume all 3 ones exist
             try {
-                Marketplace.createNewFile();
+                fileMarketplace.createNewFile();
             } catch (IOException o) {
                 o.printStackTrace();
             }
@@ -134,28 +173,99 @@ public class DatabaseController {
         int ID = Integer.parseInt(gameID);
         float gameDiscount = Float.parseFloat(discount);
 
-        return Game(gameName, gamePrice, gameSupplier, ID, gameDiscount);
+        return new Game(gameName, gamePrice, gameSupplier, ID, gameDiscount);
 //        return null;
     }
 
 
-    public ArrayList<AbstractUser> readUser() {
+    public static void main(String[] args) throws IOException {
+        Game g1 = new Game("Spiritfarer", 39.00, "Nintendo", 111, 20.00);
+        Game g2 = new Game("Mariokart", 89.00, "Nintendo", 112, 20.00);
+        Game g3 = new Game("Spyro", 59.00, "PlayStation", 113, 20.00);
+        Game g4 = new Game("MarioParty", 59.00, "Nintendo", 114, 20.00);
+        Game g5 = new Game("CSGO", 59.00, "Steam", 115, 20.00);
+        Game g6 = new Game("Valhiem", 59.00, "Steam", 116, 20.00);
+        Game g7 = new Game("COD", 59.00, "PlayStation", 117, 20.00);
 
-        //User.txt
-        //Name,type,fundsAvailble,inventory[],transactionHistory[],
-        //"Madeo",BS,105.50,[gid1,gid2,gid3],["Bought Counter-Strike from Valve","Sold Half Life to John Doe"]
 
-        return {};
-    }
 
-    public Marketplace readMarketplace() {
 
-        return {};
-    }
+        AdminUser AA = new AdminUser("Danielle", 10000.00f);
+        BuyUser BS = new BuyUser("Ben", 1888.00f);
+        SellUser SS = new SellUser("Porie", 333.00f);
+        SellUser N = new SellUser("Nintendo", 44444.00f);
+        SellUser S = new SellUser("Steam", 2.00f);
+        SellUser P = new SellUser("Playstation", 5.00f);
 
-    public static void main(String[] args) {
+        BS.password = "BUTTS";
+
+        N.password = "Mario";
+
+        BS.inventory.add(g1);
+        BS.inventory.add(g2);
+
+        S.inventory.add(g6);
+        S.inventory.add(g5);
+
+        P.inventory.add(g3);
+        P.inventory.add(g7);
+
+        TransactionHistory transhist = new TransactionHistory();
+
+        String bs = "[buyUsername] has bought [gameName] from [sellerUsername] for [price].";
+        String ac = "[Username] has added [credit] to their account balance; Balance: [Account Balance]";
+
+        transhist.addTransaction(bs);
+        transhist.addTransaction(ac);
+        transhist.addTransaction(bs);
+        transhist.addTransaction(ac);
+        transhist.addTransaction(bs);
+        transhist.addTransaction(ac);
+        transhist.addTransaction(bs);
+        transhist.addTransaction(ac);
+
+        AA.transactionHistory = transhist;
+        BS.transactionHistory = transhist;
+
+        ArrayList<Game> games = new ArrayList<Game>();
+        games.add(g1);
+        games.add(g2);
+        games.add(g3);
+        games.add(g4);
+        games.add(g5);
+        games.add(g6);
+        games.add(g7);
+
+
+        ArrayList<AbstractUser> users = new ArrayList<AbstractUser>();
+        users.add(AA);
+        users.add(BS);
+        users.add(SS);
+        users.add(N);
+        users.add(P);
+        users.add(S);
+
+        Marketplace m = new Marketplace();
+        m.auctionSale = false;
+        HashMap<String, ArrayList<Game>> gos = new HashMap<String, ArrayList<Game>>();
+        gos.put(SS.username, games);
+        gos.put(AA.username, games);
+        gos.put(N.username, games);
+        gos.put(S.username, games);
+        gos.put(P.username, games);
+
+        m.gamesOnSale = gos;
+
+        DatabaseController DBC = new DatabaseController();
+
+        DBC.writeGame(games);
+
+        DBC.writeUser(users);
+
+        DBC.writeMarket(m);
+
         fileOpener();
-        readGame(fileNameGame);
-
+        readGame(FILENAMEGAME);
     }
 }
+

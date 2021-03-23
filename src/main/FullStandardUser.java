@@ -9,6 +9,7 @@ public class FullStandardUser extends AbstractUser {
     public FullStandardUser(String username, Float credit) {
         super(username);
         this.accountBalance = credit;
+        this.type = "FS";
     }
 
     /** Prints that the user cannot create a user
@@ -21,7 +22,7 @@ public class FullStandardUser extends AbstractUser {
     //THIS DOES NOT FOLLOW THE RIGHT FORMAT
 
     @Override
-    public void create(String username, String type, Float credit){
+    public void create(String username, String type, Float credit, Application application){
         System.out.println(this.username + " cannot create another user.");
     }
 
@@ -30,7 +31,7 @@ public class FullStandardUser extends AbstractUser {
     //THIS DOES NOT FOLLOW THE RIGHT FORMAT
 
     @Override
-    public void delete(){
+    public void delete(AbstractUser user, float amount){
         System.out.println(this.username + " cannot delete another user.");
     }
 

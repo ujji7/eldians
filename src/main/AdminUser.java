@@ -8,6 +8,7 @@ public class AdminUser extends AbstractUser {
     public AdminUser(String username, Float credit) {
         super(username);
         this.accountBalance = credit;
+        this.type = "AA";
     }
 
     /** Add credit to an account.
