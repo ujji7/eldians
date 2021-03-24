@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 public class Marketplace {
     public boolean auctionSale = true;
-    public HashMap<AbstractUser, ArrayList<Game>> gamesOnSale, todaySale;
+    public HashMap<String, ArrayList<Game>> gamesOnSale, todaySale;
 
     public Marketplace() {
-        this.gamesOnSale = new HashMap<AbstractUser, ArrayList<Game>>();
-        this.todaySale = new HashMap<AbstractUser, ArrayList<Game>>();
+        this.gamesOnSale = new HashMap<String, ArrayList<Game>>();
+        this.todaySale = new HashMap<String, ArrayList<Game>>();
     }
 
     public boolean getAuctionSale(){
@@ -23,7 +23,7 @@ public class Marketplace {
         this.auctionSale = !this.auctionSale;
     }
 
-    public HashMap<AbstractUser, ArrayList<Game>> getGamesOnSale() {
+    public HashMap<String, ArrayList<Game>> getGamesOnSale() {
         return this.gamesOnSale;
     }
     // this is just returning the marketplace change the method name
@@ -36,17 +36,17 @@ public class Marketplace {
      *
      * @param seller User to be added as a Seller
      */
-    public void addNewSeller(AbstractUser seller){
+    public void addNewSeller(String seller){
         // Add Seller and an empty ArrayList if the Seller does not exist
         if(!this.checkSellerExist(seller)){
             ArrayList<Game> gamesOnSale = new ArrayList<Game>();
             this.gamesOnSale.put(seller, gamesOnSale);
 
-            System.out.println("Seller: "+ seller.getUsername() +" added to the market");
+            System.out.println("Seller: "+ seller +" added to the market");
         }
         // Seller already exists in our market
         else{
-            System.out.println("Seller: "+ seller.getUsername()+" already exists in the market");
+            System.out.println("Seller: "+ seller+" already exists in the market");
         }
     }
 
@@ -57,7 +57,7 @@ public class Marketplace {
      * @param seller User adding the Game to their offerings
      * @param game The game to be added to the Seller's offering
      */
-    public void addGameForSeller(AbstractUser seller, Game game){
+    public void addGameForSeller(String seller, Game game){
         // Check if the Seller exists and add the Game to their list of offering
         if(this.checkSellerExist(seller)){
             String addGame = game.getName();
@@ -70,12 +70,12 @@ public class Marketplace {
                 System.out.println(game.getName() + " has now been added to the seller's offering");
             }
             else {
-                System.out.println("Seller: "+ seller.getUsername()+" is already selling " + game.getName());
+                System.out.println("Seller: "+ seller+" is already selling " + game.getName());
             }
         }
         // Seller currently does not exist in our market
         else{
-            System.out.println("Seller: "+ seller.getUsername()+" does not exist in the market");
+            System.out.println("Seller: "+ seller+" does not exist in the market");
         }
     }
 
@@ -86,8 +86,8 @@ public class Marketplace {
      * @param seller User adding the Game to their offerings
      * @param game a Unique game to be put up for Sale
      */
-    private void addForTomMar(AbstractUser seller, Game game){
-        HashMap<AbstractUser, ArrayList<Game>> todayMarket = this.todaySale;
+    private void addForTomMar(String seller, Game game){
+        HashMap<String, ArrayList<Game>> todayMarket = this.todaySale;
         // check if the user already had put any games up for sale today and add the game
         if(todayMarket.containsKey(seller)){
             ArrayList<Game> futOffering = todayMarket.get(seller);
@@ -109,7 +109,7 @@ public class Marketplace {
      * @param gameTitle the game title to be checked
      * @return true if the Game title will be up for sale tomorrow
      */
-    public boolean gameToBeUpCheck(AbstractUser seller, String gameTitle){
+    public boolean gameToBeUpCheck(String seller, String gameTitle){
         boolean result = false;
         // get the games put up for Sale by the user Today and check if the User will have the game title up for sale
         ArrayList<Game> futureOffering = this.todaySale.get(seller);
@@ -129,8 +129,8 @@ public class Marketplace {
      * @param seller a User to check if they exist
      * @return true if they exist in the market false otherwise
      */
-    public boolean checkSellerExist(AbstractUser seller){
-        return this.gamesOnSale.containsKey(seller);
+    public boolean checkSellerExist(String seller){
+        return this.gamesOnSale.containsKey(seller;
     }
 
 
@@ -141,7 +141,7 @@ public class Marketplace {
      * @param gameTitle The game title being checked
      * @return true if the seller is selling the Game title
      */
-    public boolean checkSellerSellingGame(AbstractUser seller, String gameTitle){
+    public boolean checkSellerSellingGame(String seller, String gameTitle){
         boolean result = false;
         // if the Seller exists and check if they are selling the Game
         if(this.checkSellerExist(seller)) {
@@ -156,12 +156,12 @@ public class Marketplace {
                 }
             }
             if(!gameFound){
-                System.out.println("Seller: "+ seller.getUsername()+" is currently not offering "+ gameTitle);
+                System.out.println("Seller: "+ seller+" is currently not offering "+ gameTitle);
             }
         }
         // Seller currently does not exist in our market
         else{
-            System.out.println("Seller: "+ seller.getUsername()+" does not exist in the market");
+            System.out.println("Seller: "+ seller+" does not exist in the market");
         }
         return result;
     }
@@ -173,7 +173,7 @@ public class Marketplace {
      * @param seller User selling games
      * @return ArrayList of all the offerings
      */
-    private ArrayList<Game> getMyOfferings(AbstractUser seller){
+    private ArrayList<Game> getMyOfferings(String seller){
         return this.gamesOnSale.get(seller);
     }
 
@@ -185,8 +185,8 @@ public class Marketplace {
      * @param gameTitle The game title being asked for the price
      * @return the price of the game or -1 incase of Seller is not selling the game
      */
-    private float calculatePrice(AbstractUser seller, String gameTitle){
-        float price = -1f;
+    private double calculatePrice(String seller, String gameTitle){
+        double price = -1;
         // Get all the games offering from the Seller and check the Price for the game title requested
         ArrayList<Game> currOffering = this.getMyOfferings(seller);
         for(Game myGame : currOffering) {
@@ -205,20 +205,18 @@ public class Marketplace {
      */
     public void syncMarkets(){
         // get all the seller and the new games and add them to the tomorrow's market
-        HashMap<AbstractUser, ArrayList<Game>> todayMarket = this.todaySale;
+        HashMap<String, ArrayList<Game>> todayMarket = this.todaySale;
 
 
         // for each seller sync their past offering with the new offerings
-        for (AbstractUser seller : todayMarket.keySet()) {
+        for (String seller : todayMarket.keySet()) {
             // get the seller's current offering
             ArrayList<Game> myOffering = this.getMyOfferings(seller);
             // get all the games to put up for sale
             ArrayList<Game> newGames = todayMarket.get(seller);
             // loop through all the new games they will have up sale on tomorrow
-            for(Game newGame : newGames){
-                // add it to seller's tomorrow's offering
-                myOffering.add(newGame);
-            }
+            // add it to seller's tomorrow's offering
+            myOffering.addAll(newGames);
         }
         // empty the today sale <- NEED TO IMPLEMENT the empty today sale.
         System.out.println("Market is updated for tomorrow.");

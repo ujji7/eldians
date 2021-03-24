@@ -5,7 +5,7 @@ package main;
 public class AdminUser extends AbstractUser {
 
 
-    public AdminUser(String username, Float credit) {
+    public AdminUser(String username, double credit) {
         super(username);
         this.accountBalance = credit;
         this.type = "AA";
@@ -16,7 +16,7 @@ public class AdminUser extends AbstractUser {
      * @param amount The amount of funds to be added to the User's account
      */
 
-    public void addCreditTo(float amount, AbstractUser user) {
+    public void addCreditTo(double amount, AbstractUser user) {
         user.addCredit(amount);
     }
 

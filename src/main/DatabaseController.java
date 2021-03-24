@@ -1,39 +1,45 @@
 package main;
 
+
+import java.lang.reflect.Type;
 import java.nio.channels.FileLock;
 import java.util.ArrayList;
 import java.io.*;
 import java.util.HashMap;
-import java.util.Objects;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+
+import com.google.gson.*;
 
 public class DatabaseController {
     private static final String FILENAMEGAME = "Game.json";
-    private static File fileGame, fileUser, fileMarketplace;
+    private RandomAccessFile fileGame, fileUser, fileMarketplace;
     private static final String FILENAMEUSER = "User.json";
     private static final String FILENAMEMARKETPLACE = "Marketplace.json";
     private Gson gson;
 
     public DatabaseController(){
-        fileGame = new File(FILENAMEGAME);
-//            FileLock ignoredgame = fileGame.getChannel().lock();
-        fileUser = new File(FILENAMEUSER);
-//            FileLock ignoreduser = fileUser.getChannel().lock();
-        fileMarketplace = new File(FILENAMEMARKETPLACE);
-//            FileLock ignoredmarketplace = fileMarketplace.getChannel().lock();
-        GsonBuilder builder = new GsonBuilder();
-        gson = builder.create();
+        try { fileGame = new RandomAccessFile(FILENAMEGAME, "rw");
+            FileLock ignoredgame = fileGame.getChannel().lock();
+            fileUser = new RandomAccessFile(FILENAMEUSER, "rw");
+            FileLock ignoreduser = fileUser.getChannel().lock();
+            fileMarketplace = new RandomAccessFile(FILENAMEMARKETPLACE, "rw");
+            FileLock ignoredmarketplace = fileMarketplace.getChannel().lock();
+            GsonBuilder builder = new GsonBuilder();
+            gson = builder.create();
+        } catch (IOException e) {
+                e.printStackTrace();
+            }
 
     }
 
     public void writeMarket(Marketplace market) throws IOException {
-        appendData(fileMarketplace, market);
+        appendData(fileMarketplace, gson.toJson(market));
     }
 
     public void writeUser(ArrayList<AbstractUser> userList) throws IOException {
         try {
-            appendData(fileUser, userList);
+            Gson user = new GsonBuilder().registerTypeAdapter(AbstractUser.class, new userSerializer())
+                    .create();
+            appendData(fileUser, user.toJson(userList));
         }catch (IOException e) {
             e.printStackTrace();
         }
@@ -41,141 +47,21 @@ public class DatabaseController {
 
     public void writeGame(ArrayList<Game> gameList) throws IOException {
         try {
-            appendData(fileGame, gameList);
+            appendData(fileGame, gson.toJson(gameList));
         }catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void appendData(File filename, Object data) throws IOException {
+    private void appendData(RandomAccessFile filename, String data) throws IOException {
         //https://www.journaldev.com/921/java-randomaccessfile-example
 //        filename.seek(filename.length());
-        FileWriter writer = new FileWriter(filename);
-        writer.write(gson.toJson(data));
-        writer.close();
-    }
 
-    //Read the 3 files if exist, otherwise create new files to be used to store
-    private static void fileOpener() {
-        if (!(fileGame = new File(FILENAMEGAME)).exists()) { //if game file exists, we can assume all 3 ones exist
-            try {
-                fileGame.createNewFile();
-            } catch (IOException o) {
-                o.printStackTrace();
-            }
-        }
-
-        if (!(fileUser = new File(FILENAMEUSER)).exists()) { //if game file exists, we can assume all 3 ones exist
-            try {
-                fileUser.createNewFile();
-            } catch (IOException o) {
-                o.printStackTrace();
-            }
-        }
-
-        if (!(fileMarketplace = new File(FILENAMEMARKETPLACE)).exists()) { //if game file exists, we can assume all 3 ones exist
-            try {
-                fileMarketplace.createNewFile();
-            } catch (IOException o) {
-                o.printStackTrace();
-            }
-        }
+        filename.writeBytes(data);
+        filename.close();
     }
 
 
-    private static boolean isTypeFloat(String value) {
-        try {
-            Float.parseFloat(value);
-        } catch (NumberFormatException n) {
-            return false;
-        }
-        return true;
-    }
-
-
-    // verifies if the game follows game formatting and specifications
-    private static boolean gameVerifier(String name, String price, String seller, String gameID, String discount) {
-
-        if (name == null || name.length() > 25) { //check name
-            System.out.println("name wrong" + name);
-            return false;
-
-        } else if (price == null || !isTypeFloat(price)) { //check price formatting
-            return false;
-        } else if (Float.parseFloat(price) > 999.99) {
-            return false;
-
-        } else if (seller == null || seller.length() > 15) {
-            System.out.println("seller");
-            return false;
-
-        } else if (gameID == null || !isTypeFloat(gameID)) {
-            System.out.println("gid");
-            return false;
-
-        } else if (discount == null || !isTypeFloat(discount)) {
-            System.out.println("disc");
-            return false;
-        } else if (Float.parseFloat(discount) > 999.99) {
-            return false;
-        }
-        System.out.println("all good");
-        return true;
-    }
-
-
-    // read game - and add to games list
-    private static ArrayList<Game> readGame(String fileNameGame) {
-
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(fileNameGame));
-            ArrayList<Game> games = new ArrayList<Game>();
-            String line, name, price, seller, gameID, discount;
-            name = price = seller = gameID = discount = null;
-
-            while ((line = br.readLine()) != null) { //read each line
-                if (line.equalsIgnoreCase("name")) {
-                    name = br.readLine();
-                } else if (line.equalsIgnoreCase("price")) {
-                    price = br.readLine();
-                } else if (line.equalsIgnoreCase("seller")) {
-                    seller = br.readLine();
-                } else if (line.equalsIgnoreCase("gameID")) {
-                    gameID = br.readLine();
-                } else if (line.equalsIgnoreCase("discount")) {
-                    discount = br.readLine();
-                } else if (line.isBlank()) {
-                    //make new function that adds game if verified
-                    if (gameVerifier(name, price, seller, gameID, discount)) {
-                        games.add(makeGame(name, price, seller, gameID, discount)); //make a new method here that converts the games into game objects and it also converts the string numbers into floats etc.
-                        name = price = seller = gameID = discount = null;
-                    }
-                } else {
-                    name = price = seller = gameID = discount = null;
-                }
-            }
-            if (gameVerifier(name, price, seller, gameID, discount)) {
-                games.add(makeGame(name, price, seller, gameID, discount));
-            } return games;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    private static Game makeGame(String name, String price, String seller, String gameID, String discount) {
-
-//        if gameVerifier(name, price, seller, gameID, discount)
-
-        String gameName = name.stripTrailing();
-        float gamePrice = Float.parseFloat(price);
-        String gameSupplier = seller.stripTrailing();
-        int ID = Integer.parseInt(gameID);
-        float gameDiscount = Float.parseFloat(discount);
-
-        return new Game(gameName, gamePrice, gameSupplier, ID, gameDiscount);
-//        return null;
-    }
 
 
     public static void main(String[] args) throws IOException {
@@ -190,16 +76,13 @@ public class DatabaseController {
 
 
 
-        AdminUser AA = new AdminUser("Danielle", 10000.00f);
-        BuyUser BS = new BuyUser("Ben", 1888.00f);
-        SellUser SS = new SellUser("Porie", 333.00f);
-        SellUser N = new SellUser("Nintendo", 44444.00f);
-        SellUser S = new SellUser("Steam", 2.00f);
-        SellUser P = new SellUser("Playstation", 5.00f);
+        AdminUser AA = new AdminUser("Danielle", 10000.00);
+        BuyUser BS = new BuyUser("Ben", 1888.00);
+        SellUser SS = new SellUser("Porie", 333.00);
+        FullStandardUser N = new FullStandardUser("Nintendo", 44444.00);
+        SellUser S = new SellUser("Steam", 2.00);
+        SellUser P = new SellUser("Playstation", 5.00);
 
-        BS.password = "BUTTS";
-
-        N.password = "Mario";
 
         BS.inventory.add(g1);
         BS.inventory.add(g2);
@@ -225,6 +108,19 @@ public class DatabaseController {
         transhist.addTransaction(ac);
 
         AA.transactionHistory = transhist;
+        AA.transactionHistory.addTransaction(ac);
+        AA.transactionHistory.addTransaction(ac);
+        AA.transactionHistory.addTransaction(ac);
+        AA.transactionHistory.addTransaction(ac);
+        AA.transactionHistory.addTransaction(ac);
+        AA.transactionHistory.addTransaction(ac);
+        AA.transactionHistory.addTransaction(ac);
+        AA.transactionHistory.addTransaction(ac);
+        AA.transactionHistory.addTransaction(ac);
+        AA.transactionHistory.addTransaction(ac);
+        AA.transactionHistory.addTransaction(ac);
+        AA.transactionHistory.addTransaction(ac);
+
         BS.transactionHistory = transhist;
 
         ArrayList<Game> games = new ArrayList<Game>();
@@ -263,9 +159,23 @@ public class DatabaseController {
         DBC.writeUser(users);
 
         DBC.writeMarket(m);
-
-        fileOpener();
-        readGame(FILENAMEGAME);
     }
 }
 
+class userSerializer implements JsonSerializer<AbstractUser>{
+    @Override
+    public JsonElement serialize(AbstractUser usr, Type type, JsonSerializationContext context){
+        JsonObject object = new JsonObject();
+        object.addProperty("username", usr.username);
+        object.addProperty("type", usr.type);
+        object.addProperty("accountBalance", usr.accountBalance);
+        ArrayList<Integer> inv = new ArrayList<Integer>();
+        for (Game game: usr.inventory
+        ) {
+            inv.add(game.getUniqueID());
+        }
+        object.addProperty("inventory", String.valueOf(inv));
+        object.addProperty("transactionHistory", String.valueOf(usr.transactionHistory));
+        return object;
+    }
+}

@@ -5,7 +5,7 @@ package main;
  */
 public class BuyUser extends AbstractUser {
 
-    public BuyUser(String username, Float credit) {
+    public BuyUser(String username, Double credit) {
         super(username);
         this.accountBalance = credit;
         this.type = "BS";
@@ -32,7 +32,7 @@ public class BuyUser extends AbstractUser {
     //THIS DOES NOT FOLLOW THE RIGHT FORMAT
 
     @Override
-    public void create(String username, String type, Float credit, Application application){
+    public void create(String username, String type, double credit, Application application){
         System.out.println("ERROR: \\ < Failed Constraint: "+ this.username + " does not have the ability to create another user.");
     }
 
@@ -41,7 +41,7 @@ public class BuyUser extends AbstractUser {
     //THIS DOES NOT FOLLOW THE RIGHT FORMAT
 
     @Override
-    public void delete(AbstractUser user, float amount){
+    public void delete(AbstractUser user, double amount){
         System.out.println("ERROR: \\ < Failed Constraint: "+ this.username + " does not have the ability to delete another user.");
     }
 
@@ -55,7 +55,7 @@ public class BuyUser extends AbstractUser {
     @Override
     //THIS DOES NOT FOLLOW THE RIGHT FORMAT
 
-    public boolean refund(AbstractUser buyer, AbstractUser seller, float amount){
+    public boolean refund(AbstractUser buyer, AbstractUser seller, double amount){
         System.out.println("ERROR: \\ < Failed Constraint: "+ this.username + " does not have the ability to issue a refund.");
         return false;
     }
