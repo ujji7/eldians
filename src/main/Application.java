@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Application {
+
     public static ArrayList<AbstractUser> userList;
 
     public Marketplace market;
@@ -27,6 +28,13 @@ public class Application {
             databaseController.writeMarket(this.market);
         }catch (IOException e){
             System.out.println("Cannot write files");
+        }
+    }
+
+    public void Run(ArrayList<Transaction> transactions) {
+
+        for (transac : transactions) {
+            login = transac.execute(this.userList, this.gamesList, this.market, this.login);
         }
     }
 
