@@ -220,7 +220,7 @@ public class Marketplace {
                 myOffering.add(newGame);
             }
         }
-        // empty the today sale
+        // empty the today sale <- NEED TO IMPLEMENT the empty today sale.
         System.out.println("Market is updated for tomorrow.");
     }
 
