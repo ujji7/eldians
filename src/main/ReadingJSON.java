@@ -8,6 +8,7 @@ import java.util.*;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
 // CHECK IF U EVER DO THIS.BOARD = BOARD
@@ -43,12 +44,9 @@ public class ReadingJSON {
             Gson gson = new GsonBuilder().registerTypeAdapter(Game.class, new DeserializeGame()).create(); //create Gson
             // object to build the List of games
 
+
             List<Game> games = gson.fromJson(reader, new TypeToken<List<Game>>() {}.getType()); //Return list of games
             // according to game deserializer
-
-            if (games == null) { //there are no games
-                return new ArrayList<>();
-            }
 
             games.removeIf(Objects::isNull); //remove any null game Objects - they are not in proper game format
 
@@ -68,6 +66,9 @@ public class ReadingJSON {
 
         } catch (IOException fileNotFoundException) {
             fileNotFoundException.printStackTrace();
+        } catch (JsonSyntaxException e){
+            e.printStackTrace();
+            return new ArrayList<>();
         }
         return null;
 
@@ -108,10 +109,6 @@ public class ReadingJSON {
 
             List<AbstractUser> users = gson.fromJson(reader, new TypeToken<List<AbstractUser>>() {}.getType());
 
-            if (users == null) {
-                return new ArrayList<>();
-            }
-
             users.removeIf(Objects::isNull); //if any user is null (aka an error), remove it
 
             removeDuplicateSellers(users); // remove duplicate sellers
@@ -122,6 +119,8 @@ public class ReadingJSON {
         } catch (IOException fileNotFoundException) {
             fileNotFoundException.printStackTrace();
             return null;
+        } catch (JsonSyntaxException e){
+            return new ArrayList<>();
         }
     }
 
@@ -149,16 +148,15 @@ public class ReadingJSON {
 
             Marketplace market = gson.fromJson(reader, Marketplace.class);
 
-            if (market == null) {
-                return new Marketplace();
-            }
-
             reader.close(); // close reader
             return market;
 
         } catch (IOException fileNotFoundException) {
             fileNotFoundException.printStackTrace();
             return null;
+        }
+        catch (JsonSyntaxException e){
+            return new Marketplace(false);
         }
     }
 

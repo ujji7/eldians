@@ -2,14 +2,8 @@ package main;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
-
-//I made in game that returns the price with discount applied since we'll probs need it in many places.
-
 //we need an auction sale method - i implemented it at botfitom check it out
 // also look at readme for add credit - there is another implementations for admin type
-
-
 
 
 //BUY USER NOW HAS CORRECT FORMAT OF ERRORS - WHEN WE SWITCH those error codes to abstract and the abstract code
@@ -18,7 +12,6 @@ import java.util.HashMap;
 //I made in game that returns the price with discount applied since we'll probs need it in many places.
 
 //we need an auction sale method - i implemented it at bottom check it out
-// also look at readme for add credit - there is another implementations for admin type - DONE
 
 
 //Back End Error Recording:

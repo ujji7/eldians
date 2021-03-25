@@ -4,11 +4,13 @@ import java.util.ArrayList;
 
 public class Marketplace {
     public boolean auctionSale = true;
+
     public HashMap<String, ArrayList<Game>> gamesOnSale, todaySale;
 
     public Marketplace() {
         this.gamesOnSale = new HashMap<String, ArrayList<Game>>();
         this.todaySale = new HashMap<String, ArrayList<Game>>();
+
     }
 
     public boolean getAuctionSale(){
