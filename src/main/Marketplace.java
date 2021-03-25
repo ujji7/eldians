@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 public class Marketplace {
     public boolean auctionSale = true;
-    public HashMap<AbstractUser, ArrayList<Game>> gamesOnSale;
+    public HashMap<String, ArrayList<Game>> gamesOnSale;
 
     public Marketplace() {
-        this.gamesOnSale = new HashMap<AbstractUser, ArrayList<Game>>();
+        this.gamesOnSale = new HashMap<String, ArrayList<Game>>();
     }
 
     public boolean getAuctionSale(){
@@ -21,7 +21,7 @@ public class Marketplace {
         this.auctionSale = !this.auctionSale;
     }
 
-    public HashMap<AbstractUser, ArrayList<Game>> getGamesOnSale() {
+    public HashMap<String, ArrayList<Game>> getGamesOnSale() {
         return this.gamesOnSale;
     }
     // this is just returning the marketplace change the method name

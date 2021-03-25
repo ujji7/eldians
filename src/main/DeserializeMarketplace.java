@@ -82,10 +82,10 @@ public class DeserializeMarketplace implements JsonDeserializer<Marketplace> {
         HashMap<AbstractUser, ArrayList<Game>> market = new HashMap<AbstractUser, ArrayList<Game>>();
 
         for (String s : sellers) {
-            AbstractUser user = findUser(s);
+//            AbstractUser user = findUser(s); //add this if hashmap <user obj, list.
             JsonArray gameIDList = uniqueSellers.get(s).getAsJsonArray();
             ArrayList<Game> gamesSoldByUSer = gameIDsToGames(s, gameIDList);
-            market.put(user, gamesSoldByUSer);
+            market.put(s, gamesSoldByUSer);
         }
 
         return new Marketplace(auction, market);
