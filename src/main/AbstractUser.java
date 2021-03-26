@@ -2,14 +2,8 @@ package main;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
-
-//I made in game that returns the price with discount applied since we'll probs need it in many places.
-
 //we need an auction sale method - i implemented it at botfitom check it out
 // also look at readme for add credit - there is another implementations for admin type
-
-
 
 
 //BUY USER NOW HAS CORRECT FORMAT OF ERRORS - WHEN WE SWITCH those error codes to abstract and the abstract code
@@ -18,7 +12,6 @@ import java.util.HashMap;
 //I made in game that returns the price with discount applied since we'll probs need it in many places.
 
 //we need an auction sale method - i implemented it at bottom check it out
-// also look at readme for add credit - there is another implementations for admin type - DONE
 
 
 //Back End Error Recording:
@@ -58,12 +51,12 @@ public abstract class AbstractUser {
 
     }
 
-    public AbstractUser(String username, float balance){
+    public AbstractUser(String username, double balance){
         this(username);
         this.accountBalance = balance;
     }
 
-    public AbstractUser(String username, float balance, ArrayList<Game> inventory){
+    public AbstractUser(String username, double balance, ArrayList<Game> inventory){
         this(username, balance);
         this.inventory = inventory;
     }
@@ -102,7 +95,7 @@ public abstract class AbstractUser {
      *
      * @param amount The value of funds to be added
      */
-    public void transferFunds(float amount){
+    public void transferFunds(double amount){
         //boolean result = true;
         // check if we can add the funds
         if(this.canAcceptFunds(amount)){
@@ -117,7 +110,7 @@ public abstract class AbstractUser {
             }
         }
         else {
-            // ACCORDINGa TO PIAZZA @666 max out the balance and prompt user    //change it later
+            // ACCORDING TO PIAZZA @666 max out the balance and prompt user    //change it later
             this.setAccountBalance(MAXFUNDS);
             System.out.println("ERROR: \\ < Failed Constraint: "+ this.username +
                     "'s balance was Maxed up upon addition of more funds!");
@@ -136,7 +129,7 @@ public abstract class AbstractUser {
      *
      * @param amount The amount of funds to be added to the User's account
      */
-    public void addCredit(float amount) {
+    public void addCredit(double amount) {
         // check the constraints of daily limit
         double fundsToday = this.newFunds;
         if (this.dailyLimitCheck(amount)) {
@@ -174,11 +167,11 @@ public abstract class AbstractUser {
      */
     //HELPER FOR BUY - I DON'T ACTUALLY USE THIS HELPER ANYMORE AND NOW THIS SEEMS A BIT REDUNDANT WE CAN
     // DELETE THIS HELPER LATER ON UNLESS SOMEONE ELSE USES IT
-    private void removeFunds(Float amount) {
-        if (this.canTransferFunds(amount)) {
-            this.accountBalance = this.accountBalance - (double) amount; //should this be a double? what happens here?
-        }
-    }
+//    private void removeFunds(Float amount) {
+//        if (this.canTransferFunds(amount)) {
+//            this.accountBalance = this.accountBalance - (double) amount; //should this be a double? what happens here?
+//        }
+//    }
 
     /** Return true if the game is already in the user's inventory.
      *
@@ -340,7 +333,7 @@ public abstract class AbstractUser {
      * @param amount the value of credits to be transfered among them
      * @return true if the refund was made false otherwise
      */
-    public boolean refund(AbstractUser buyer, AbstractUser seller, float amount){
+    public boolean refund(AbstractUser buyer, AbstractUser seller, double amount){
         boolean result = false;
         // need to check if the seller can transfer funds
         boolean canSendMoney = seller.canTransferFunds(amount);
@@ -371,7 +364,7 @@ public abstract class AbstractUser {
      * @param credit a float representing the amount of credits to add to the newly
      *               created user's account balance
      */
-    public void create(String username, String type, Float credit, Application application){
+    public void create(String username, String type, double credit, Application application){
         if(MINFUNDS <= credit || credit <= MAXFUNDS){
             AbstractUser newUser;
             switch (type) {
@@ -403,7 +396,7 @@ public abstract class AbstractUser {
                     "a User already exists with given name. >//");
         }
         System.out.println("ERROR: \\< Failed Constraint: New User could not be created since "
-                + Float.toString(credit) + "amount is invalid. >//");
+                + Double.toString(credit) + "amount is invalid. >//");
 
     }
 
@@ -412,7 +405,7 @@ public abstract class AbstractUser {
      *
      *
      */
-    public void delete(AbstractUser user, float amount){
+    public void delete(AbstractUser user, double amount){
         System.out.println("ERROR: \\< Failed Constraint: Current User is not allowed to delete someone's account. >//");
 
     }
@@ -436,7 +429,7 @@ public abstract class AbstractUser {
     }
 
 
-    private boolean dailyLimitCheck(float amount){
+    private boolean dailyLimitCheck(double amount){
         return this.NEWFUNDSTODAY + amount <= DAILYLIMIT;
     }
 
@@ -444,7 +437,7 @@ public abstract class AbstractUser {
     /** Prints that the user cannot implement an auction sale.
      * @param amount amount by which to reduce prices of games by.
      */
-    public void auctionSale(float amount) {
+    public void auctionSale(double amount) {
         System.out.println(this.getUsername() + "cannot implement an auction sale.");
     }
 }

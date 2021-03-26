@@ -10,7 +10,7 @@ public class SellUser extends AbstractUser {
      * @param username
      * @param credit
      */
-    public SellUser(String username, Float credit) {
+    public SellUser(String username, double credit) {
         super(username);
         this.accountBalance = credit;
         this.type = "SS";
@@ -38,7 +38,7 @@ public class SellUser extends AbstractUser {
     //THIS DOES NOT FOLLOW THE RIGHT FORMAT
 
     @Override
-    public void create(String username, String type, Float credit, Application application){
+    public void create(String username, String type, double credit, Application application){
         System.out.println(this.username + " cannot create another user.");
     }
 
@@ -47,7 +47,7 @@ public class SellUser extends AbstractUser {
     //THIS DOES NOT FOLLOW THE RIGHT FORMAT
 
     @Override
-    public void delete(AbstractUser user, float amount){
+    public void delete(AbstractUser user, double amount){
         System.out.println(this.username + " cannot delete another user.");
     }
 
@@ -61,7 +61,7 @@ public class SellUser extends AbstractUser {
     //THIS DOES NOT FOLLOW THE RIGHT FORMAT
 
     @Override
-    public boolean refund(AbstractUser buyer, AbstractUser seller, float amount){
+    public boolean refund(AbstractUser buyer, AbstractUser seller, double amount){
         System.out.println(this.username + " cannot issue a refund.");
         return false;
     }
