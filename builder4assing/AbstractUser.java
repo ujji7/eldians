@@ -28,7 +28,6 @@ import java.util.HashMap;
  */
 public abstract class AbstractUser {
     public String username;
-    public String password;
     public String type;
     public double accountBalance;
     public ArrayList<Game> inventory;
@@ -40,15 +39,14 @@ public abstract class AbstractUser {
     public static final float DAILYLIMIT = 1000f;
     public static final float NEWFUNDSTODAY = 0f;
 
-    public AbstractUser(UserBuilder Builder){
-        this.username = builder.username;
-        this.accountBalance = builder.accountBalance;
-        // why is this 0? should we change the constructor
-        this.accountBalance = 0;
-        this.newFunds = 0;
-        this.transactionHistory = new TransactionHistory();
-
-    }
+//    public AbstractUser(){
+//
+//        // why is this 0? should we change the constructor
+//        this.accountBalance = 0;
+//        this.newFunds = 0;
+//        this.transactionHistory = new TransactionHistory();
+//
+//    }
 //
 //    public AbstractUser(String username, double balance){
 //        this(username);
@@ -60,6 +58,22 @@ public abstract class AbstractUser {
 //        this.inventory = inventory;
 //    }
 
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setInventory(ArrayList<Game> inventory) {
+        this.inventory = inventory;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setTransactionHistory(TransactionHistory transactionHistory) {
+        this.transactionHistory = transactionHistory;
+    }
 
     /**
      * Sets the account balance for our User

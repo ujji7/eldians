@@ -4,16 +4,35 @@ import java.util.ArrayList;
  *
  */
 public class AdminUser extends AbstractUser {
-    inventory;
 
     public AdminUser(UserBuilder builder) {
-        super(builder);
+        this.username = builder.username;
         this.type = "AA";
         this.inventory = builder.inventory;
         this.accountBalance = builder.accountBalance;
-        this.transactionHistory = builder.transactionHistory
+        this.transactionHistory = builder.transactionHistory;
     }
 
+
+    public String getUsername(){
+        return this.username;
+    }
+
+    public String getType(){
+        return this.type;
+    }
+
+    public ArrayList<Game> getInventory(){
+        return this.inventory;
+    }
+
+    public double getAccountBalance(){
+        return this.accountBalance;
+    }
+
+    public TransactionHistory getTransactionHistory(){
+        return this.transactionHistory;
+    }
     /** Add credit to an account.
      *
      * @param amount The amount of funds to be added to the User's account
@@ -43,4 +62,41 @@ public class AdminUser extends AbstractUser {
 //            Marketplace.getAuctionSale() = 0.00f;
 //        }
 //    }
+    public static class UserBuilder {
+
+        public String username; //mandatory
+        public double accountBalance; // optional
+        public ArrayList<main.Game> inventory; //optional
+        public double newFunds; //optional
+        public ArrayList<String> transactionHistory; //optional
+
+
+        public UserBuilder(String name) {
+            this.username = name;
+        }
+
+        public UserBuilder balance(double accountBalance){
+            this.accountBalance = accountBalance;
+            return this;
+        }
+
+        public UserBuilder inventoryGames(ArrayList<main.Game> inventory){
+            this.inventory.addAll(inventory);
+            return this;
+        }
+
+        public UserBuilder newFunds(double newFunds){
+            this.newFunds = newFunds;
+            return this;
+        }
+
+        public UserBuilder transactionHistory(ArrayList<String> transactions){
+            this.transactionHistory.addAll(transactions);
+            return this;
+        }
+
+        public AdminUser build(){
+            return new AdminUser(this);
+        }
+    }
 }
