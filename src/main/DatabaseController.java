@@ -1,6 +1,5 @@
 package main;
 
-
 import java.lang.reflect.Type;
 import java.nio.channels.FileLock;
 import java.util.ArrayList;
@@ -8,6 +7,10 @@ import java.io.*;
 import java.util.HashMap;
 
 import com.google.gson.*;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DatabaseController {
     private static final String FILENAMEGAME = "Game.json";

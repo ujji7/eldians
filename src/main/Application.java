@@ -1,5 +1,7 @@
 package main;
-import javax.imageio.IIOException;
+
+import transactions.Transaction;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -33,7 +35,7 @@ public class Application {
 
     public void Run(ArrayList<Transaction> transactions) {
 
-        for (transac : transactions) {
+        for (Transaction transac : transactions) {
             login = transac.execute(this.userList, this.gamesList, this.market, this.login);
         }
     }

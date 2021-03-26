@@ -29,6 +29,7 @@ import java.util.HashMap;
  */
 public abstract class AbstractUser {
     public String username;
+    public String password;
     public String type;
     public double accountBalance;
     public ArrayList<Game> inventory;
