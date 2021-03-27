@@ -2,24 +2,21 @@
  * it cannot create or delete users.
  *
  */
-public class BuyUser extends AbstractUser {
+import Game;
 
-    public BuyUser(UserBuilder builder) {
+import java.util.ArrayList;
+
+public class BuyUser extends AbstractUser {
+//    public ArrayList<Game> inventory;
+
+    private BuyUser(BuyUserBuilder builder) {
         this.username = builder.username;
         this.accountBalance = builder.accountBalance;
         this.type = "BS";
+        this.inventory = builder.inventory;
+
     }
 
-//    public BuyUser(String username, Double credit) {
-//        super(username);
-//        this.accountBalance = credit;
-//        this.type = "BS";
-//    }
-//
-//    public BuyUser(String username, Double balance, ArrayList<Game> inventory, ArrayList<String> transactions) {
-//        super(username, balance, inventory, transactions);
-////        this.transactionHistory = transactions;
-//    }
 
     /** Prints that the user cannot sell a game.
      *
@@ -70,4 +67,43 @@ public class BuyUser extends AbstractUser {
         return false;
     }
 
+    public static class BuyUserBuilder {
+
+        private String username; // required
+//        public String type;
+        public double accountBalance;
+        public ArrayList<Game> inventory;
+        public double newFunds;
+        public ArrayList<String> transactionHistory;
+
+        public BuyUserBuilder(String name) {
+            this.username = name;
+        }
+
+        public BuyUserBuilder balance(double accountBalance){
+            this.accountBalance = accountBalance;
+            return this;
+        }
+
+        public UserBuilder inventoryGames(ArrayList<main.Game> inventory){
+            this.inventory.addAll(inventory);
+            return this;
+        }
+
+        public BuyUserBuilder newFunds(double newFunds){
+            this.newFunds = newFunds;
+            return this;
+        }
+
+        public BuyUserBuilder transactionHistory(ArrayList<String> transactions){
+            this.transactionHistory.addAll(transactions);
+            return this;
+        }
+
+        public BuyUser build() {
+            BuyUser user = new BuyUser(this);
+            return new BuyUser(this);
+        }
+
+    }
 }
