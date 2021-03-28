@@ -71,4 +71,46 @@ public class BuyUser extends AbstractUser {
         return false;
     }
 
+    public static class BuyUserBuilder {
+
+        private String username; // required
+        //        public String type;
+        public double accountBalance;
+        public ArrayList<Game> inventory;
+        public double newFunds;
+        public ArrayList<String> transactionHistory;
+
+        public BuyUserBuilder(String name) {
+            this.username = name;
+            this.accountBalance = 0.00;
+            this.transactionHistory = new ArrayList<>();
+        }
+
+        public BuyUserBuilder balance(double accountBalance){
+            this.accountBalance = accountBalance;
+            return this;
+        }
+
+        public UserBuilder inventoryGames(ArrayList<main.Game> inventory){
+            this.inventory.addAll(inventory);
+            return this;
+        }
+
+        public BuyUserBuilder newFunds(double newFunds){
+            this.newFunds = newFunds;
+            return this;
+        }
+
+        public BuyUserBuilder transactionHistory(ArrayList<String> transactions){
+            this.transactionHistory.addAll(transactions);
+            return this;
+        }
+
+        public BuyUser build() {
+            BuyUser user = new BuyUser(this);
+            return new BuyUser(this);
+        }
+
+    }
+
 }
