@@ -38,7 +38,7 @@ public class SellUser extends AbstractUser {
     //THIS DOES NOT FOLLOW THE RIGHT FORMAT
 
     @Override
-    public void create(String username, String type, double credit, Application application){
+    public void create(String username, String type, double credit){
         System.out.println(this.username + " cannot create another user.");
     }
 

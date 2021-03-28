@@ -1,4 +1,6 @@
 package main;
+
+import java.util.ArrayList;
 /** This is a buy type user that extends the Abstract User class. A Buy type user cannot sell games, only buy. And
  * it cannot create or delete users.
  *
@@ -16,7 +18,7 @@ public class BuyUser extends AbstractUser {
     }
 
     public BuyUser(String username, Double balance, ArrayList<Game> inventory, ArrayList<String> transactions) {
-        super(username, balance, inventory, transactions);
+        super(username, balance, inventory, new TransactionHistory(transactions));
 //        this.transactionHistory = transactions;
     }
 
@@ -41,7 +43,7 @@ public class BuyUser extends AbstractUser {
     //THIS DOES NOT FOLLOW THE RIGHT FORMAT
 
     @Override
-    public void create(String username, String type, double credit, Application application){
+    public void create(String username, String type, double credit){
         System.out.println("ERROR: \\ < Failed Constraint: "+ this.username + " does not have the ability to create another user.");
     }
 

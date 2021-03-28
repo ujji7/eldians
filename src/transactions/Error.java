@@ -8,10 +8,25 @@ import java.util.ArrayList;
 
 public class Error implements Transaction{
 
+    /**
+     * Creates a new Error object that prints an Error to the console.
+     */
     public Error() { System.out.println("Fatal Error: This is not a valid transaction code"); }
 
+    /**
+     * Executes an Error transaction. Returns the person who is currently logged in.
+     *
+     * This method should *NEVER* be called.
+     *
+     * @param users ArrayList of Users in the system.
+     * @param games ArrayList of Games in the system.
+     * @param market the current Marketplace, holding games being sold by sellers.
+     * @param login the user who is currently logged in.
+     * @return
+     */
     @Override
-    public String execute(ArrayList<AbstractUser> users, ArrayList<Game> games, Marketplace market, String login) {
+    public AbstractUser execute(ArrayList<AbstractUser> users, ArrayList<Game> games, Marketplace market,
+                                AbstractUser login) {
         return login;
     }
 }

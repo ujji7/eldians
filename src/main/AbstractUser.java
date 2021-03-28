@@ -34,7 +34,7 @@ public abstract class AbstractUser {
     public double accountBalance;
     public ArrayList<Game> inventory;
     public double newFunds;
-    public TransactionHistory transactionHistory;
+    public TransactionHistory transactionHistory = null;
     public static final double MAXFUNDS = 999999.99f;
     // can change minFunds to allow overdrafts for future improvements
     public static final float MINFUNDS = 0f;
@@ -47,8 +47,7 @@ public abstract class AbstractUser {
         this.accountBalance = 0;
         this.inventory = new ArrayList<Game>();
         this.newFunds = 0;
-        this.transactionHistory = new TransactionHistory();
-
+        if (this.transactionHistory == null) { this.transactionHistory = new TransactionHistory(); }
     }
 
     public AbstractUser(String username, double balance){
@@ -60,6 +59,12 @@ public abstract class AbstractUser {
         this(username, balance);
         this.inventory = inventory;
     }
+
+    public AbstractUser(String username, double balance, ArrayList<Game> inventory, TransactionHistory transHist){
+        this(username, balance, inventory);
+        this.transactionHistory = transHist;
+    }
+
 
 
     /**
@@ -364,7 +369,7 @@ public abstract class AbstractUser {
      * @param credit a float representing the amount of credits to add to the newly
      *               created user's account balance
      */
-    public void create(String username, String type, double credit, Application application){
+    public void create(String username, String type, double credit){
         if(MINFUNDS <= credit || credit <= MAXFUNDS){
             AbstractUser newUser;
             switch (type) {
