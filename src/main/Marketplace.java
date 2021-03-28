@@ -21,7 +21,7 @@ public class Marketplace {
      * Toggle the Auction Sale in the market
      *
      */
-    private void toggleSale(){
+    public void toggleSale(){
         this.auctionSale = !this.auctionSale;
     }
 
@@ -132,7 +132,7 @@ public class Marketplace {
      * @return true if they exist in the market false otherwise
      */
     public boolean checkSellerExist(String seller){
-        return this.gamesOnSale.containsKey(seller;
+        return this.gamesOnSale.containsKey(seller);
     }
 
 
