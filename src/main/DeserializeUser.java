@@ -21,21 +21,23 @@ public class DeserializeUser implements JsonDeserializer<AbstractUser> {
     private static final String fullType = "FS";
 
     public Boolean correctUserTypes(JsonObject jsonObject) {
-        if (!(jsonObject.has(name) && jsonObject.has(type) && jsonObject.has(credit) && jsonObject.has(inventory) &&
+        if (!(jsonObject.has(name) && jsonObject.has(type) && jsonObject.has(credit) &&
                 jsonObject.has(transactionHistory))) {
             return false;
         }
-
         try {
             jsonObject.get(name).getAsString();
-            jsonObject.get(type).getAsString();
+            String typeUser = jsonObject.get(type).getAsString();
             jsonObject.get(credit).getAsDouble();
-            JsonArray inventoryGame = jsonObject.get(inventory).getAsJsonArray();
-
-            removeNonIntegers(inventoryGame);
+            if (typeUser.equals(sellType) && jsonObject.has(inventory)) {
+                return false;
+            }
+            if (jsonObject.has(inventory)) { //if its a diff type other than seller, itll have inventory
+                JsonArray inventoryGame = jsonObject.get(inventory).getAsJsonArray();
+                removeNonIntegers(inventoryGame);
+            }
 
             JsonArray transactionArray = jsonObject.get(transactionHistory).getAsJsonArray();
-
             Iterator<JsonElement> iteratorT = transactionArray.iterator();
             while (iteratorT.hasNext()) {
                 JsonElement t = iteratorT.next();
@@ -45,14 +47,18 @@ public class DeserializeUser implements JsonDeserializer<AbstractUser> {
                     iteratorT.remove();
                 }
             }
-
-            } catch(Exception e){
-                return false;
-            }
-            return true;
+        } catch (Exception e) {
+            return false;
         }
+        return true;
+    }
 
     // helper for check types
+
+    /** Remove items from array that are not integer types.
+     *
+     * @param array to be removed of integers
+     */
     private void removeNonIntegers(JsonArray array) {
         Iterator<JsonElement> iterator = array.iterator();
         while (iterator.hasNext()) {
@@ -65,16 +71,15 @@ public class DeserializeUser implements JsonDeserializer<AbstractUser> {
         }
     }
 
-    private static boolean userVerifier(String name, String type, Double credit, JsonArray inventory) {
+    private static boolean userVerifier(String name, String type, Double credit) {
 
         if (name.length() > 15) { //check name
             return false;
         } else if (!((type.equals(adminType)) || (type.equals(buyType)) || (type.equals(sellType)) ||
                 (type.equals(fullType)))) {
             return false;
-        } else if (credit > 999999.99) {
-            return false;
-        } else return !type.equals(sellType) || inventory.size() == 0;
+        } else return !(credit > 999999.99);
+//        } else return !type.equals(sellType) || inventory.size() == 0;
     }
 
 
@@ -90,21 +95,22 @@ public class DeserializeUser implements JsonDeserializer<AbstractUser> {
         return inventoryGames;
     }
 
-    private static AbstractUser makeUser(String name, String type, Double credit, ArrayList<Game> inventory,
+    private static AbstractUser makeBasicUser(String name, String type, Double credit, ArrayList<Game> inventory,
                                     ArrayList<String> history) {
 
 
         if (type.equals(buyType)) {
-            return new BuyUser(name, credit, inventory, history);
-        } else if (type.equals(sellType)) {
-            return new SellUser(name, credit, inventory, history);
+            return new BuyUserBuilder(name).credit(credit).inventoryGames(inventory).transactionHistory(history);
+        } else if (type.equals(adminType)) {
+            return new AdminUserBuilder(name).credit(credit).inventoryGames(inventory).transactionHistory(history);
+        } else if (type.equals(fullType)) {
+            return new FullUserBuilder(name).credit(credit).inventoryGames(inventory).transactionHistory(history);
         }
-//        } else if (type.equals(adminType)) {
-//            return new AdminUser(name, credit, inventory, history);
-//        } else if (type.equals(fullType)) {
-//            return new FullStandardUser(name, credit, inventory, history);
-//        }
         return null;
+    }
+
+    private static AbstractUser makeSellUser(String name, String type, Double credit, ArrayList<String> history) {
+        return new SellUserBuilder(name).credit(credit).transactionHistory(history);
     }
 
     @Override
@@ -119,19 +125,25 @@ public class DeserializeUser implements JsonDeserializer<AbstractUser> {
         String nameUser = jsonObject.get(name).getAsString();
         String typeUser = jsonObject.get(type).getAsString();
         double creditUser = jsonObject.get(credit).getAsDouble();
-        JsonArray inventoryUser = jsonObject.get(inventory).getAsJsonArray();
+
         JsonArray transactionHistoryUser = jsonObject.get(transactionHistory).getAsJsonArray();
 
-        if (!userVerifier(nameUser, typeUser, creditUser, inventoryUser)) {
+        if (!userVerifier(nameUser, typeUser, creditUser)) {
             return null;
         }
-        ArrayList<Game> inventoryGameObjects = gameIDsToGames(inventoryUser);
+
         ArrayList<String> transactionHistoryList = new ArrayList<String>();
 
         for (JsonElement i : transactionHistoryUser) {
             transactionHistoryList.add(i.getAsString());
         }
 
-        return makeUser(nameUser, typeUser, creditUser, inventoryGameObjects, transactionHistoryList);
+        if (jsonObject.has(inventory)) { //any other than sell
+            JsonArray inventoryUser = jsonObject.get(inventory).getAsJsonArray();
+            ArrayList<Game> inventoryGameObjects = gameIDsToGames(inventoryUser);
+            makeBasicUser(nameUser, typeUser, creditUser, inventoryGameObjects, transactionHistoryList)
+        }
+
+        return makeSellUser(nameUser, typeUser, creditUser, transactionHistoryList);
     }
 }
