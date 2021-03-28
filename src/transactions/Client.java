@@ -21,7 +21,7 @@ public class Client {
 
     // private List<String> allLines;
     private ArrayList<ArrayList<String>> validFormatTrans;
-    // private ArrayList<Transaction> validTranasctions;
+    private ArrayList<Transaction> validTranasctions;
     // private static String dailyTxt;
     // Login, Logout, Create, Add-Credit, Delete, Auction-Sale regex format
     private static String regLLCADT = "(0[0-7]|10)\\s(.{15})\\s(AA|FS|BS|SS)\\s(\\d{6}\\.\\d{2})";
@@ -113,21 +113,34 @@ public class Client {
      * Sends all the properly formatted transactions to the Transaction Factory and then sends it to the application
      * for processing
      *
+     *
      */
     private void makeAndExecute() {
+        this.validTranasctions = new ArrayList<Transaction>();
+        // make an array list of Transaction Oject
         for (ArrayList<String> tranSeq : validFormatTrans) {
-            /*
-            try {}
-            catch (){
+            TransactionFactory myTranFactory = new TransactionFactory();
 
-            }
-        */
+                        //VERIFY WITH MAD
+
+            this.validTranasctions.add(myTranFactory.buildTransaction(tranSeq));
+
+        }
+        // If there are transaction objects then send them to Application
+        if(validTranasctions.size() >1){
+            Application app = new Application();
+
+                        //Check this BS error
+
+            app.Run(validTranasctions);
+
+        }
+        else{
+            System.out.println("<Fatal Error: A valid transaction sequence was not found in" +
+                    " daily.txt>" +
+                    " \n Error encountered in Client.java");
         }
     }
-
-
-
-
 
 
     /**
