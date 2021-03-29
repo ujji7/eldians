@@ -116,9 +116,7 @@ public class SellUser extends main.AbstractUser {
             else{
                 System.out.println("ERROR: \\" + reciever.getUsername() + " already has " +gameName+
                         ".\n Gift transaction failed.");
-
             }
-
         }
     }
 
