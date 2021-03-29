@@ -8,16 +8,28 @@ import java.util.ArrayList;
  */
 public class SellUser extends AbstractUser {
 
-    /**
-     *
-     * @param username
-     * @param credit
-     */
-    public SellUser(String username, double credit) {
-        super(username);
-        this.accountBalance = credit;
+    private SellUser(SellUserBuilder builder) {
+        this.username = builder.username;
+        this.accountBalance = builder.accountBalance;
         this.type = "SS";
     }
+
+    public String getUsername(){
+        return this.username;
+    }
+
+    public String getType(){
+        return this.type;
+    }
+
+    public double getAccountBalance(){
+        return this.accountBalance;
+    }
+
+    public TransactionHistory getTransactionHistory(){
+        return this.transactionHistory;
+    }
+
 
     /** Prints that this user cannot buy a game.
      *

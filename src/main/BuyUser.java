@@ -7,20 +7,45 @@ import java.util.ArrayList;
  */
 public class BuyUser extends AbstractUser {
 
-    public BuyUser(String username) {
-        super(username);
-    }
+//    public BuyUser(String username) {
+//        super(username);
+//    }
 
-    public BuyUser(String username, Double credit) {
-        super(username);
-        this.accountBalance = credit;
+
+//    public BuyUser(String username, Double credit) {
+//        super(username);
+//        this.accountBalance = credit;
+//        this.type = "BS";
+//    }
+
+    private BuyUser(BuyUserBuilder builder) {
+        this.username = builder.username;
+        this.accountBalance = builder.accountBalance;
         this.type = "BS";
+        this.inventory = builder.inventory;
+
     }
 
-    public BuyUser(String username, Double balance, ArrayList<Game> inventory, ArrayList<String> transactions) {
-        super(username, balance, inventory, new TransactionHistory(transactions));
-//        this.transactionHistory = transactions;
+    public String getUsername(){
+        return this.username;
     }
+
+    public String getType(){
+        return this.type;
+    }
+
+    public ArrayList<Game> getInventory(){
+        return this.inventory;
+    }
+
+    public double getAccountBalance(){
+        return this.accountBalance;
+    }
+
+    public TransactionHistory getTransactionHistory(){
+        return this.transactionHistory;
+    }
+
 
     /** Prints that the user cannot sell a game.
      *
