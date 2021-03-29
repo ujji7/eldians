@@ -1,25 +1,35 @@
 package main;
+
+import java.util.ArrayList;
+
 /** Admin type user that extends the Abstract USer class. A sell type user cannot buy games, only sell. And
  * it cannot create or delete users.
  *
  */
 public class SellUser extends AbstractUser {
 
-    /**
-     *
-     * @param username
-     * @param credit
-     */
-    public SellUser(String username, double credit) {
-        super(username);
-        this.accountBalance = credit;
+    private SellUser(SellUserBuilder builder) {
+        this.username = builder.username;
+        this.accountBalance = builder.accountBalance;
         this.type = "SS";
     }
 
 
+    public String getUsername(){
+        return this.username;
+    }
 
+    public String getType(){
+        return this.type;
+    }
 
+    public double getAccountBalance(){
+        return this.accountBalance;
+    }
 
+    public TransactionHistory getTransactionHistory(){
+        return this.transactionHistory;
+    }
 
     /** Prints that this user cannot buy a game.
      *
@@ -69,5 +79,41 @@ public class SellUser extends AbstractUser {
     public boolean refund(AbstractUser buyer, AbstractUser seller, double amount){
         System.out.println(this.username + " cannot issue a refund.");
         return false;
+    }
+
+    public static class SellUserBuilder {
+
+        private String username; // required
+        //        public String type;
+        public double accountBalance;
+        public double newFunds;
+        public ArrayList<String> transactionHistory;
+
+        public SellUserBuilder(String name) {
+            this.username = name;
+            this.accountBalance = 0.00;
+            this.transactionHistory = new ArrayList<>();
+        }
+
+        public SellUserBuilder balance(double accountBalance){
+            this.accountBalance = accountBalance;
+            return this;
+        }
+
+        public SellUserBuilder newFunds(double newFunds){
+            this.newFunds = newFunds;
+            return this;
+        }
+
+        public SellUserBuilder transactionHistory(ArrayList<String> transactions){
+            this.transactionHistory.addAll(transactions);
+            return this;
+        }
+
+        public SellUser build() {
+            SellUser user = new SellUser(this);
+            return new SellUser(this);
+        }
+
     }
 }

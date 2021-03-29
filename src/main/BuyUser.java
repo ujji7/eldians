@@ -7,20 +7,45 @@ import java.util.ArrayList;
  */
 public class BuyUser extends AbstractUser {
 
-    public BuyUser(String username) {
-        super(username);
-    }
+//    public BuyUser(String username) {
+//        super(username);
+//    }
 
-    public BuyUser(String username, Double credit) {
-        super(username);
-        this.accountBalance = credit;
+
+//    public BuyUser(String username, Double credit) {
+//        super(username);
+//        this.accountBalance = credit;
+//        this.type = "BS";
+//    }
+
+    private BuyUser(BuyUserBuilder builder) {
+        this.username = builder.username;
+        this.accountBalance = builder.accountBalance;
         this.type = "BS";
+        this.inventory = builder.inventory;
+
     }
 
-    public BuyUser(String username, Double balance, ArrayList<Game> inventory, ArrayList<String> transactions) {
-        super(username, balance, inventory, new TransactionHistory(transactions));
-//        this.transactionHistory = transactions;
+    public String getUsername(){
+        return this.username;
     }
+
+    public String getType(){
+        return this.type;
+    }
+
+    public ArrayList<Game> getInventory(){
+        return this.inventory;
+    }
+
+    public double getAccountBalance(){
+        return this.accountBalance;
+    }
+
+    public TransactionHistory getTransactionHistory(){
+        return this.transactionHistory;
+    }
+
 
     /** Prints that the user cannot sell a game.
      *
@@ -69,6 +94,48 @@ public class BuyUser extends AbstractUser {
     public boolean refund(AbstractUser buyer, AbstractUser seller, double amount){
         System.out.println("ERROR: \\ < Failed Constraint: "+ this.username + " does not have the ability to issue a refund.");
         return false;
+    }
+
+    public static class BuyUserBuilder {
+
+        private String username; // required
+        //        public String type;
+        public double accountBalance;
+        public ArrayList<Game> inventory;
+        public double newFunds;
+        public ArrayList<String> transactionHistory;
+
+        public BuyUserBuilder(String name) {
+            this.username = name;
+            this.accountBalance = 0.00;
+            this.transactionHistory = new ArrayList<>();
+        }
+
+        public BuyUserBuilder balance(double accountBalance){
+            this.accountBalance = accountBalance;
+            return this;
+        }
+
+        public UserBuilder inventoryGames(ArrayList<main.Game> inventory){
+            this.inventory.addAll(inventory);
+            return this;
+        }
+
+        public BuyUserBuilder newFunds(double newFunds){
+            this.newFunds = newFunds;
+            return this;
+        }
+
+        public BuyUserBuilder transactionHistory(ArrayList<String> transactions){
+            this.transactionHistory.addAll(transactions);
+            return this;
+        }
+
+        public BuyUser build() {
+            BuyUser user = new BuyUser(this);
+            return new BuyUser(this);
+        }
+
     }
 
 }
