@@ -72,6 +72,36 @@ public class AdminUser extends AbstractUser {
 //        }
 //    }
 
+    /**
+     * Method to send a game gift between users
+     *
+     *
+     * @param game A game to be sent
+     * @param sender A user sending the Gift
+     * @param reciever A user to recieve the Gift
+     * @param market The current Market
+     */
+    public void gift(main.Game game, main.AbstractUser sender, main.AbstractUser reciever, main.Marketplace market){
+        // Attempting the gift transaction
+        sender.gift(game, reciever, market);
+    }
+
+
+    /**
+     * Checks and removes the game for the requested User
+     * Method is used by Admin when a valid Username is provided
+     *
+     * @param game Game to be removed
+     * @param owner Owner of the Game
+     * @param market The current Market
+     */
+    public void removegame(main.Game game, main.AbstractUser owner, main.Marketplace market){
+        // Attempting the remove transaction for the User
+        owner.removegame(game, market);
+    }
+
+
+
     public static class UserBuilder {
 
         public String username; //mandatory

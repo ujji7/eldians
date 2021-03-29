@@ -32,7 +32,7 @@ public abstract class AbstractUser {
     public String password;
     public String type;
     public double accountBalance;
-    public ArrayList<Game> inventory;
+    public ArrayList<main.Game> inventory;
     public double newFunds;
     public TransactionHistory transactionHistory = null;
     public static final double MAXFUNDS = 999999.99f;
@@ -101,49 +101,55 @@ public abstract class AbstractUser {
      * @param amount The value of funds to be added
      */
     public void transferFunds(double amount){
-        //boolean result = true;
-        // check if we can add the funds
-        if(this.canAcceptFunds(amount)){
-            if(this.newFunds + amount <= DAILYLIMIT) {
-                this.setAccountBalance(this.getAccountBalance() + amount); // this can be this.accountBalance += amount
-                System.out.println("$" + amount + " added to" + this.username);
-            }
-            // Verify from piazza if this is right!
-            else {
-                System.out.println("Couldn't process addition of funds as " +this.getUsername()+
-                        " account will be maxed out upon addition of funds.");
-            }
-        }
-        else {
-            // ACCORDING TO PIAZZA @666 max out the balance and prompt user    //change it later
-            this.setAccountBalance(MAXFUNDS);
-            System.out.println("ERROR: \\ < Failed Constraint: "+ this.username +
-                    "'s balance was Maxed up upon addition of more funds!");
-        }
-        System.out.println("New account balance is $" + this.getAccountBalance());
-        //return result;
+        this.setAccountBalance(this.getAccountBalance() + amount);
+        System.out.println("$" + amount + " added to" + this.username);
+        System.out.println("Most updated account balance is $" + this.getAccountBalance());
     }
-
-
-    //NEED TO MAKE A HELPER TO ISSUE REFUND AMOUNTS
-    // Need a helper to round off floats for wach transaction
 
 
     /**
      * Adds the amount of funds to be added to the User's account and prints out the Status
      *
+     *
      * @param amount The amount of funds to be added to the User's account
      */
     public void addCredit(double amount) {
         // check the constraints of daily limit
-        double fundsToday = this.newFunds;
         if (this.dailyLimitCheck(amount)) {
-            // checking other constraints and then attempting to add the funds
-            this.transferFunds(amount);
-        } else {
-            // According to piazza @701                         /change it later
-            System.out.println("ERROR: \\ < Failed Constraint: " + this.username +
-                    " daily limit be reached! No funds were added");
+            // check if the account will be maxed upon addition of funds
+            if(this.canAcceptFunds(amount)){
+                this.transferFunds(amount);
+                this.newFunds += amount;
+            }
+            // Max out their account with the difference            @666 Piazza
+            else{
+                double newFunds = MAXFUNDS - this.getAccountBalance();
+                this.setAccountBalance(MAXFUNDS);
+                System.out.println("ERROR: \\ < Failed Constraint: "+ this.username +
+                        "'s balance was Maxed out!\n$" + newFunds+ " were added to the account");
+                this.newFunds += newFunds;
+            }
+        }
+        // Reject the transaction               @701 Piazza
+        else {
+            // get the amount that can be added
+            double newFunds = DAILYLIMIT - this.newFunds;
+
+            System.out.println("ERROR: \\ < Failed Constraint: "+ this.username +
+            "'s daily limit would be reached upon addition of funds!\n$" + newFunds+ " can be added to the account");
+
+            // Add the difference to the account
+            /*this.newFunds = DAILYLIMIT;
+            // If the user's account will not be maxed out to add the funds
+            if(this.canAcceptFunds(newFunds)){
+                this.transferFunds(newFunds);
+            }
+            // Max out their account
+            else{
+                this.setAccountBalance(MAXFUNDS);
+                System.out.println("ERROR: \\ < Failed Constraint: "+ this.username +
+                        "'s balance is Maxed out!\n$" + newFunds+ " were added to the account");
+            }*/
         }
     }
 
@@ -340,26 +346,35 @@ public abstract class AbstractUser {
      */
     public boolean refund(AbstractUser buyer, AbstractUser seller, double amount){
         boolean result = false;
-        // need to check if the seller can transfer funds
+        // need to check if the seller can transfer funds an buyer can accept the funds
         boolean canSendMoney = seller.canTransferFunds(amount);
-        if(canSendMoney) {
-            // remove the credits from the seller's account
-            seller.transferFunds(-amount);                  //-----FAILS when seller has less funds
-            //seller.issueFunds(float amount, AbstractUser user)
-            // add the funds regardless of maxing out
-            buyer.transferFunds(amount);        // remove this when above is done
+        boolean canRecieveMoney = buyer.canAcceptFunds(amount);
+        if(canSendMoney && canRecieveMoney){
+            // remove the credits from the seller's account and add it to the buyer's
+            seller.transferFunds(-amount);
+            buyer.transferFunds(amount);
             result = true;
             System.out.println(seller.getUsername() + " made a refund to "
                     + buyer.getUsername() + " for $" + amount);
         }
-        // buyer unable to transfer funds
+        // failed to issue refund
         else{
-            System.out.println("ERROR: \\ < Failed Constraint: " + seller.getUsername() + " could not make a refund to " +
+            // Seller unable to transfer the funds
+            if(!canSendMoney){
+                System.out.println("ERROR: \\ < Failed Constraint: " + seller.getUsername() + " could not make a refund to " +
                     buyer.getUsername() + " for $" + amount + " due to insufficient funds. > //");
+             }
+            // Buyer unable to accept the funds
+            else {
+                System.out.println("ERROR: \\ < Failed Constraint: " + buyer.getUsername() + " could not accept a refund from " +
+                        seller.getUsername() + " for $" + amount + " due to account maxing out upon addition of funds. > //");
+            }
         }
         return result;
 
     }
+
+
 
     /**
      * creates a new user of given type and adds them to the Application userList
@@ -403,6 +418,105 @@ public abstract class AbstractUser {
         System.out.println("ERROR: \\< Failed Constraint: New User could not be created since "
                 + Double.toString(credit) + "amount is invalid. >//");
 
+    }
+
+
+    /**
+     * Sends Games to a User if they can accept this Game
+     * This method is used by Admin and Full-Standard User
+     *
+     * @param game a Game to be gifted
+     * @param reciever person who will be recieving the Gift
+     * @param market the current Market
+     */
+    public void gift(main.Game game, AbstractUser reciever, main.Marketplace market){
+        // Reciever is a Sell user
+        if (reciever instanceof main.SellUser){
+            System.out.println("ERROR: \\< Failed Constraint: Sell User can not accept any gifts. >//");
+        }
+
+        else{
+            String gameName = game.getName();
+            // check if the Receiver has the game in their inventory
+            boolean inRecInv = !reciever.gameInInventory(game);
+            // Check if the Receiver has the game up for Sale on the Market
+            boolean inRecMar = !market.checkSellerSellingGame(reciever.getUsername(), gameName);
+
+            // if the User can accept the game then check if the sender can send the game
+            if(inRecInv && inRecMar){
+                boolean inSenInv = this.gameInInventory(game);
+                boolean inSenMar = market.checkSellerSellingGame(this.getUsername(), gameName);
+                // User can send the gift, game is added to the Receiver's inventory
+                if (inSenInv || inSenMar){
+                    // Game needs to be removed from the sender's inventory
+                    if(inSenInv){
+                        this.removeFromInventory(gameName);
+                    }
+                    this.inventory.add(game);
+                }
+                // Sender doesn't have the game
+                else{
+                    System.out.println("ERROR: \\" + this.username + " does not have the " + gameName +
+                            ".\n Gift transaction failed.");
+                }
+            }
+            // Reciever already has the game
+            else{
+                System.out.println("ERROR: \\" + reciever.getUsername() + " already has " +gameName+
+                        ".\n Gift transaction failed.");
+
+            }
+
+        }
+    }
+
+
+    /**
+     * Helper to remove the game from the User's inventory
+     *
+     * @param game remove the game title from the User's inventory
+     */
+    protected void removeFromInventory(String game){
+        ArrayList<main.Game> currInv = this.inventory;
+        // finding and setting the game to be removed
+        main.Game currGame = null;
+        for(main.Game curr : currInv){
+            if(curr.getName().equals(game)){
+                currGame = curr;
+            }
+        }
+        //  removing the game
+        this.inventory.remove(currGame);
+    }
+
+
+    /**
+     * Checks and removes the game for the User
+     * Method is used by Admin and Full-Standard
+     *
+     * @param game The game being removed
+     * @param market The current market
+     */
+    public void removegame(main.Game game, main.Marketplace market){
+        String currGame = game.getName();
+        // check if the User is Selling the Game on the Market
+        boolean iAmOffering = market.checkSellerSellingGame(this.getUsername(), currGame);
+        boolean inMyInv = this.gameInInventory(game);
+        // remove from Market
+        if(iAmOffering){
+            market.removeGame(this.getUsername(), currGame);
+            System.out.println(game.getName()+ " was removed from the User's offering on the Market.");
+        }
+        // remove from inventory
+        else if (inMyInv){
+            this.removeFromInventory(currGame);
+            System.out.println(game.getName()+ " was removed from the User's inventory.");
+
+        }
+        else if (!inMyInv){
+            System.out.println(game.getName()+ " was not found in the User's inventory.");
+        }
+        // else printing out the error from Market
     }
 
     /**

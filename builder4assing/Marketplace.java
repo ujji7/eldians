@@ -201,6 +201,28 @@ public class Marketplace {
     }
 
 
+
+    /**
+     * Helper to remove the game from the User's offering from the current Market
+     *
+     * @param seller The person trying to remove the Game
+     * @param game The Game to be removed
+     */
+    public void removeGame(String seller, String game){
+        // get all my offerings and remove the game from my offerings
+        ArrayList<Game> currOffering = this.getMyOfferings(seller);
+        Game toRemove = null;
+        for(Game curr : currOffering){
+            if(curr.getName().equals(game)){
+                toRemove = curr;
+            }
+        }
+        // removing the game from the User's offering
+        gamesOnSale.get(seller).remove(toRemove);
+    }
+
+
+
     /**
      * Sync yesterday's market with Today's market at the end of the day
      *
