@@ -136,7 +136,7 @@ public abstract class AbstractUser {
             double newFunds = DAILYLIMIT - this.newFunds;
 
             System.out.println("ERROR: \\ < Failed Constraint: "+ this.username +
-            "'s daily limit would be reached upon addition of funds!\n$" + newFunds+ " can be added to the account");
+            "'s daily limit would be reached upon addition of funds!\nOnly $" + newFunds+ " can be added to the account");
 
             // Add the difference to the account
             /*this.newFunds = DAILYLIMIT;
@@ -559,9 +559,6 @@ public abstract class AbstractUser {
     public void auctionSale(double amount) {
         System.out.println(this.getUsername() + "cannot implement an auction sale.");
     }
-
-
-
 
 
 }

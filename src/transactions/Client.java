@@ -395,7 +395,7 @@ public class Client {
 
 
     public static void main(String[] args){
-        Client client = new Client("/Users/ujji7/IdeaProjects/207 practise/src/main/admindaily.txt");
+        Client client = new Client("daily.txt");
     }
 
 }

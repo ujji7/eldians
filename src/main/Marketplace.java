@@ -229,7 +229,6 @@ public class Marketplace {
         // get all the seller and the new games and add them to the tomorrow's market
         HashMap<String, ArrayList<Game>> todayMarket = this.todaySale;
 
-
         // for each seller sync their past offering with the new offerings
         for (String seller : todayMarket.keySet()) {
             // get the seller's current offering
