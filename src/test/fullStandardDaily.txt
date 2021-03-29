@@ -1,0 +1,8 @@
+00 admin1          AA 000124.00
+03 Valorant                  admin1          20.00 023.56
+10 admin1          AA 000000.00
+00 full Stan U1    FS 300000.00
+06 full Stan U1    FS 000500.00
+03 Apex                      full Stan U1    10.00 100.00
+04 Valorant                  admin1          full Stan U1   
+10 full Stan U1    FS 300000.00

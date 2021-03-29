@@ -14,6 +14,7 @@ public class SellUser extends AbstractUser {
         this.type = "SS";
     }
 
+
     public String getUsername(){
         return this.username;
     }
@@ -29,7 +30,6 @@ public class SellUser extends AbstractUser {
     public TransactionHistory getTransactionHistory(){
         return this.transactionHistory;
     }
-
 
     /** Prints that this user cannot buy a game.
      *
