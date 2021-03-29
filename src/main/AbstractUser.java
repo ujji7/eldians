@@ -190,7 +190,7 @@ public abstract class AbstractUser {
      * @return true if game in inventory, else false
      */
     //HELPER FOR BUY
-    private boolean gameInInventory(Game game) {
+    protected boolean gameInInventory(Game game) {
         for (Game g : this.inventory) {
             if (g.getName().equals(game.getName())) {
                 return true;
