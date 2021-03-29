@@ -13,7 +13,7 @@ public class SellUser extends AbstractUser {
         this.accountBalance = builder.accountBalance;
         this.type = "SS";
     }
-
+    
     public String getUsername(){
         return this.username;
     }

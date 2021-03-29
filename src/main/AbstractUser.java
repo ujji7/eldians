@@ -445,4 +445,9 @@ public abstract class AbstractUser {
     public void auctionSale(double amount) {
         System.out.println(this.getUsername() + "cannot implement an auction sale.");
     }
+
+
+
+
+
 }
