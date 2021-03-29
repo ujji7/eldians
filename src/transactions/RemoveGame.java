@@ -22,8 +22,44 @@ public class RemoveGame implements Transaction {
         this.ownerName = o;
     }
 
+    /**
+     * Executes a RemoveGame transaction. Return the user currently logged in.
+     *
+     * @param users ArrayList of Users in the system.
+     * @param games ArrayList of Games in the system.
+     * @param market the current Marketplace, holding games being sold by sellers.
+     * @param login the user who is currently logged in.
+     * @return the user currently logged in.
+     */
     @Override
-    public String execute(ArrayList<AbstractUser> users, ArrayList<Game> games, Marketplace market, String login) {
-        return null;
+    public AbstractUser execute(ArrayList<AbstractUser> users, ArrayList<Game> games, Marketplace market,
+                                AbstractUser login) {
+
+        // Find owner of game
+        AbstractUser owner = null;
+        for (AbstractUser user: users) {
+            if (user.getUsername().equals(this.ownerName)) {
+                owner = user;
+            }
+        }
+
+        // Find game
+        Game game = null;
+        for (Game g: games) {
+            if (g.getName().equals(this.gameName)) {
+                game = g;
+            }
+        }
+
+        // remove game if owner and game exist
+        if (owner == null) {
+            System.out.println();
+        } else if (game == null) {
+            System.out.println();
+        } else {
+            login.removeGame(owner, game);
+        }
+
+        return login;
     }
 }
