@@ -22,7 +22,6 @@ public class Client {
     // private List<String> allLines;
     private ArrayList<ArrayList<String>> validFormatTrans;
     private ArrayList<Transaction> validTranasctions;
-    // private static String dailyTxt;
     // Login, Logout, Create, Add-Credit, Delete, Auction-Sale regex format
     private static String regLLCADT = "(0[0-7]|10)\\s(.{15})\\s(AA|FS|BS|SS)\\s(\\d{6}\\.\\d{2})";
     // Sell, Buy, Refund transaction regex
@@ -31,13 +30,8 @@ public class Client {
     private static String regRefund = "(05)\\s(.{15})\\s(.{15})\\s(\\d{6}\\.\\d{2})";
     // Gift and Remove regex
     private static String regRemGif = "(0[89])\\s(.{25})\\s(.{15})\\s(.{15})";
-
-
-
-
     // HashMap of all the regex formats
     private HashMap<String, String> regMap;
-
 
 
     public Client(String destination) {
@@ -55,9 +49,6 @@ public class Client {
             while ((line = br.readLine()) != null) {
                 if (line.length() >= 31 && line.length() <= 60 ) {
                     String tranType = line.substring(0, 2);
-
-                    //            System.out.println(tranType);
-
                     // Login, Logout, Create, Add-Credit, Delete, Auction-Sale transactions
                     if (tranType.equals("00") || tranType.equals("01") || tranType.equals("02")
                             || tranType.equals("06") || tranType.equals("07") || tranType.equals("10")) {
@@ -130,7 +121,7 @@ public class Client {
         if(validTranasctions.size() >1){
             Application app = new Application();
 
-                        //Check this BS error
+                        //Check this error
 
             app.Run(validTranasctions);
 
@@ -166,8 +157,6 @@ public class Client {
                         result.add(ownerName);
                         result.add(recieverName);
                         this.validFormatTrans.add(result);
-
-                        System.out.println(tranType + " " + gameName + " " + ownerName + " " + recieverName);
                     }
                     else{
                         // Transaction format is not valid
@@ -224,9 +213,6 @@ public class Client {
     }
 
 
-
-
-
     /**
      * CHECKS and strips out and returns the necessary input form the received transaction
      * dealing with BUY transactions
@@ -279,16 +265,35 @@ public class Client {
     private void len31Transaction(String tranType, String transaction) {
 
         if(this.formatChecker(tranType, transaction)){
-            ArrayList<String> result = new ArrayList<>();
             // Extracting the data from the transaction and adding it to the ArrayList
             String userName = this.stripSpace(transaction.substring(3, 18));
             String userType = transaction.substring(19,21);
             String amount = transaction.substring(22,31);
-            result.add(tranType);
-            result.add(userName);
-            result.add(userType);
-            result.add(amount);
-            this.validFormatTrans.add(result);
+
+            // For Login, Create and Delete we require a Username input
+            if(tranType.equals("00") || tranType.equals("01") || tranType.equals("02")){
+                if(this.containsData(userName)){
+                    ArrayList<String> result = new ArrayList<>();
+                    result.add(tranType);
+                    result.add(userName);
+                    result.add(userType);
+                    result.add(amount);
+                    this.validFormatTrans.add(result);
+                }
+                else{
+                    System.out.println("<Fatal Error: Username not provided in the : " + transaction +
+                            ".\nThis Transaction not valid in daily.txt>.\n" + "Error encountered in Client.java");
+                }
+            }
+            // Add-Credit and Logout transactions don't necessarily require a name
+            else{
+                ArrayList<String> result = new ArrayList<>();
+                result.add(tranType);
+                result.add(userName);
+                result.add(userType);
+                result.add(amount);
+                this.validFormatTrans.add(result);
+            }
         }
     }
 

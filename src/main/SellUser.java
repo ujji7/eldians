@@ -16,6 +16,11 @@ public class SellUser extends AbstractUser {
         this.type = "SS";
     }
 
+
+
+
+
+
     /** Prints that this user cannot buy a game.
      *
      * @param seller the supplier of the game
