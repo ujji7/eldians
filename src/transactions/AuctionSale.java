@@ -1,4 +1,4 @@
-package src.transactions;
+package transactions;
 
 import main.AbstractUser;
 import main.AdminUser;

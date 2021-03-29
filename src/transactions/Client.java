@@ -1,4 +1,4 @@
-package src.transactions;
+package transactions;
 import main.Application;
 
 import java.io.BufferedReader;
