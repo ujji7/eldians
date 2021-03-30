@@ -45,7 +45,7 @@ public class FullStandardUser extends AbstractUser {
     }
 
 
-    public class UserBuilder {
+    public static class UserBuilder {
 
         public String username; //mandatory
         public String type; // mandatory

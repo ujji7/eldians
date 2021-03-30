@@ -8,7 +8,7 @@ import java.util.ArrayList;
  */
 public class SellUser extends AbstractUser {
 
-    private SellUser(SellUserBuilder builder) {
+    private SellUser(UserBuilder builder) {
         this.username = builder.username;
         this.accountBalance = builder.accountBalance;
         this.type = "SS";
@@ -104,7 +104,7 @@ public class SellUser extends AbstractUser {
 
 
 
-    public static class SellUserBuilder {
+    public static class UserBuilder {
 
         private String username; // required
         //        public String type;
@@ -112,23 +112,23 @@ public class SellUser extends AbstractUser {
         public double newFunds;
         public ArrayList<String> transactionHistory;
 
-        public SellUserBuilder(String name) {
+        public UserBuilder(String name) {
             this.username = name;
             this.accountBalance = 0.00;
             this.transactionHistory = new ArrayList<>();
         }
 
-        public SellUserBuilder balance(double accountBalance){
+        public UserBuilder balance(double accountBalance){
             this.accountBalance = accountBalance;
             return this;
         }
 
-        public SellUserBuilder newFunds(double newFunds){
+        public UserBuilder newFunds(double newFunds){
             this.newFunds = newFunds;
             return this;
         }
 
-        public SellUserBuilder transactionHistory(ArrayList<String> transactions){
+        public UserBuilder transactionHistory(ArrayList<String> transactions){
             this.transactionHistory.addAll(transactions);
             return this;
         }
