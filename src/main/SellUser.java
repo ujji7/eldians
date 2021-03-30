@@ -38,7 +38,7 @@ public class SellUser extends AbstractUser {
     //THIS DOES NOT FOLLOW THE RIGHT FORMAT
 
     @Override
-    public void buy(AbstractUser seller, Game game, boolean saleToggle){
+    public void buy(AbstractUser seller, Game game, boolean saleToggle, Marketplace market){
         System.out.println(this.username + " cannot buy games.");
     }
 

@@ -516,7 +516,7 @@ public abstract class AbstractUser {
      * @param amount the value of funds to check are present for our user
      * @return true if the amount is avalible false otherwise
      */
-    private boolean canTransferFunds(double amount){
+    protected boolean canTransferFunds(double amount){
         return this.accountBalance - amount >= MINFUNDS;
     }
 
@@ -525,7 +525,7 @@ public abstract class AbstractUser {
      * @param amount the amount of funds to be added
      * @return true if the funds can be added false otherwise
      */
-    private boolean canAcceptFunds(double amount){
+    protected boolean canAcceptFunds(double amount){
         return this.accountBalance + amount <= MAXFUNDS;
     }
 
