@@ -240,7 +240,6 @@ public abstract class AbstractUser {
                 System.out.println("ERROR: \\ < Failed Constraint: "+ this.username + " does not have enough funds " +
                         "to buy " + game.getName() + ". ");
             }  // Needs to be implemented in transferFunds()
-
             else if (!seller.canAcceptFunds(price)) { //seller's account maxed out
                 this.payAndAddGame(seller, price, game);
                 seller.accountBalance = MAXFUNDS;
