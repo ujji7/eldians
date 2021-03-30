@@ -10,16 +10,56 @@ public class Refund implements Transaction {
 
     String buyer;
     String seller;
-    Float credit;
+    Double credit;
 
+    /**
+     * Creates a new refund transaction.
+     *
+     * @param b String representing the buyer's username.
+     * @param s String representing the seller's username.
+     * @param c String representing the credit being refunded.
+     */
     public Refund(String b, String s, String c) {
         this.buyer = b;
         this.seller = s;
-        this.credit = Float.parseFloat(c);
+        this.credit = Double.parseDouble(c);
     }
 
+    /**
+     * Executes a Refund transaction. Return the user currently logged in.
+     *
+     * @param users ArrayList of Users in the system.
+     * @param games ArrayList of Games in the system.
+     * @param market the current Marketplace, holding games being sold by sellers.
+     * @param login the user who is currently logged in.
+     * @return the user currently logged in.
+     */
     @Override
-    public String execute(ArrayList<AbstractUser> users, ArrayList<Game> games, Marketplace market, String login) {
-        return null;
+    public AbstractUser execute(ArrayList<AbstractUser> users, ArrayList<Game> games, Marketplace market,
+                                AbstractUser login) {
+
+        AbstractUser buyerUser = null;
+        for (AbstractUser user : users) {
+            if (user.getUsername().equals(this.buyer)) {
+                buyerUser = user;
+            }
+        }
+
+        AbstractUser sellerUser = null;
+        for (AbstractUser user : users) {
+            if (user.getUsername().equals(this.seller)) {
+                sellerUser = user;
+            }
+        }
+
+        if (buyerUser == null) {
+            System.out.println("ERROR: < User " + this.buyer + " cannot be found in system. >");
+        } else if (sellerUser == null) {
+            System.out.println("ERROR: < User " + this.seller + " cannot be found in system. >");
+        } else {
+            login.refund(buyerUser, sellerUser, this.credit);
+        }
+
+        return login;
     }
 }
