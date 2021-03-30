@@ -121,7 +121,7 @@ public class Client {
         if(validTranasctions.size() >1){
             Application app = new Application();
 
-                        //Check this error
+                    //VERIFY WITH MAD
 
             app.Run(validTranasctions);
 
