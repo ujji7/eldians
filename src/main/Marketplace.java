@@ -9,7 +9,7 @@ public class Marketplace {
 
     public Marketplace() {
         this.gamesOnSale = new HashMap<String, ArrayList<Game>>();
-        this.todaySale = new HashMap<String, ArrayList<Game>>();
+       // this.todaySale = new HashMap<String, ArrayList<Game>>();
 
     }
 
@@ -57,13 +57,13 @@ public class Marketplace {
         }
     }
 
-
-    /**
+/*
+    *//**
      * Adds the Game for the Seller in the market
      *
      * @param seller User adding the Game to their offerings
      * @param game The game to be added to the Seller's offering
-     */
+     *//*
     public void addGameForSeller(String seller, Game game){
         // Check if the Seller exists and add the Game to their list of offering
         if(this.checkSellerExist(seller)){
@@ -87,12 +87,12 @@ public class Marketplace {
     }
 
 
-    /**
+    *//**
      *
      *
      * @param seller User adding the Game to their offerings
      * @param game a Unique game to be put up for Sale
-     */
+     *//*
     private void addForTomMar(String seller, Game game){
         HashMap<String, ArrayList<Game>> todayMarket = this.todaySale;
         // check if the user already had put any games up for sale today and add the game
@@ -106,7 +106,7 @@ public class Marketplace {
             todayMarket.put(seller, futOffering);
         }
 
-    }
+    }*/
 
 
     /**
@@ -118,12 +118,12 @@ public class Marketplace {
      */
     public boolean gameToBeUpCheck(String seller, String gameTitle){
         boolean result = false;
-        // get the games put up for Sale by the user Today and check if the User will have the game title up for sale
-        ArrayList<Game> futureOffering = this.todaySale.get(seller);
-        for(Game myGame : futureOffering) {
+        // get the game title and check if it is on a Hold for today
+        ArrayList<Game> myOffering = this.gamesOnSale.get(seller);
+        for(Game myGame : myOffering) {
             String currGameName = myGame.getName();
             if (currGameName.equals(gameTitle)) {
-                result = true;
+                result = myGame.getHold();
             }
         }
         return result;
@@ -142,7 +142,7 @@ public class Marketplace {
 
 
     /**
-     * Checks if the seller is  selling the Game title
+     * Checks if the seller is currently offering the sale of the Game title
      *
      * @param seller User checking if they are selling the game title
      * @param gameTitle The game title being checked
@@ -158,8 +158,15 @@ public class Marketplace {
             for(Game myGame : currOffering){
                 String currGameName = myGame.getName();
                 if(currGameName.equals(gameTitle)){
-                    result = true;
                     gameFound = true;
+                    // Check if the Game is on hold or not
+                    if(!myGame.getHold()){
+                        result = true;
+                    }
+                    else{
+                        System.out.println("Seller: "+ seller+" will have the Game: "+ gameTitle
+                        + " up for Processing tomorrow. ");
+                    }
                 }
             }
             if(!gameFound){
@@ -213,7 +220,7 @@ public class Marketplace {
      * @param game The Game to be removed
      */
     public void removeGame(String seller, String game){
-        // get all my offerings and remove the game from my offerings
+        // get all my offerings and remove the game from my offerings if the game is not on hold
         ArrayList<Game> currOffering = this.getMyOfferings(seller);
         Game toRemove = null;
         for(Game curr : currOffering){
@@ -229,7 +236,6 @@ public class Marketplace {
     /**
      * Sync yesterday's market with Today's market at the end of the day
      *
-     */
     public void syncMarkets(){
         // get all the seller and the new games and add them to the tomorrow's market
         HashMap<String, ArrayList<Game>> todayMarket = this.todaySale;
@@ -246,6 +252,6 @@ public class Marketplace {
         }
         // empty the today sale <- NEED TO IMPLEMENT the empty today sale.
         System.out.println("Market is updated for tomorrow.");
-    }
+    }*/
 
 }

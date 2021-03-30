@@ -497,7 +497,7 @@ public abstract class AbstractUser {
         else if (!inMyInv){
             System.out.println(game.getName()+ " was not found in the User's inventory.");
         }
-        // else printing out the error from Market
+        // else printing out the error from Market for Game not being currently offered
     }
 
     /**
