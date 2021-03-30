@@ -81,7 +81,7 @@ public class AdminUser extends AbstractUser {
      * @param reciever A user to recieve the Gift
      * @param market The current Market
      */
-    public void gift(main.Game game, main.AbstractUser sender, main.AbstractUser reciever, main.Marketplace market){
+    public void gift(Game game, AbstractUser sender, AbstractUser reciever, Marketplace market){
         // Attempting the gift transaction
         sender.gift(game, reciever, market);
     }
@@ -95,10 +95,50 @@ public class AdminUser extends AbstractUser {
      * @param owner Owner of the Game
      * @param market The current Market
      */
-    public void removegame(main.Game game, main.AbstractUser owner, main.Marketplace market){
+    public void removegame(Game game, AbstractUser owner, Marketplace market){
         // Attempting the remove transaction for the User
         owner.removegame(game, market);
     }
+
+
+
+    /**
+     * Issues a refund and transfers the funds between the two user if the funds are avalible in the supplier's account
+     * @param buyer the customer asking for the refund
+     * @param seller the supplier of the games issueing the refund
+     * @param amount the value of credits to be transfered among them
+     * @return true if the refund was made false otherwise
+     */
+    public boolean refund(AbstractUser buyer, AbstractUser seller, double amount){
+        boolean result = false;
+        // need to check if the seller can transfer funds an buyer can accept the funds
+        boolean canSendMoney = seller.canTransferFunds(amount);
+        boolean canRecieveMoney = buyer.canAcceptFunds(amount);
+        if(canSendMoney && canRecieveMoney){
+            // remove the credits from the seller's account and add it to the buyer's
+            seller.transferFunds(-amount);
+            buyer.transferFunds(amount);
+            result = true;
+            System.out.println(seller.getUsername() + " made a refund to "
+                    + buyer.getUsername() + " for $" + amount);
+        }
+        // failed to issue refund
+        else{
+            // Seller unable to transfer the funds
+            if(!canSendMoney){
+                System.out.println("ERROR: \\ < Failed Constraint: " + seller.getUsername() + " could not make a refund to " +
+                        buyer.getUsername() + " for $" + amount + " due to insufficient funds. > //");
+            }
+            // Buyer unable to accept the funds
+            else {
+                System.out.println("ERROR: \\ < Failed Constraint: " + buyer.getUsername() + " could not accept a refund from " +
+                        seller.getUsername() + " for $" + amount + " due to account maxing out upon addition of funds. > //");
+            }
+        }
+        return result;
+
+    }
+
 
 
 

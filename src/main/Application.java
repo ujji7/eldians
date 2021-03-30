@@ -41,8 +41,3 @@ public class Application {
     }
 
 }
-
-
-
-
-// for Admin transaction when toggling sale call market.toggleSale()
