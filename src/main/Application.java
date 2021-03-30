@@ -4,6 +4,7 @@ import transactions.Transaction;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Application {
 
@@ -20,6 +21,16 @@ public class Application {
 
     public static void addUser(AbstractUser user) {
         userList.add(user);
+    }
+
+    private void BODRead() {
+//        ReadingJSON readJson = new ReadingJSON();
+        ReadingJSON.readGamesFile();
+        List<Game> games = ReadingJSON.readGamesFile();
+        List<AbstractUser> users = ReadingJSON.readUsersFile(games);
+        Marketplace market = ReadingJSON.readMarketFile(games, users);
+        this.gamesList = (ArrayList<Game>) games;
+        this.market = market;
     }
 
     private void eodWriteeod(){

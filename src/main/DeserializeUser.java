@@ -21,18 +21,27 @@ public class DeserializeUser implements JsonDeserializer<AbstractUser> {
     private static final String fullType = "FS";
 
     public Boolean correctUserTypes(JsonObject jsonObject) {
-        if (!(jsonObject.has(name) && jsonObject.has(type) && jsonObject.has(credit) && jsonObject.has(inventory) &&
+        if (!(jsonObject.has(name) && jsonObject.has(type) && jsonObject.has(credit)  &&
                 jsonObject.has(transactionHistory))) {
             return false;
+        }//these are mandatory
+
+        if (jsonObject.has(inventory)) { //if it has an inventory, then do these things
+            try {
+                JsonArray inventoryGame = jsonObject.get(inventory).getAsJsonArray();
+                removeNonIntegers(inventoryGame);
+            } catch (Exception e) {
+                return false;
+            }
         }
 
         try {
             jsonObject.get(name).getAsString();
             jsonObject.get(type).getAsString();
             jsonObject.get(credit).getAsDouble();
-            JsonArray inventoryGame = jsonObject.get(inventory).getAsJsonArray();
-
-            removeNonIntegers(inventoryGame);
+//            JsonArray inventoryGame = jsonObject.get(inventory).getAsJsonArray();
+//
+//            removeNonIntegers(inventoryGame);
 
             JsonArray transactionArray = jsonObject.get(transactionHistory).getAsJsonArray();
 
@@ -46,11 +55,11 @@ public class DeserializeUser implements JsonDeserializer<AbstractUser> {
                 }
             }
 
-            } catch(Exception e){
-                return false;
-            }
-            return true;
+        } catch(Exception e){
+            return false;
         }
+        return true;
+    }
 
     // helper for check types
     private void removeNonIntegers(JsonArray array) {
@@ -65,16 +74,14 @@ public class DeserializeUser implements JsonDeserializer<AbstractUser> {
         }
     }
 
-    private static boolean userVerifier(String name, String type, Double credit, JsonArray inventory) {
+    private static boolean userVerifier(String name, String type, Double credit) {
 
         if (name.length() > 15) { //check name
             return false;
         } else if (!((type.equals(adminType)) || (type.equals(buyType)) || (type.equals(sellType)) ||
                 (type.equals(fullType)))) {
             return false;
-        } else if (credit > 999999.99) {
-            return false;
-        } else return !type.equals(sellType) || inventory.size() == 0;
+        } else return !(credit > 999999.99);
     }
 
 
@@ -119,13 +126,19 @@ public class DeserializeUser implements JsonDeserializer<AbstractUser> {
         String nameUser = jsonObject.get(name).getAsString();
         String typeUser = jsonObject.get(type).getAsString();
         double creditUser = jsonObject.get(credit).getAsDouble();
-        JsonArray inventoryUser = jsonObject.get(inventory).getAsJsonArray();
+
         JsonArray transactionHistoryUser = jsonObject.get(transactionHistory).getAsJsonArray();
 
-        if (!userVerifier(nameUser, typeUser, creditUser, inventoryUser)) {
+        if (!userVerifier(nameUser, typeUser, creditUser)) {
             return null;
         }
-        ArrayList<Game> inventoryGameObjects = gameIDsToGames(inventoryUser);
+
+        ArrayList<Game> inventoryGameObjects = new ArrayList<>();
+        if (!typeUser.equals(sellType)) {
+            JsonArray inventoryUser = jsonObject.get(inventory).getAsJsonArray();
+            inventoryGameObjects = gameIDsToGames(inventoryUser);
+        }
+
         ArrayList<String> transactionHistoryList = new ArrayList<String>();
 
         for (JsonElement i : transactionHistoryUser) {
