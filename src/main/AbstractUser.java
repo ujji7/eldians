@@ -33,7 +33,7 @@ public abstract class AbstractUser {
     protected String password;
     protected String type;
     protected double accountBalance;
-    protected ArrayList<main.Game> inventory;
+    protected ArrayList<Game> inventory;
     protected double newFunds;
     public ArrayList<String> transactionHistory = null;
     public static final double MAXFUNDS = 999999.99f;
@@ -222,11 +222,11 @@ public abstract class AbstractUser {
 
 
     public void buy(AbstractUser seller, Game game, boolean saleToggle, Marketplace market){
-        if (!seller.sellingGame(game)) {
+        if (!seller.sellingGame(game, market)) {
             System.out.println("ERROR: \\ < Failed Constraint: " + seller.getUsername() + "is not selling " +
                     game.getName() + " on the market.");
         }
-        if (this.sellingGame(game)) {
+        if (this.sellingGame(game, market)) {
             System.out.println("ERROR: \\ < Failed Constraint: " + this.getUsername() + "is selling " + game.getName()
                     + " on the market.");
         }
@@ -408,7 +408,7 @@ public abstract class AbstractUser {
      */
     public void gift(Game game, AbstractUser reciever, Marketplace market){
         // Reciever is a Sell user
-        if (reciever instanceof main.SellUser){
+        if (reciever instanceof SellUser){
             System.out.println("ERROR: \\< Failed Constraint: Sell User can not accept any gifts. >//");
         }
 
