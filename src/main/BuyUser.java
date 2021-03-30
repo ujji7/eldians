@@ -18,7 +18,7 @@ public class BuyUser extends AbstractUser {
 //        this.type = "BS";
 //    }
 
-    private BuyUser(BuyUserBuilder builder) {
+    private BuyUser(UserBuilder builder) {
         this.username = builder.username;
         this.accountBalance = builder.accountBalance;
         this.type = "BS";
@@ -126,7 +126,7 @@ public class BuyUser extends AbstractUser {
         }
     }
 
-    public static class BuyUserBuilder {
+    public static class UserBuilder {
 
         private String username; // required
         //        public String type;
@@ -135,13 +135,13 @@ public class BuyUser extends AbstractUser {
         public double newFunds;
         public ArrayList<String> transactionHistory;
 
-        public BuyUserBuilder(String name) {
+        public UserBuilder(String name) {
             this.username = name;
             this.accountBalance = 0.00;
             this.transactionHistory = new ArrayList<>();
         }
 
-        public BuyUserBuilder balance(double accountBalance){
+        public UserBuilder balance(double accountBalance){
             this.accountBalance = accountBalance;
             return this;
         }
@@ -151,12 +151,12 @@ public class BuyUser extends AbstractUser {
             return this;
         }
 
-        public BuyUserBuilder newFunds(double newFunds){
+        public UserBuilder newFunds(double newFunds){
             this.newFunds = newFunds;
             return this;
         }
 
-        public BuyUserBuilder transactionHistory(ArrayList<String> transactions){
+        public UserBuilder transactionHistory(ArrayList<String> transactions){
             this.transactionHistory.addAll(transactions);
             return this;
         }

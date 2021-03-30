@@ -167,10 +167,6 @@ public class AdminUser extends AbstractUser {
             return this;
         }
 
-        public UserBuilder newFunds(double newFunds){
-            this.newFunds = newFunds;
-            return this;
-        }
 
         public UserBuilder transactionHistory(ArrayList<String> transactions){
             this.transactionHistory.addAll(transactions);

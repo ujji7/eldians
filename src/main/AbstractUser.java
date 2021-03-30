@@ -31,10 +31,10 @@ public abstract class AbstractUser {
 
     protected String username;
     protected String type;
-    protected double accountBalance;
-    protected ArrayList<Game> inventory;
-    protected double newFunds;
-    public ArrayList<String> transactionHistory = null;
+    protected double accountBalance = 0;
+    protected ArrayList<Game> inventory = new ArrayList<Game>();
+    protected double newFunds = 0;
+    public ArrayList<String> transactionHistory = new ArrayList<String>();
     public static final double MAXFUNDS = 999999.99f;
     // can change minFunds to allow overdrafts for future improvements
     private static final float MINFUNDS = 0f;
@@ -364,16 +364,24 @@ public abstract class AbstractUser {
             AbstractUser newUser;
             switch (type) {
                 case "AA":
-                    newUser = new AdminUser(username, credit);
+                    AdminUser.UserBuilder AAbuilder = new AdminUser.UserBuilder(username);
+                    AAbuilder.balance(credit);
+                    newUser = AAbuilder.build();
                     break;
                 case "FS":
-                    newUser = new FullStandardUser(username, credit);
+                    FullStandardUser.UserBuilder FSbuilder = new FullStandardUser.UserBuilder(username);
+                    FSbuilder.balance(credit);
+                    newUser = FSbuilder.build();
                     break;
                 case "BS":
-                    newUser = new BuyUser(username, credit);
+                    BuyUser.UserBuilder BSbuilder = new BuyUser.UserBuilder(username);
+                    BSbuilder.balance(credit);
+                    newUser = BSbuilder.build();
                     break;
                 case "SS":
-                    newUser = new SellUser(username, credit);
+                    SellUser.UserBuilder SSbuilder = new SellUser.UserBuilder(username);
+                    SSbuilder.balance(credit);
+                    newUser = SSbuilder.build();
                     break;
                 default:
                     // if user isn't initialized we stop the create function
