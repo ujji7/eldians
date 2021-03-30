@@ -38,7 +38,7 @@ public class DeserializeGame implements JsonDeserializer<Game> {
             return null;
         }
         Game game = new Game(name, price, seller, gameID, discount);
-        game.changeOnHold();
+        game.changeHold();
         return game;
     }
 
