@@ -70,6 +70,12 @@ public class Gift implements Transaction {
         } else if (receiver == null) {
             System.out.println("ERROR: < Cannot find " + this.receiverName + " in the system. > ");
         } else {
+            // If normal user
+            //FORMAT gift(GAME, RECEIVER, MARKET)
+
+            // IF admin and valid sender name provided
+            // FORMAT gift(GAME, SENDER, RECEIVER, MARKET)
+
             login.gift(owner, receiver, game);
         }
 

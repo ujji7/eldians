@@ -57,7 +57,14 @@ public class RemoveGame implements Transaction {
         } else if (game == null) {
             System.out.println();
         } else {
-            login.removeGame(owner, game);
+            // if normal user FORMAT
+            // removegame(GAME, MARKET)
+
+            // if admin
+            // check if a valid user is provided
+            // removegame(Game, USER, MARKET)
+
+            login.removegame(owner, game);
         }
 
         return login;
