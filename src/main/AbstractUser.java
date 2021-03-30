@@ -28,6 +28,7 @@ import java.util.HashMap;
  *                                      -----As we will be requiring a constructors with given inventories
  */
 public abstract class AbstractUser {
+
     protected String username;
     protected String password;
     protected String type;
@@ -219,30 +220,27 @@ public abstract class AbstractUser {
      * @param saleToggle the status of Sale being on the market
      */
 
-    public void buy(AbstractUser seller, Game game, boolean saleToggle){
 
-                            ///pass in the marketplace
-
-
-//        if (!seller.sellingGame(game)) {  //check if seller is selling this game on market - THIS CAN JUST BE IN MRKTPLC
-//            //marketplace.containsKey(seller) && marketplace.get(seller).get(game)
-//            System.out.println("ERROR: \\ < Failed Constraint: " + seller.getUsername() + "is not selling " + game.getName() + " on the market.");
-//        }
-
-
+    public void buy(AbstractUser seller, Game game, boolean saleToggle, Marketplace market){
+        if (!seller.sellingGame(game)) {
+            System.out.println("ERROR: \\ < Failed Constraint: " + seller.getUsername() + "is not selling " +
+                    game.getName() + " on the market.");
+        }
+        if (this.sellingGame(game)) {
+            System.out.println("ERROR: \\ < Failed Constraint: " + this.getUsername() + "is selling " + game.getName()
+                    + " on the market.");
+        }
         if (gameInInventory(game)) { //check that game isn't already in inventory
-            //this.inventory.contains(game)
-            System.out.println("ERROR: \\ < Failed Constraint: "+ this.username + " already owns " + game.getName() + ". Cannot buy it again.");
-
+            System.out.println("ERROR: \\ < Failed Constraint: "+ this.username + " already owns " + game.getName() +
+                    ". Cannot buy it again.");
         }
 
         else {                                                  // Needs to be implemented in transferFunds()
-
             double price = game.getPriceWithDiscount(saleToggle);
             if (!this.canTransferFunds(price)) { //buyer does not have enough money
-                System.out.println("ERROR: \\ < Failed Constraint: "+ this.username + " does not have enough funds to buy " + game.getName() + ". ");
-            }
-            // Needs to be implemented in transferFunds()
+                System.out.println("ERROR: \\ < Failed Constraint: "+ this.username + " does not have enough funds " +
+                        "to buy " + game.getName() + ". ");
+            }  // Needs to be implemented in transferFunds()
 
             else if (!seller.canAcceptFunds(price)) { //seller's account maxed out
                 this.payAndAddGame(seller, price, game);
@@ -253,8 +251,10 @@ public abstract class AbstractUser {
             else { // make normal add and print message
                 this.payAndAddGame(seller, price, game);
                 seller.accountBalance += price;
-                this.transactionHistory.add("User: " + this.username + " bought " + game.getName() + " from "
-                        + seller.getUsername());
+                String transaction = "User: " + this.username + " bought " + game.getName() + " from "
+                        + seller.getUsername();
+                this.transactionHistory.add(transaction);
+                System.out.println(transaction);
             }
         }
     }
