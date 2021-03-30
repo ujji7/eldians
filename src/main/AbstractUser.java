@@ -41,14 +41,14 @@ public abstract class AbstractUser {
     private static final float DAILYLIMIT = 1000f;
     private static final float NEWFUNDSTODAY = 0f;
 
-    public AbstractUser(String username){
-        this.username = username;
-        // why is this 0? should we change the constructor
-        this.accountBalance = 0;
-        this.inventory = new ArrayList<Game>();
-        this.newFunds = 0;
-        if (this.transactionHistory.size() == 0) { this.transactionHistory = new ArrayList<>(); }
-    }
+//    public AbstractUser(String username){
+//        this.username = username;
+//        // why is this 0? should we change the constructor
+//        this.accountBalance = 0;
+//        this.inventory = new ArrayList<Game>();
+//        this.newFunds = 0;
+//        if (this.transactionHistory.size() == 0) { this.transactionHistory = new ArrayList<>(); }
+//    }
 
    /* public AbstractUser(String username, double balance){
         this(username);
@@ -240,7 +240,6 @@ public abstract class AbstractUser {
                 System.out.println("ERROR: \\ < Failed Constraint: "+ this.username + " does not have enough funds " +
                         "to buy " + game.getName() + ". ");
             }  // Needs to be implemented in transferFunds()
-
             else if (!seller.canAcceptFunds(price)) { //seller's account maxed out
                 this.payAndAddGame(seller, price, game);
                 seller.accountBalance = MAXFUNDS;

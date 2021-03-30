@@ -77,7 +77,7 @@ public class Buy implements Transaction {
                 } else {
 
                     // Make the purchase
-                    buyer.buy(seller, gameOnSale, market.getAuctionSale());
+                    buyer.buy(seller, gameOnSale, market.getAuctionSale(), market);
                 }
             }
         }
