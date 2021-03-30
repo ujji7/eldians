@@ -28,6 +28,7 @@ public class Application {
         List<Game> games = ReadingJSON.readGamesFile();
         List<AbstractUser> users = ReadingJSON.readUsersFile(games);
         Marketplace market = ReadingJSON.readMarketFile(games, users);
+        userList = (ArrayList<AbstractUser>) users;
         this.gamesList = (ArrayList<Game>) games;
         this.market = market;
     }
