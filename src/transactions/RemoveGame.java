@@ -57,7 +57,7 @@ public class RemoveGame implements Transaction {
         } else if (game == null) {
             System.out.println();
         } else {
-            login.removeGame(owner, game);
+            login.removegame(game, market);
         }
 
         return login;

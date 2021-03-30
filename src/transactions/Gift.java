@@ -41,7 +41,7 @@ public class Gift implements Transaction {
         // Find game
         Game game = null;
         for (Game g: games) {
-            if (g.getName().equals(this.gameName)) {
+            if (g.getName().equals(this.gameName) && g.getSupplierID().equals(this.ownerName)) {
                 game = g;
             }
         }
@@ -70,7 +70,7 @@ public class Gift implements Transaction {
         } else if (receiver == null) {
             System.out.println("ERROR: < Cannot find " + this.receiverName + " in the system. > ");
         } else {
-            login.gift(owner, receiver, game);
+            login.gift(game, receiver, market);
         }
 
         return login;

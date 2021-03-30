@@ -1,5 +1,7 @@
-package transactions;
-import main.Application;
+package main;
+
+import transactions.Transaction;
+import transactions.TransactionFactory;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
