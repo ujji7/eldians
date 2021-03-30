@@ -156,22 +156,22 @@ public class ReadingJSON {
             return null;
         }
         catch (JsonSyntaxException e){
-            return new Marketplace(false);
+            return new Marketplace(false, new HashMap<String,ArrayList<Game>>());
         }
     }
 
-    public static void main (String[]args){
-        filesOpener();
-        List<Game> games = readGamesFile();
-        System.out.println("games are: " + games);
-        System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.");
-
-        List<AbstractUser> users = readUsersFile(games);
-        System.out.println("users are: " + users);
-
-        System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.");
-        Marketplace market = readMarketFile(games, users);
-        System.out.println("market is: " + market);
-    }
+//    public static void main (String[]args){
+//        filesOpener();
+//        List<Game> games = readGamesFile();
+//        System.out.println("games are: " + games);
+//        System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.");
+//
+//        List<AbstractUser> users = readUsersFile(games);
+//        System.out.println("users are: " + users);
+//
+//        System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.");
+//        Marketplace market = readMarketFile(games, users);
+//        System.out.println("market is: " + market);
+//    }
 }
 

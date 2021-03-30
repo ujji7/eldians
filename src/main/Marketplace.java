@@ -13,6 +13,11 @@ public class Marketplace {
 
     }
 
+    public Marketplace(boolean auctionSale, HashMap<String, ArrayList<Game>> market){
+        this.auctionSale = auctionSale;
+        this.gamesOnSale = market;
+    }
+
     public boolean getAuctionSale(){
         return this.auctionSale;
     }

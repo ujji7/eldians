@@ -79,7 +79,7 @@ public class DeserializeMarketplace implements JsonDeserializer<Marketplace> {
         JsonObject uniqueSellers = removeDuplicateSellers(sellersInMarket); //now this has no duplicate sellers
 
         Set<String> sellers = uniqueSellers.keySet(); // get all sellers
-        HashMap<AbstractUser, ArrayList<Game>> market = new HashMap<AbstractUser, ArrayList<Game>>();
+        HashMap<String, ArrayList<Game>> market = new HashMap<String, ArrayList<Game>>();
 
         for (String s : sellers) {
 //            AbstractUser user = findUser(s); //add this if hashmap <user obj, list.
