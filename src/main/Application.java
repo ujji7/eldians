@@ -23,6 +23,15 @@ public class Application {
         userList.add(user);
     }
 
+    private void BODRead() {
+//        ReadingJSON readJson = new ReadingJSON();
+        List<Game> games = ReadingJSON.readGamesFile();
+        List<AbstractUser> users = ReadingJSON.readUsersFile(games);
+        Marketplace market = ReadingJSON.readMarketFile(games, users);
+        this.gamesList = (ArrayList<Game>) games;
+        this.market = market;
+    }
+
     private void EODWrite(){
         DatabaseController databaseController = new DatabaseController();
         try {
@@ -34,12 +43,6 @@ public class Application {
         }
     }
 
-    private void BODRead() {
-        ReadingJSON readJson = new ReadingJSON();
-        List<Game> games = readJson.readGamesFile();
-        List<AbstractUser> users = readJson.readUsersFile(games);
-        readJson.readMarketFile(games, users);
-    }
 
     public void Run(ArrayList<Transaction> transactions) {
 //        BODRead();

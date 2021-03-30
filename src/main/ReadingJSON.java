@@ -37,7 +37,7 @@ public class ReadingJSON {
     }
 
 
-    public List<Game> readGamesFile() {
+    public static List<Game> readGamesFile() {
         try {
             Reader reader = Files.newBufferedReader(Paths.get(fileNameGame)); // create a reader to read the games file
 
@@ -97,7 +97,7 @@ public class ReadingJSON {
         }
     }
 
-    public List<AbstractUser> readUsersFile(List<Game> gamesList) {
+    public static List<AbstractUser> readUsersFile(List<Game> gamesList) {
         try {
             Reader reader = Files.newBufferedReader(Paths.get(fileNameUser));  // create a reader
             GsonBuilder gsonBuilder = new GsonBuilder();
@@ -134,7 +134,7 @@ public class ReadingJSON {
         return userIDs;
     }
 
-    public Marketplace readMarketFile(List<Game> listGames, List<AbstractUser> listUsers) {
+    public static Marketplace readMarketFile(List<Game> listGames, List<AbstractUser> listUsers) {
         try {
             Reader reader = Files.newBufferedReader(Paths.get(fileNameMarket));  // create a reader
             GsonBuilder gsonBuilder = new GsonBuilder();
