@@ -37,7 +37,7 @@ public class ReadingJSON {
     }
 
 
-    public static List<Game> readGamesFile() {
+    public List<Game> readGamesFile() {
         try {
             Reader reader = Files.newBufferedReader(Paths.get(fileNameGame)); // create a reader to read the games file
 
@@ -97,7 +97,7 @@ public class ReadingJSON {
         }
     }
 
-    public static List<AbstractUser> readUsersFile(List<Game> gamesList) {
+    public List<AbstractUser> readUsersFile(List<Game> gamesList) {
         try {
             Reader reader = Files.newBufferedReader(Paths.get(fileNameUser));  // create a reader
             GsonBuilder gsonBuilder = new GsonBuilder();
@@ -134,7 +134,7 @@ public class ReadingJSON {
         return userIDs;
     }
 
-    public static Marketplace readMarketFile(List<Game> listGames, List<AbstractUser> listUsers) {
+    public Marketplace readMarketFile(List<Game> listGames, List<AbstractUser> listUsers) {
         try {
             Reader reader = Files.newBufferedReader(Paths.get(fileNameMarket));  // create a reader
             GsonBuilder gsonBuilder = new GsonBuilder();
@@ -156,22 +156,22 @@ public class ReadingJSON {
             return null;
         }
         catch (JsonSyntaxException e){
-            return new Marketplace(false);
+            return new Marketplace(false, new HashMap<String,ArrayList<Game>>());
         }
     }
 
-    public static void main (String[]args){
-        filesOpener();
-        List<Game> games = readGamesFile();
-        System.out.println("games are: " + games);
-        System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.");
-
-        List<AbstractUser> users = readUsersFile(games);
-        System.out.println("users are: " + users);
-
-        System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.");
-        Marketplace market = readMarketFile(games, users);
-        System.out.println("market is: " + market);
-    }
+//    public static void main (String[]args){
+//        filesOpener();
+//        List<Game> games = readGamesFile();
+//        System.out.println("games are: " + games);
+//        System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.");
+//
+//        List<AbstractUser> users = readUsersFile(games);
+//        System.out.println("users are: " + users);
+//
+//        System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.");
+//        Marketplace market = readMarketFile(games, users);
+//        System.out.println("market is: " + market);
+//    }
 }
 

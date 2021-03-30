@@ -5,6 +5,7 @@ public class Game{
     private String supplierID;
     private int uniqueID;
     private double discount;
+    private boolean onHold = true;
 
 
     public Game(String name, double price, String supplierID, int uniqueID, double discount){
@@ -13,6 +14,13 @@ public class Game{
         this.supplierID = supplierID;
         this.uniqueID = uniqueID;
         this.discount = discount;
+    }
+    public void changeHold(){
+        this.onHold = false;
+    }
+
+    public boolean getHold(){
+        return this.onHold;
     }
 
     public String getName(){

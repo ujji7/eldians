@@ -93,17 +93,34 @@ public class DeserializeUser implements JsonDeserializer<AbstractUser> {
     private static AbstractUser makeUser(String name, String type, Double credit, ArrayList<Game> inventory,
                                     ArrayList<String> history) {
 
-
-        if (type.equals(buyType)) {
-            return new BuyUser(name, credit, inventory, history);
-        } else if (type.equals(sellType)) {
-            return new SellUser(name, credit, inventory, history);
+        switch (type) {
+            case buyType: {
+                BuyUser.UserBuilder builder = new BuyUser.UserBuilder(name);
+                builder.balance(credit);
+                builder.inventoryGames(inventory);
+                builder.transactionHistory(history);
+                return builder.build();
+            }
+            case sellType: {
+                SellUser.UserBuilder builder = new SellUser.UserBuilder(name);
+                builder.balance(credit);
+                builder.transactionHistory(history);
+                return builder.build();
+            }
+            case adminType: {
+                AdminUser.UserBuilder builder = new AdminUser.UserBuilder(name);
+                builder.balance(credit);
+                builder.inventoryGames(inventory);
+                builder.transactionHistory(history);
+                return builder.build();
+            }
+            case fullType: {
+                FullStandardUser.UserBuilder builder = new FullStandardUser.UserBuilder(name);
+                builder.balance(credit);
+                builder.transactionHistory(history);
+                return builder.build();
+            }
         }
-//        } else if (type.equals(adminType)) {
-//            return new AdminUser(name, credit, inventory, history);
-//        } else if (type.equals(fullType)) {
-//            return new FullStandardUser(name, credit, inventory, history);
-//        }
         return null;
     }
 
