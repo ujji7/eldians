@@ -38,7 +38,7 @@ public class AdminUser extends AbstractUser {
         return this.accountBalance;
     }
 
-    public TransactionHistory getTransactionHistory(){
+    public ArrayList<String> getTransactionHistory(){
         return this.transactionHistory;
     }
 
@@ -146,7 +146,7 @@ public class AdminUser extends AbstractUser {
 
         public String username; //mandatory
         public double accountBalance; // optional
-        public ArrayList<main.Game> inventory; //optional
+        public ArrayList<Game> inventory; //optional
         public double newFunds; //optional
         public ArrayList<String> transactionHistory; //optional
 
@@ -162,7 +162,7 @@ public class AdminUser extends AbstractUser {
             return this;
         }
 
-        public UserBuilder inventoryGames(ArrayList<main.Game> inventory){
+        public UserBuilder inventoryGames(ArrayList<Game> inventory){
             this.inventory.addAll(inventory);
             return this;
         }
