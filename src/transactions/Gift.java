@@ -41,7 +41,7 @@ public class Gift implements Transaction {
         // Find game
         Game game = null;
         for (Game g: games) {
-            if (g.getName().equals(this.gameName)) {
+            if (g.getName().equals(this.gameName) && g.getSupplierID().equals(this.ownerName)) {
                 game = g;
             }
         }
@@ -76,7 +76,8 @@ public class Gift implements Transaction {
             // IF admin and valid sender name provided
             // FORMAT gift(GAME, SENDER, RECEIVER, MARKET)
 
-            login.gift(owner, receiver, game);
+
+            login.gift(game, receiver, market);
         }
 
         return login;

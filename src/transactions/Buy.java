@@ -68,7 +68,7 @@ public class Buy implements Transaction {
                 // Find the game
                 Game gameOnSale = null;
                 for(Game game : games) {
-                    if (game.getName().equals(this.game)) {
+                    if (game.getName().equals(this.game) && game.getSupplierID().equals(this.seller)) {
                         gameOnSale = game;
                     }
                 }
@@ -77,7 +77,7 @@ public class Buy implements Transaction {
                 } else {
 
                     // Make the purchase
-                    buyer.buy(seller, gameOnSale, market.getAuctionSale());
+                    buyer.buy(seller, gameOnSale, market.getAuctionSale(), market);
                 }
             }
         }
