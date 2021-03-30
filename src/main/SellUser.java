@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * it cannot create or delete users.
  *
  */
-public class SellUser extends main.AbstractUser {
+public class SellUser extends AbstractUser {
 
     private SellUser(SellUserBuilder builder) {
         this.username = builder.username;
@@ -26,7 +26,7 @@ public class SellUser extends main.AbstractUser {
         return this.accountBalance;
     }
 
-    public TransactionHistory getTransactionHistory(){
+    public ArrayList<String> getTransactionHistory(){
         return this.transactionHistory;
     }
 
@@ -51,9 +51,9 @@ public class SellUser extends main.AbstractUser {
      * @param market the current Market
      */
     @Override
-    public void gift(main.Game game, main.AbstractUser reciever, main.Marketplace market){
+    public void gift(Game game, AbstractUser reciever, Marketplace market){
         // Reciever is a Sell user
-        if (reciever instanceof main.SellUser){
+        if (reciever instanceof SellUser){
             System.out.println("ERROR: \\< Failed Constraint: Sell User can not accept any gifts. >//");
         }
         else{
@@ -90,7 +90,7 @@ public class SellUser extends main.AbstractUser {
      * @param market The current market
      */
     @Override
-    public void removegame(main.Game game, main.Marketplace market){
+    public void removegame(Game game, Marketplace market){
         String currGame = game.getName();
         // check if the User is Selling the Game on the Market
         boolean iAmOffering = market.checkSellerSellingGame(this.getUsername(), currGame);

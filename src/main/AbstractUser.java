@@ -74,7 +74,7 @@ public abstract class AbstractUser {
     public void setAccountBalance(double balance){
 
         this.accountBalance = balance;
-        this.transactionHistory.addTransaction("User: " + this.username + " added $" + balance + " to their account");
+        this.transactionHistory.add("User: " + this.username + " added $" + balance + " to their account");
     }
 
     /**
@@ -253,7 +253,7 @@ public abstract class AbstractUser {
             else { // make normal add and print message
                 this.payAndAddGame(seller, price, game);
                 seller.accountBalance += price;
-                this.transactionHistory.addTransaction("User: " + this.username + " bought " + game.getName() + " from "
+                this.transactionHistory.add("User: " + this.username + " bought " + game.getName() + " from "
                         + seller.getUsername());
             }
         }
@@ -285,7 +285,7 @@ public abstract class AbstractUser {
             map.put(this.username, gameList);
 
             // Report to console and transactionHistory
-            this.transactionHistory.addTransaction("User: " + this.username + " is now selling " + game.getName() +
+            this.transactionHistory.add("User: " + this.username + " is now selling " + game.getName() +
                     " for " + game.getPrice());
             System.out.println("Game: " + game.getName() + " is now being sold by " + this.getUsername() + " for $" +
                     game.getPrice() + " at a " + game.getDiscount()+"% discount, will be availble for purchase tomorrow");
@@ -385,7 +385,7 @@ public abstract class AbstractUser {
             }
             if(!Application.userList.contains(newUser)) {
                 Application.addUser(newUser);
-                this.transactionHistory.addTransaction("User: " + this.username + " has created user " +
+                this.transactionHistory.add("User: " + this.username + " has created user " +
                     newUser.getUsername());
                 System.out.println("A new user was created: \n" + newUser.toString());
             }
@@ -452,10 +452,10 @@ public abstract class AbstractUser {
      * @param game remove the game title from the User's inventory
      */
     protected void removeFromInventory(String game){
-        ArrayList<main.Game> currInv = this.inventory;
+        ArrayList<Game> currInv = this.inventory;
         // finding and setting the game to be removed
-        main.Game currGame = null;
-        for(main.Game curr : currInv){
+        Game currGame = null;
+        for(Game curr : currInv){
             if(curr.getName().equals(game)){
                 currGame = curr;
             }
@@ -472,7 +472,7 @@ public abstract class AbstractUser {
      * @param game The game being removed
      * @param market The current market
      */
-    public void removegame(Game game, main.Marketplace market){
+    public void removegame(Game game, Marketplace market){
         String currGame = game.getName();
         // check if the User is Selling the Game on the Market
         boolean iAmOffering = market.checkSellerSellingGame(this.getUsername(), currGame);
