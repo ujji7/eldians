@@ -28,18 +28,19 @@ import java.util.HashMap;
  *                                      -----As we will be requiring a constructors with given inventories
  */
 public abstract class AbstractUser {
-    public String username;
-    public String password;
-    public String type;
-    public double accountBalance;
-    public ArrayList<Game> inventory;
-    public double newFunds;
-    public Arraylist<String> transactionHistory = null;
+
+    protected String username;
+    protected String password;
+    protected String type;
+    protected double accountBalance;
+    protected ArrayList<main.Game> inventory;
+    protected double newFunds;
+    public ArrayList<String> transactionHistory = null;
     public static final double MAXFUNDS = 999999.99f;
     // can change minFunds to allow overdrafts for future improvements
-    public static final float MINFUNDS = 0f;
-    public static final float DAILYLIMIT = 1000f;
-    public static final float NEWFUNDSTODAY = 0f;
+    private static final float MINFUNDS = 0f;
+    private static final float DAILYLIMIT = 1000f;
+    private static final float NEWFUNDSTODAY = 0f;
 
     public AbstractUser(String username){
         this.username = username;
@@ -47,10 +48,10 @@ public abstract class AbstractUser {
         this.accountBalance = 0;
         this.inventory = new ArrayList<Game>();
         this.newFunds = 0;
-        if (this.transactionHistory == null) { this.transactionHistory = new TransactionHistory(); }
+        if (this.transactionHistory.size() == 0) { this.transactionHistory = new ArrayList<>(); }
     }
 
-    public AbstractUser(String username, double balance){
+   /* public AbstractUser(String username, double balance){
         this(username);
         this.accountBalance = balance;
     }
@@ -63,7 +64,7 @@ public abstract class AbstractUser {
     public AbstractUser(String username, double balance, ArrayList<Game> inventory, TransactionHistory transHist){
         this(username, balance, inventory);
         this.transactionHistory = transHist;
-    }
+    }*/
 
 
 
@@ -219,6 +220,7 @@ public abstract class AbstractUser {
      * @param saleToggle the status of Sale being on the market
      */
 
+
     public void buy(AbstractUser seller, Game game, boolean saleToggle, Marketplace market){
         if (!seller.sellingGame(game)) {
             System.out.println("ERROR: \\ < Failed Constraint: " + seller.getUsername() + "is not selling " +
@@ -346,35 +348,9 @@ public abstract class AbstractUser {
      * @return true if the refund was made false otherwise
      */
     public boolean refund(AbstractUser buyer, AbstractUser seller, double amount){
-        boolean result = false;
-        // need to check if the seller can transfer funds an buyer can accept the funds
-        boolean canSendMoney = seller.canTransferFunds(amount);
-        boolean canRecieveMoney = buyer.canAcceptFunds(amount);
-        if(canSendMoney && canRecieveMoney){
-            // remove the credits from the seller's account and add it to the buyer's
-            seller.transferFunds(-amount);
-            buyer.transferFunds(amount);
-            result = true;
-            System.out.println(seller.getUsername() + " made a refund to "
-                    + buyer.getUsername() + " for $" + amount);
-        }
-        // failed to issue refund
-        else{
-            // Seller unable to transfer the funds
-            if(!canSendMoney){
-                System.out.println("ERROR: \\ < Failed Constraint: " + seller.getUsername() + " could not make a refund to " +
-                    buyer.getUsername() + " for $" + amount + " due to insufficient funds. > //");
-             }
-            // Buyer unable to accept the funds
-            else {
-                System.out.println("ERROR: \\ < Failed Constraint: " + buyer.getUsername() + " could not accept a refund from " +
-                        seller.getUsername() + " for $" + amount + " due to account maxing out upon addition of funds. > //");
-            }
-        }
-        return result;
-
+        System.out.println("ERROR: \\ < Failed Constraint: "+ this.username + " does not have the ability to issue a refund.");
+        return false;
     }
-
 
 
     /**
@@ -430,7 +406,7 @@ public abstract class AbstractUser {
      * @param reciever person who will be recieving the Gift
      * @param market the current Market
      */
-    public void gift(main.Game game, AbstractUser reciever, main.Marketplace market){
+    public void gift(Game game, AbstractUser reciever, Marketplace market){
         // Reciever is a Sell user
         if (reciever instanceof main.SellUser){
             System.out.println("ERROR: \\< Failed Constraint: Sell User can not accept any gifts. >//");
@@ -465,9 +441,7 @@ public abstract class AbstractUser {
             else{
                 System.out.println("ERROR: \\" + reciever.getUsername() + " already has " +gameName+
                         ".\n Gift transaction failed.");
-
             }
-
         }
     }
 
