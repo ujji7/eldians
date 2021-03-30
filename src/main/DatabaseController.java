@@ -96,33 +96,33 @@ public class DatabaseController {
         P.inventory.add(g3);
         P.inventory.add(g7);
 
-        TransactionHistory transhist = new TransactionHistory();
+        ArrayList<String> transhist = new TransactionHistory();
 
         String bs = "[buyUsername] has bought [gameName] from [sellerUsername] for [price].";
         String ac = "[Username] has added [credit] to their account balance; Balance: [Account Balance]";
 
-        transhist.addTransaction(bs);
-        transhist.addTransaction(ac);
-        transhist.addTransaction(bs);
-        transhist.addTransaction(ac);
-        transhist.addTransaction(bs);
-        transhist.addTransaction(ac);
-        transhist.addTransaction(bs);
-        transhist.addTransaction(ac);
+        transhist.add(bs);
+        transhist.add(ac);
+        transhist.add(bs);
+        transhist.add(ac);
+        transhist.add(bs);
+        transhist.add(ac);
+        transhist.add(bs);
+        transhist.add(ac);
 
         AA.transactionHistory = transhist;
-        AA.transactionHistory.addTransaction(ac);
-        AA.transactionHistory.addTransaction(ac);
-        AA.transactionHistory.addTransaction(ac);
-        AA.transactionHistory.addTransaction(ac);
-        AA.transactionHistory.addTransaction(ac);
-        AA.transactionHistory.addTransaction(ac);
-        AA.transactionHistory.addTransaction(ac);
-        AA.transactionHistory.addTransaction(ac);
-        AA.transactionHistory.addTransaction(ac);
-        AA.transactionHistory.addTransaction(ac);
-        AA.transactionHistory.addTransaction(ac);
-        AA.transactionHistory.addTransaction(ac);
+        AA.transactionHistory.add(ac);
+        AA.transactionHistory.add(ac);
+        AA.transactionHistory.add(ac);
+        AA.transactionHistory.add(ac);
+        AA.transactionHistory.add(ac);
+        AA.transactionHistory.add(ac);
+        AA.transactionHistory.add(ac);
+        AA.transactionHistory.add(ac);
+        AA.transactionHistory.add(ac);
+        AA.transactionHistory.add(ac);
+        AA.transactionHistory.add(ac);
+        AA.transactionHistory.add(ac);
 
         BS.transactionHistory = transhist;
 
