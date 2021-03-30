@@ -26,7 +26,7 @@ public class DeserializeGame implements JsonDeserializer<Game> {
      * @param discount discount applied to game
      * @return Game object with given parameters
      */
-    private static Game makeGame(String name, Float price, String seller, Integer gameID, Float discount) {
+    private static Game makeGame(String name, Double price, String seller, Integer gameID, Double discount) {
 
         if (name.length() > 25) { //check name
             return null;
@@ -37,7 +37,9 @@ public class DeserializeGame implements JsonDeserializer<Game> {
         } else if (discount > 90.00) {
             return null;
         }
-        return new Game(name, price, seller, gameID, discount);
+        Game game = new Game(name, price, seller, gameID, discount);
+        game.changeOnHold();
+        return game;
     }
 
     // https://stackoverflow.com/questions/15920212/how-to-check-the-type-of-a-value-from-a-jsonobject/15920281
@@ -49,10 +51,10 @@ public class DeserializeGame implements JsonDeserializer<Game> {
 
         try {
             jsonObject.get(name).getAsString();
-            jsonObject.get(price).getAsFloat();
+            jsonObject.get(price).getAsDouble();
             jsonObject.get(seller).getAsString();
             jsonObject.get(gameID).getAsInt();
-            jsonObject.get(discount).getAsFloat();
+            jsonObject.get(discount).getAsDouble();
             jsonObject.get(onHold).getAsBoolean();
 
         } catch (Exception e) {
@@ -72,10 +74,10 @@ public class DeserializeGame implements JsonDeserializer<Game> {
         }
 
         String nameGame = jsonObject.get(name).getAsString();
-        Float priceGame = jsonObject.get(price).getAsFloat();
+        double priceGame = jsonObject.get(price).getAsDouble();
         String sellerGame = jsonObject.get(seller).getAsString();
         Integer gameIDGame = jsonObject.get(gameID).getAsInt();
-        Float discountGame = jsonObject.get(discount).getAsFloat();
+        Double discountGame = jsonObject.get(discount).getAsDouble();
 
         return makeGame(nameGame, priceGame, sellerGame, gameIDGame, discountGame);
     }
