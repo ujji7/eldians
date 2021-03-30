@@ -30,7 +30,6 @@ import java.util.HashMap;
 public abstract class AbstractUser {
 
     protected String username;
-    protected String password;
     protected String type;
     protected double accountBalance;
     protected ArrayList<Game> inventory;
