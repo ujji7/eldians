@@ -1,6 +1,7 @@
 package transactions;
 
 import main.AbstractUser;
+import main.AdminUser;
 import main.Game;
 import main.Marketplace;
 
@@ -8,8 +9,8 @@ import java.util.ArrayList;
 
 public class RemoveGame implements Transaction {
 
-    String gameName;
-    String ownerName;
+    private final String gameName;
+    private final String ownerName;
 
     /**
      * Constructs a RemoveGame object with the given parameters.
@@ -35,37 +36,22 @@ public class RemoveGame implements Transaction {
     public AbstractUser execute(ArrayList<AbstractUser> users, ArrayList<Game> games, Marketplace market,
                                 AbstractUser login) {
 
+        Finder find = new Finder();
+
         // Find owner of game
-        AbstractUser owner = null;
-        for (AbstractUser user: users) {
-            if (user.getUsername().equals(this.ownerName)) {
-                owner = user;
-            }
-        }
+        AbstractUser owner = find.findUser(this.ownerName, users);
 
         // Find game
-        Game game = null;
-        for (Game g: games) {
-            if (g.getName().equals(this.gameName)) {
-                game = g;
-            }
-        }
+        Game game = find.findGame(this.gameName, games);
 
-        // remove game if owner and game exist
+        // remove game if owner and game exist, call correct remove game if user is admin or not.
         if (owner == null) {
-            System.out.println();
+            System.out.println("ERROR: < User: " + this.ownerName + " does not exist in database. >");
         } else if (game == null) {
-            System.out.println();
+            System.out.println("ERROR: < Game: " + this.gameName + " does not exist in database. >");
+        } else if (owner instanceof AdminUser) {
+            ((AdminUser) login).removegame(game, owner, market);
         } else {
-
-            // if normal user FORMAT
-            // removegame(GAME, MARKET)
-
-            // if admin
-            // check if a valid user is provided
-            // removegame(Game, USER, MARKET)
-
-
             login.removegame(game, market);
         }
 

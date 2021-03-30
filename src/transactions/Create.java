@@ -8,9 +8,9 @@ import java.util.ArrayList;
 
 public class Create implements Transaction {
 
-    String username;
-    String type;
-    double funds;
+    private final String username;
+    private final String type;
+    private final double funds;
 
     /**
      * Creates a new Create transaction.

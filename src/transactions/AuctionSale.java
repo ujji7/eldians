@@ -9,9 +9,9 @@ import java.util.ArrayList;
 
 public class AuctionSale implements Transaction {
 
-    String username;
-    String type;
-    float funds;
+    private final String username;
+    private final String type;
+    private final float funds;
 
     /**
      * Creates a new AuctionSale transaction.

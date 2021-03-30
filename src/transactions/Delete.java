@@ -8,9 +8,9 @@ import java.util.ArrayList;
 
 public class Delete implements Transaction {
 
-    String username;
-    String type;
-    double funds;
+    private final String username;
+    private final String type;
+    private final double funds;
 
     /**
      * Creates a new Delete transaction.
@@ -38,22 +38,31 @@ public class Delete implements Transaction {
     public AbstractUser execute(ArrayList<AbstractUser> users, ArrayList<Game> games, Marketplace market,
                                 AbstractUser login) {
 
-        // Find the user being deleted
-        AbstractUser delete = null;
-        for (AbstractUser user : users) {
-            if (user.getUsername().equals(this.username)) {
-                delete = user;
-            }
-        }
+        Finder find = new Finder();
 
-        // Delete if they exist, raise error otherwise
+        // Find the user being deleted
+        AbstractUser delete = find.findUser(this.username, users);
+
+        // Delete if they exist, raise error otherwise, raise warnings if they exits but attributes are not corrects
         if (delete == null) {
             System.out.println("ERROR: < Cannot delete " + this.username + " as the user does not exist in the " +
-                    "system > ");
-        } else {
-            login.delete(delete, this.funds);
+                    "system >");
+            return login;
         }
 
+        // If deleted user exists but has wrong details, proceed but raise errors.
+        if (delete.getAccountBalance() != this.funds) {
+            System.out.println("WARNING: < User being deleted does not have matching funds, " +
+                    "proceeding with deletion. >");
+        }
+
+        if ((delete instanceof main.SellUser && !this.type.equals("SS")) ||
+                (delete instanceof main.BuyUser && !this.type.equals("BS")) ||
+                (delete instanceof main.FullStandardUser && !this.type.equals("FS"))) {
+            System.out.println("WARNING: < User being deleted is not of correct type, proceeding with deletion. >");
+        }
+
+        login.delete(delete, this.funds);
         return login;
     }
 }

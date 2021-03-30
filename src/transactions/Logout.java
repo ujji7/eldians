@@ -8,9 +8,9 @@ import java.util.ArrayList;
 
 public class Logout implements Transaction{
 
-    String username;
-    String type;
-    double funds;
+    private final String username;
+    private final String type;
+    private final double funds;
 
     /**
      * Creates a new Logout transaction.
@@ -37,6 +37,28 @@ public class Logout implements Transaction{
     @Override
     public AbstractUser execute(ArrayList<AbstractUser> users, ArrayList<Game> games, Marketplace market,
                                 AbstractUser login) {
+
+        if (login == null) {
+            System.out.println("ERROR: < No one is currently logged in, maintaining previous state. >");
+            return null;
+        }
+
+        if (!login.getUsername().equals(this.username)) {
+            System.out.println("WARNING: < User logging out does not match username of user currently logged in, " +
+                    "proceeding by logging out user currently logged in. >");
+        }
+
+        if (login.getAccountBalance() != this.funds) {
+            System.out.println("WARNING: < User logging out does not have matching funds, " +
+                    "proceeding with logout. >");
+        }
+
+        if ((login instanceof main.SellUser && !this.type.equals("SS")) ||
+                (login instanceof main.BuyUser && !this.type.equals("BS")) ||
+                (login instanceof main.FullStandardUser && !this.type.equals("FS"))) {
+            System.out.println("WARNING: < User logging out is not of correct type, proceeding with loggout. >");
+        }
+
         return null;
     }
 }

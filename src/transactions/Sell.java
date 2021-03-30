@@ -8,10 +8,10 @@ import java.util.ArrayList;
 
 public class Sell implements Transaction {
 
-    String gameName;
-    String seller;
-    Double discount;
-    Double salePrice;
+    private final String gameName;
+    private final String seller;
+    private final Double discount;
+    private final Double salePrice;
 
     /**
      * Creates a new Sell transaction.
@@ -43,6 +43,11 @@ public class Sell implements Transaction {
 
         // Generate UniqueID
         int uid = 101; // TEMPORARY! REMOVE WHEN WE HAVE A WAY TO GENERATE UNIQUEID'S
+
+        if (!login.getUsername().equals(this.seller)) {
+            System.out.println("WARNING: < Logged in user does not match username: " + this.seller +
+                    ", proceeding using logged in user as the seller. >");
+        }
 
         // Create the game
         Game newGame = new Game(this.gameName, this.salePrice, login.getUsername(), uid, this.discount);
