@@ -1,6 +1,9 @@
 package main;
 import java.util.ArrayList;
 import java.util.HashMap;
+//line 401
+//CREATE MATHOD HAS ISSEU
+
 
 //we need an auction sale method - i implemented it at botfitom check it out
 // also look at readme for add credit - there is another implementations for admin type
@@ -396,10 +399,11 @@ public abstract class AbstractUser {
                 System.out.println("A new user was created: \n" + newUser.toString());
             }
             System.out.println("ERROR: \\< Failed Constraint: New User could not be created since" +
-                    "a User already exists with given name. >//");
+                    " a User already exists with given name. >//");
+            System.out.println("baby is alive: " + username);
         }
         System.out.println("ERROR: \\< Failed Constraint: New User could not be created since "
-                + Double.toString(credit) + "amount is invalid. >//");
+                + Double.toString(credit) + " amount is invalid. >//");
 
     }
 

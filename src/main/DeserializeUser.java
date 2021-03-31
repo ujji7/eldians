@@ -10,11 +10,11 @@ import java.util.Iterator;
 
 public class DeserializeUser implements JsonDeserializer<AbstractUser> {
     public HashMap<Integer, Game> gameIDs;
-    private static final String name = "name";
+    private static final String name = "username";
     private static final String type = "type";
-    private static final String credit = "credit";
+    private static final String credit = "accountBalance";
     private static final String inventory = "inventory";
-    private static final String transactionHistory = "transaction history";
+    private static final String transactionHistory = "transactionHistory";
     private static final String buyType = "BS";
     private static final String sellType = "SS";
     private static final String adminType = "AA";

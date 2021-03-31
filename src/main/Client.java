@@ -23,7 +23,7 @@ public class Client {
 
     // private List<String> allLines;
     private ArrayList<ArrayList<String>> validFormatTrans;
-    private ArrayList<Transaction> validTranasctions;
+    private ArrayList<Transaction> validTransactions;
     // Login, Logout, Create, Add-Credit, Delete, Auction-Sale regex format
     private static String regLLCADT = "(0[0-7]|10)\\s(.{15})\\s(AA|FS|BS|SS)\\s(\\d{6}\\.\\d{2})";
     // Sell, Buy, Refund transaction regex
@@ -109,23 +109,23 @@ public class Client {
      *
      */
     private void makeAndExecute() {
-        this.validTranasctions = new ArrayList<Transaction>();
-        // make an array list of Transaction Oject
+        this.validTransactions = new ArrayList<Transaction>();
+        // make an array list of Transaction Object
         for (ArrayList<String> tranSeq : validFormatTrans) {
             TransactionFactory myTranFactory = new TransactionFactory();
 
                         //VERIFY WITH MAD
 
-            this.validTranasctions.add(myTranFactory.buildTransaction(tranSeq));
+            this.validTransactions.add(myTranFactory.buildTransaction(tranSeq));
 
         }
         // If there are transaction objects then send them to Application
-        if(validTranasctions.size() >1){
+        if(validTransactions.size() >1){
             Application app = new Application();
 
                     //VERIFY WITH MAD
 
-            app.Run(validTranasctions);
+            app.Run(validTransactions);
 
         }
         else{
@@ -397,7 +397,8 @@ public class Client {
 
 
     public static void main(String[] args){
-        Client client = new Client("/Users/Danielle/Documents/Documents/School/6Y2S/CSC207/a2-eldians/src/main/admindaily.txt");
+//        Client client = new Client("/Users/Danielle/Documents/Documents/School/6Y2S/CSC207/a2-eldians/src/main/admindaily.txt");
+        Client client = new Client("C:/Users/bhara/Documents/CSC207/a2-eldians/src/main/dailyc.txt");
     }
 
 }

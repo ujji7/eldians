@@ -19,9 +19,9 @@ import com.google.gson.reflect.TypeToken;
  */
 public class ReadingJSON {
     private static File Game, User, Market;
-    private static final String fileNameGame = "games.json";
-    private static final String fileNameUser = "users.json";
-    private static final String fileNameMarket = "market.json";
+    private static final String fileNameGame = "gamec.json";
+    private static final String fileNameUser = "userc.json";
+    private static final String fileNameMarket = "marketc.json";
 
     private static void individualFileOpener(File file, String name) {
         if (!(file = new File(name)).exists()) { //if game file does not exist, we can assume all 3 ones exist
@@ -45,6 +45,7 @@ public class ReadingJSON {
     public static List<Game> readGamesFile() {
         try {
             Reader reader = Files.newBufferedReader(Paths.get(fileNameGame)); // create a reader to read the games file
+            System.out.println("game file is found.");
             Gson gson = new GsonBuilder().registerTypeAdapter(Game.class, new DeserializeGame()).create(); //create Gson
             // object to build the List of games
             List<Game> games = gson.fromJson(reader, new TypeToken<List<Game>>() {}.getType()); //Return list of games

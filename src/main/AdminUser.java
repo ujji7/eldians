@@ -146,7 +146,7 @@ public class AdminUser extends AbstractUser {
 
         public String username; //mandatory
         public double accountBalance; // optional
-        public ArrayList<Game> inventory; //optional
+        public ArrayList<Game> inventory = new ArrayList<Game>(); //optional
         public double newFunds; //optional
         public ArrayList<String> transactionHistory; //optional
 

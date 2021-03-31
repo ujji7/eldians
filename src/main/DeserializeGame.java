@@ -12,8 +12,8 @@ import java.lang.reflect.Type;
 public class DeserializeGame implements JsonDeserializer<Game> {
     private final String name = "name";
     private final String price = "price";
-    private final String seller = "seller";
-    private final String gameID = "gameID";
+    private final String seller = "supplierID";
+    private final String gameID = "uniqueID";
     private final String discount = "discount";
     private final String onHold = "onHold";
 

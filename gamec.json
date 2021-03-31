@@ -1,0 +1,24 @@
+[{
+    "name": "Clue" ,
+    "price": 20.99,
+    "supplierID": "Alice",
+    "uniqueID": 1,
+    "discount": 10.06,
+    "onHold": false
+  },
+  {
+    "name": "Monopoly" ,
+    "price": 20.99,
+    "supplierID": "admin1",
+    "uniqueID": 2,
+    "discount": 9.85,
+    "onHold": true
+  },
+  {
+  "name": "Mouse trap" ,
+  "price": 12.0,
+  "supplierID": "Alice",
+  "uniqueID": 3,
+  "discount": 9.85,
+  "onHold": true
+}]
