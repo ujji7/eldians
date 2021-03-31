@@ -312,7 +312,7 @@ public class Client {
             ArrayList<String> result = new ArrayList<>();
             // Extracting the data from the transaction and adding it to the ArrayList
             String gameName = this.stripSpace(transaction.substring(3,28));
-            String sellerName = transaction.substring(29,44);
+            String sellerName = this.stripSpace(transaction.substring(29,44));
             String discount = transaction.substring(45,50);
             String price = transaction.substring(51,57);
             if(this.containsData(gameName)){
