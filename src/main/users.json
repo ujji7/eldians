@@ -35,7 +35,6 @@
   { "username": "YesMadeoNoBuy",
     "type": "SS",
     "accountBalance": 105.56,
-    "inventory": [],
     "transactionHistory": []
   },
 
@@ -105,7 +104,6 @@
   {"username": "YesValve",
     "type": "SS",
     "accountBalance": 105.56,
-    "inventory": [],
     "transactionHistory": ["Sold Counter-Strike from Madeo"]
   },
   { "username": "YesOneInv",

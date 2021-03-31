@@ -10,11 +10,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-
-// CHECK IF U EVER DO THIS.BOARD = BOARD
-// WHAT IF FILE LOOKS LIKE {}
+/** A ReadingJSON class that Reads the database files and creates the necessary objects to be used by the system.
+ * There are 3 files to be read, one for games, one for users, and one for the marketplace.
+ * This was adapted from a website post written by Eugen Paraschiv on October 24, 2019 here:
+ * https://www.baeldung.com/gson-deserialization-guide
+ * File opener methods were adapted from practical notes.
+ *
+ */
 public class ReadingJSON {
-    //    https://www.baeldung.com/gson-deserialization-guide
     private static File Game, User, Market;
     private static final String fileNameGame = "games.json";
     private static final String fileNameUser = "users.json";
@@ -37,21 +40,18 @@ public class ReadingJSON {
     }
 
 
+    // Code adapted from MSDN example: HOW TO CITE A FUNCTION
+    // http://msdn.microsoft.com/en-us/library/ms680578(VS.85).aspx
     public static List<Game> readGamesFile() {
         try {
             Reader reader = Files.newBufferedReader(Paths.get(fileNameGame)); // create a reader to read the games file
-
             Gson gson = new GsonBuilder().registerTypeAdapter(Game.class, new DeserializeGame()).create(); //create Gson
             // object to build the List of games
-
-
             List<Game> games = gson.fromJson(reader, new TypeToken<List<Game>>() {}.getType()); //Return list of games
             // according to game deserializer
-
-            games.removeIf(Objects::isNull); //remove any null game Objects - they are not in proper game format
+            games.removeIf(Objects::isNull);
 
             ArrayList<Integer> uniqueIDs = new ArrayList<Integer>();
-
             for (Iterator<Game> it = games.iterator(); it.hasNext(); ) { //check that there are no duplicate gameIDs
                 Game g = it.next();
                 if (!(uniqueIDs.contains(g.getUniqueID()))) {
@@ -60,18 +60,14 @@ public class ReadingJSON {
                     it.remove();
                 }
             }
-
-            reader.close(); // close reader
+            reader.close();
             return games;
-
         } catch (IOException fileNotFoundException) {
-            fileNotFoundException.printStackTrace();
+            System.out.println("Games file not found.");
         } catch (JsonSyntaxException e){
-            e.printStackTrace();
-            return new ArrayList<>();
+            System.out.println("Games file not in correct format.");
         }
-        return null;
-
+        return new ArrayList<>();
     }
 
     private static HashMap<Integer, Game> setGamesList(List<Game> gamesList) {
@@ -117,11 +113,11 @@ public class ReadingJSON {
             return users;
 
         } catch (IOException fileNotFoundException) {
-            fileNotFoundException.printStackTrace();
-            return null;
+            System.out.println("Users file not found.");
         } catch (JsonSyntaxException e){
-            return new ArrayList<>();
+            System.out.println("Users file not in proper format.");
         }
+        return new ArrayList<>();
     }
 
     private static HashMap<String, AbstractUser> getUserHashmap(List<AbstractUser> listUsers) {
@@ -147,17 +143,16 @@ public class ReadingJSON {
             Gson gson = gsonBuilder.create();
 
             Marketplace market = gson.fromJson(reader, Marketplace.class);
-
-            reader.close(); // close reader
+            reader.close();
             return market;
 
         } catch (IOException fileNotFoundException) {
-            fileNotFoundException.printStackTrace();
-            return null;
+            System.out.println("Market file not found.");
         }
         catch (JsonSyntaxException e){
-            return new Marketplace(false, new HashMap<String,ArrayList<Game>>());
+            System.out.println("Market file not in proper format.");
         }
+        return new Marketplace(false, new HashMap<String,ArrayList<Game>>());
     }
 
 //    public static void main (String[]args){
