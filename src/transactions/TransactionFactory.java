@@ -41,6 +41,7 @@ public class TransactionFactory {
 
             // Buy 04-GameName-Seller-Buyer
             case "04":
+                System.out.println(attr2);
                 transac = new Buy(attr1, attr2, attr3);
                 break;
 

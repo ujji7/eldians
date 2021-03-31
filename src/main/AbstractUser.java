@@ -2,15 +2,12 @@ package main;
 import java.util.ArrayList;
 import java.util.HashMap;
 //line 401
-//CREATE MATHOD HAS ISSEU
+//REMOVE ANY UNNECESSARY PRINT STATEMENTS IN CREATE AND BUY
 
 
 //we need an auction sale method - i implemented it at botfitom check it out
 // also look at readme for add credit - there is another implementations for admin type
 
-
-//BUY USER NOW HAS CORRECT FORMAT OF ERRORS - WHEN WE SWITCH those error codes to abstract and the abstract code
-//to admin, we can use buy user's code
 
 //I made in game that returns the price with discount applied since we'll probs need it in many places.
 
@@ -165,8 +162,8 @@ public abstract class AbstractUser {
      */
     //helper for buy
     private boolean sellingGame(Game game, Marketplace market) {
-        if (market.getGamesOnSale().containsKey(this)) { //user is selling a game in the mkt place
-            for (Game g : market.getGamesOnSale().get(this)) {
+        if (market.getGamesOnSale().containsKey(this.username)) { //user is selling a game in the mkt place
+            for (Game g : market.getGamesOnSale().get(this.username)) {
                 if (g.getUniqueID() == game.getUniqueID()) {
                     return true;
                 }
@@ -225,12 +222,14 @@ public abstract class AbstractUser {
 
     public void buy(AbstractUser seller, Game game, boolean saleToggle, Marketplace market){
         if (!seller.sellingGame(game, market)) {
-            System.out.println("ERROR: \\ < Failed Constraint: " + seller.getUsername() + "is not selling " +
+            System.out.println("ERROR: \\ < Failed Constraint: " + seller.getUsername() + " is not selling " +
                     game.getName() + " on the market.");
+            return;
         }
         if (this.sellingGame(game, market)) {
             System.out.println("ERROR: \\ < Failed Constraint: " + this.getUsername() + "is selling " + game.getName()
                     + " on the market.");
+            return;
         }
         if (gameInInventory(game)) { //check that game isn't already in inventory
             System.out.println("ERROR: \\ < Failed Constraint: "+ this.username + " already owns " + game.getName() +
@@ -396,8 +395,8 @@ public abstract class AbstractUser {
                 Application.addUser(newUser);
                 this.transactionHistory.add("User: " + this.username + " has created user " +
                     newUser.getUsername());
-                System.out.println("A new user was created: \n" + newUser.toString());
-                System.out.println("new user name is: " + username);
+                System.out.println("A new user was created: \n" + username); //+ newUser.toString()
+//                System.out.println("new user name is: " + username);
                 return;
             }
             System.out.println("ERROR: \\< Failed Constraint: New User could not be created since" +

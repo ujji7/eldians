@@ -34,9 +34,9 @@ public class Application {
         userList = (ArrayList<AbstractUser>) users;
         this.gamesList = (ArrayList<Game>) games;
         this.market = market;
-        Set<String> usersv2 = market.getGamesOnSale().keySet();
+        Set<String> usersv2 = this.market.getGamesOnSale().keySet();
         for (String u : usersv2) {
-            System.out.println("their game" + market.getGamesOnSale().get(u));
+            System.out.println(u + "'s game: " + market.getGamesOnSale().get(u));
         }
 //        System.out.println(market);
     }

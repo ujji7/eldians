@@ -1,5 +1,5 @@
 package transactions;
-
+//lLINE 42 PRINT STATEMENT - CHANGES Alice to alice
 import main.AbstractUser;
 import main.Game;
 import main.Marketplace;
@@ -19,10 +19,12 @@ public class Buy implements Transaction {
      * @param b String representing the buyer.
      * @param s String representing the seller.
      */
-    public Buy(String g, String b, String s) {
+    public Buy(String g, String s, String b) {
         this.game = g;
         this.buyer = b;
+        System.out.println("buyer: " + this.buyer);
         this.seller = s;
+        System.out.println("seller: " + this.seller);
     }
 
     /**
@@ -39,6 +41,7 @@ public class Buy implements Transaction {
                                 AbstractUser login) {
 
         Finder find = new Finder();
+        System.out.println(this.buyer + users);
 
         // Find the buyer
         AbstractUser buyer = find.findUser(this.buyer, users);
