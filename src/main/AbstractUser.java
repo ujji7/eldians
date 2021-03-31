@@ -397,6 +397,8 @@ public abstract class AbstractUser {
                 this.transactionHistory.add("User: " + this.username + " has created user " +
                     newUser.getUsername());
                 System.out.println("A new user was created: \n" + newUser.toString());
+                System.out.println("new user name is: " + username);
+                return;
             }
             System.out.println("ERROR: \\< Failed Constraint: New User could not be created since" +
                     " a User already exists with given name. >//");
