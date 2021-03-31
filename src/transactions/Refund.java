@@ -8,9 +8,9 @@ import java.util.ArrayList;
 
 public class Refund implements Transaction {
 
-    String buyer;
-    String seller;
-    Double credit;
+    private final String buyer;
+    private final String seller;
+    private final double credit;
 
     /**
      * Creates a new refund transaction.
@@ -38,19 +38,11 @@ public class Refund implements Transaction {
     public AbstractUser execute(ArrayList<AbstractUser> users, ArrayList<Game> games, Marketplace market,
                                 AbstractUser login) {
 
-        AbstractUser buyerUser = null;
-        for (AbstractUser user : users) {
-            if (user.getUsername().equals(this.buyer)) {
-                buyerUser = user;
-            }
-        }
+        Finder find = new Finder();
 
-        AbstractUser sellerUser = null;
-        for (AbstractUser user : users) {
-            if (user.getUsername().equals(this.seller)) {
-                sellerUser = user;
-            }
-        }
+        AbstractUser buyerUser = find.findUser(this.buyer, users);
+
+        AbstractUser sellerUser = find.findUser(this.seller, users);
 
         if (buyerUser == null) {
             System.out.println("ERROR: < User " + this.buyer + " cannot be found in system. >");

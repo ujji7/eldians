@@ -8,9 +8,9 @@ import java.util.ArrayList;
 
 public class Login implements Transaction{
 
-    String username;
-    String type;
-    double funds;
+    private final String username;
+    private final String type;
+    private final double funds;
 
     /**
      * Creates a new Login Transaction.
@@ -44,19 +44,27 @@ public class Login implements Transaction{
             return login;
         }
 
+        Finder find = new Finder();
+
         // Find the user trying to log in
-        AbstractUser log = null;
-        for (AbstractUser user : users) {
-            if (user.getUsername().equals(this.username)) { log = user; }
-        }
+        AbstractUser log = find.findUser(this.username, users);
 
-        // if we found the user, return them since they are the new person who is logged in.
-        if (log != null) { return log; }
-
-        // else the user doesn't exist so this is an error and return who was previously logged in (null).
-        else {
+        if (log == null) {
             System.out.println("ERROR: < User not found in database. >");
-            return login;
+            return null;
         }
+
+        // If user exists but details are wrong, proceed and warn the user
+        if (log.getAccountBalance() != this.funds) {
+            System.out.println("WARNING: < User logging in does not have matching funds, " +
+                    "proceeding with login. >");
+        }
+        if ((log instanceof main.SellUser && !this.type.equals("SS")) ||
+                (log instanceof main.BuyUser && !this.type.equals("BS")) ||
+                (log instanceof main.FullStandardUser && !this.type.equals("FS"))) {
+            System.out.println("WARNING: < User logging in is not of correct type, proceeding with login. >");
+        }
+
+        return log;
     }
 }

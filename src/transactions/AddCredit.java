@@ -10,9 +10,9 @@ import java.util.ArrayList;
 
 public class AddCredit implements Transaction {
 
-    String username;
-    String type;
-    float credit;
+    private final String username;
+    private final String type;
+    private final float credit;
 
     /**
      * Creates a new AddCredit transaction.
@@ -40,21 +40,28 @@ public class AddCredit implements Transaction {
     public AbstractUser execute(ArrayList<AbstractUser> users, ArrayList<Game> games, Marketplace market,
                           AbstractUser login) {
 
-        if (login instanceof AdminUser) {
+        if (login instanceof AdminUser && this.username.equals("")) {
+
+            // When username field is empty, the admin wants to add to itself, but warn to console anyways.
+            System.out.println("WARNING: < Username field left empty, Adding funds to self. >");
+            login.addCredit(this.credit);
+
+        } else if (login instanceof AdminUser) {
+
+            Finder find = new Finder();
             // Find user we are adding credit to
-            AbstractUser foundUser = null;
-            for (AbstractUser user : users) {
-                if (user.getUsername().equals(this.username)) { foundUser = user; }
-            }
+            AbstractUser foundUser = find.findUser(this.username, users);
 
             if (foundUser == null) {
                 System.out.println("ERROR: < User " + this.username + "Not Found >");
             } else {
                 ((AdminUser) login).addCreditTo(this.credit, foundUser);
             }
+
         } else {
             login.addCredit(this.credit);
         }
         return login;
     }
+
 }
