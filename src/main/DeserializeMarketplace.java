@@ -12,9 +12,11 @@ import java.util.*;
  */
 
 // did this.board = board for the hashmaps - FIX THATTTT
+    // SET INITIALIZING MARKET TO ORIGINALLY WITH FALSE AUCTION SALE
 public class DeserializeMarketplace implements JsonDeserializer<Marketplace> {
     private HashMap<Integer, Game> gameIDs;
     private HashMap<String, AbstractUser> users;
+    private static final String id = "game";
     private static final String auctionSale = "auctionSale";
     private static final String gamesOnSale = "gamesOnSale";
 
@@ -82,6 +84,20 @@ public class DeserializeMarketplace implements JsonDeserializer<Marketplace> {
         return users.get(name);
     }
 
+    protected JsonArray getIntegersFromObject(JsonArray array) {
+        JsonArray jsonObjects = new JsonArray();
+        for (JsonElement jsonArrayObject : array) {
+            if (jsonArrayObject instanceof JsonObject) {
+                try {
+                    Integer uniqueID = ((JsonObject) jsonArrayObject).get(id).getAsInt();
+                    jsonObjects.add(uniqueID);
+                } catch (Exception ignored) {
+                }
+            }
+        }
+        return jsonObjects;
+    }
+
     @Override
     public Marketplace deserialize(JsonElement json, Type typeOfT,
                                     JsonDeserializationContext context) throws JsonParseException {
@@ -99,7 +115,10 @@ public class DeserializeMarketplace implements JsonDeserializer<Marketplace> {
         for (String s : sellers) {
 //            AbstractUser user = findUser(s); //add this if hashmap <user obj, list.
             JsonArray gameIDList = uniqueSellers.get(s).getAsJsonArray();
-            ArrayList<Game> gamesSoldByUSer = gameIDsToGames(s, gameIDList);
+//            System.out.println("gameIDList" + gameIDList);
+            JsonArray listOfIntegers = getIntegersFromObject(gameIDList);
+//            System.out.println("list of integers" + listOfIntegers);
+            ArrayList<Game> gamesSoldByUSer = gameIDsToGames(s, listOfIntegers);
             market.put(s, gamesSoldByUSer);
         }
 

@@ -3,6 +3,8 @@ package main;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.io.*;
+import java.util.HashMap;
+import java.util.Set;
 
 
 import com.google.gson.*;
@@ -20,61 +22,32 @@ public class DatabaseController {
             fileGame = new FileWriter(FILENAMEGAME);
             fileUser = new FileWriter(FILENAMEUSER);
             fileMarketplace = new FileWriter(FILENAMEMARKETPLACE);
-            GsonBuilder builder = new GsonBuilder();
+            GsonBuilder builder = new GsonBuilder().setPrettyPrinting();
             gson = builder.create();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
-//    public void writeMarket(Marketplace market) throws IOException {
-//        GsonBuilder invBuilder = new GsonBuilder();
-//        invBuilder.registerTypeAdapter(Game.class, new userSerializer());
-//        Gson user = invBuilder.create();
-//        writeData(fileMarketplace, user.toJson(market));
-//
-//    }
-
-    //BHARATHI'S TRY
     public void writeMarket(Marketplace market) throws IOException {
         GsonBuilder invBuilder = new GsonBuilder();
-        invBuilder.registerTypeAdapter(Game.class, new userSerializer());
+        invBuilder.registerTypeAdapter(Game.class, new userSerializer()).setPrettyPrinting();
         Gson user = invBuilder.create();
         writeData(fileMarketplace, user.toJson(market));
 
     }
 
-//    public void writeUser(ArrayList<AbstractUser> userList) throws IOException {
-//        try {
-//            GsonBuilder invBuilder = new GsonBuilder();
-//            invBuilder.registerTypeAdapter(Game.class, new userSerializer());
-//            Gson user = invBuilder.create();
-//            writeData(fileUser, user.toJson(userList));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-    //BHARATHI'S TRY
     public void writeUser(ArrayList<AbstractUser> userList) throws IOException {
         try {
-
-            Gson gson = new GsonBuilder()
-                    .registerTypeAdapter(AbstractUser.class, new userSerializer())
-                    .setPrettyPrinting()
-                    .create();
-
-//            GsonBuilder userBuilder = new GsonBuilder();
-//            userBuilder.registerTypeAdapter(AbstractUser.class, new userSerializer());
-//            userBuilder.create();
-            writeData(fileUser, gson.toJson(userList));
+            GsonBuilder invBuilder = new GsonBuilder();
+            invBuilder.registerTypeAdapter(Game.class, new userSerializer()).setPrettyPrinting();
+            Gson user = invBuilder.create();
+            writeData(fileUser, user.toJson(userList));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-
+    
     public void writeGame(ArrayList<Game> gameList) throws IOException {
         try {
             writeData(fileGame, gson.toJson(gameList));
@@ -94,43 +67,21 @@ public class DatabaseController {
 
 }
 
-//class userSerializer implements JsonSerializer<Game>{
-//    @Override
-//    public JsonElement serialize(Game game, Type type, JsonSerializationContext context){
-//        JsonObject object = new JsonObject();
-//        object.addProperty("game", game.getUniqueID());
-////        object.addProperty("username", usr.username);
-////        object.addProperty("type", usr.type);
-////        object.addProperty("accountBalance", usr.accountBalance);
-////        ArrayList<Integer> inv = new ArrayList<Integer>();
-////        for (Game game: usr.inventory
-////        ) {
-////            inv.add(game.getUniqueID());
-////        }
-////        object.addProperty("inventory", String.valueOf(inv));
-////        object.addProperty("transactionHistory", String.valueOf(usr.transactionHistory));
-//        return object;
-//    }
-//}
-
-
-//BHARATHI'S TRY AT THE INVENTORY
-class userSerializer implements JsonSerializer<AbstractUser>{
+class userSerializer implements JsonSerializer<Game>{
     @Override
-    public JsonElement serialize(AbstractUser user, Type type, JsonSerializationContext context){
+    public JsonElement serialize(Game game, Type type, JsonSerializationContext context){
         JsonObject object = new JsonObject();
-//        object.addProperty("game", game.getUniqueID());
-        object.addProperty("username", user.username);
-        object.addProperty("type", user.type);
-        object.addProperty("accountBalance", user.accountBalance);
-
-        ArrayList<Integer> inv = new ArrayList<Integer>();
-        for (Game game: user.inventory) {
-            inv.add(game.getUniqueID());
-        }
-        System.out.println(inv);
-        object.addProperty("inventory", String.valueOf(inv));
-        object.addProperty("transactionHistory", String.valueOf(user.transactionHistory));
+        object.addProperty("game", game.getUniqueID());
+//        object.addProperty("username", usr.username);
+//        object.addProperty("type", usr.type);
+//        object.addProperty("accountBalance", usr.accountBalance);
+//        ArrayList<Integer> inv = new ArrayList<Integer>();
+//        for (Game game: usr.inventory
+//        ) {
+//            inv.add(game.getUniqueID());
+//        }
+//        object.addProperty("inventory", String.valueOf(inv));
+//        object.addProperty("transactionHistory", String.valueOf(usr.transactionHistory));
         return object;
     }
 }

@@ -19,4 +19,9 @@ Click File from the toolbar\
  Go to where you stored the downloaded jar file and select it. \
  Click apply\
  Click ok.\
-It should work now.
+It should work now.\
+
+File > Settings > Editor > General > Scroll down to On Save \
+Ensure that "Remove trailing spaces on" is unchecked.
+
+

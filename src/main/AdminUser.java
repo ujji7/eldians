@@ -2,6 +2,7 @@ package main;
 
 import java.util.ArrayList;
 
+//CREATE METHOD DOES NOT PROPERYL CHECK FOR ALREADY USER WITH THE GIVEN USERNAME EXISTS
 /** Admin type user that extends the Abstract User class. An admin has the highest privileges.
  *
  */

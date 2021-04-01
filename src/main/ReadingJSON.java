@@ -19,9 +19,9 @@ import com.google.gson.reflect.TypeToken;
  */
 public class ReadingJSON {
     private static File Game, User, Market;
-    private static final String fileNameGame = "gamec.json";
-    private static final String fileNameUser = "userc.json";
-    private static final String fileNameMarket = "marketc.json";
+    private static final String fileNameGame = "games.json";
+    private static final String fileNameUser = "users.json";
+    private static final String fileNameMarket = "market.json";
 
     /** If a file with the name does not exist, creates a file with the name
      *
