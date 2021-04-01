@@ -61,8 +61,8 @@ Where:
   * At the beginning of each day, the onHold attribute is changed to false, as a new day has begun.
 
 The unique id's must begin with 1 and increase as more and more games are added. If another 
-game is written into the system with the same unique id as a previous one, it will not be 
-added to the system.
+game is written into the system with the same unique id as one that has already been created, it will not be 
+added to the system. 
 
 If any game object does not follow the specifications, it will not be added to the system.
 If the entire game file does not follow the specified format, aka an empty file, a file with just "," 
@@ -119,10 +119,11 @@ If any user object does not follow the specifications, it will not be added to t
 If the entire users file does not follow the specified format, aka an empty file, a file with just ","
 would lead to the creation of an empty list of users.
 
-MARKETPLACE FILE:
-Must be in the given format, where the file begins with a '[' and ends with a ']':
-
+MARKETPLACE FILE: 
 This is a list of each seller, and the games they are selling
+
+Must be in the given format, where the file begins with a '{' and ends with a '}':
+
 {"auctionSale": false,
 "gamesOnSale": {
 "Alice": [{"id": 1 }, {"id": 3 }],
@@ -131,7 +132,7 @@ This is a list of each seller, and the games they are selling
 
 Where:
 * "auctionSale" is a boolean telling whether the auction sale is on (true) or off (false)
-  * if no "auctionSale" attribute exists in the file, or it is not in the boolean, it will be defaulted to false
+  * if no "auctionSale" attribute exists in the file, or it is not a boolean, it will be defaulted to false
 * "gamesOnSale" is the actual marketplace, consisting of usernames which correspond to a list of 
 game unique ids
   * if "gamesOnSale" does not exist or does not follow the specified format, an empty marketplace will be created
@@ -143,5 +144,5 @@ game unique ids
     added to the seller's list of games.
   * duplicate unique ids will be ignored.  
 
-If the entire market file does not follow the specified format, aka an empty file, a file with just "$"
+If the entire market file does not follow the specified format, aka an empty file, a file with just "aknda"
 would lead to the creation of a new, empty Marketplace with auction sale set as false.
