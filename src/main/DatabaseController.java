@@ -70,7 +70,7 @@ class userSerializer implements JsonSerializer<Game>{
     @Override
     public JsonElement serialize(Game game, Type type, JsonSerializationContext context){
         JsonObject object = new JsonObject();
-        object.addProperty("game", game.getUniqueID());
+        object.addProperty("uniqueID", game.getUniqueID());
 //        object.addProperty("username", usr.username);
 //        object.addProperty("type", usr.type);
 //        object.addProperty("accountBalance", usr.accountBalance);
