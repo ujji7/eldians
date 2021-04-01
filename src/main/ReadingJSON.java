@@ -19,9 +19,11 @@ import com.google.gson.reflect.TypeToken;
  */
 public class ReadingJSON {
     private static File Game, User, Market;
-    private static final String fileNameGame = "games.json";
-    private static final String fileNameUser = "users.json";
-    private static final String fileNameMarket = "market.json";
+    private static final String fileNameGame = "games.json"; //games file
+    private static final String fileNameUser = "users.json"; //users file
+    private static final String fileNameMarket = "market.json"; //market file
+    private static final String fileNotFoundError = " file not found.";
+    private static final String fileFormatError =" file not in correct format.";
 
     /** If a file with the name does not exist, creates a file with the name
      *
@@ -39,7 +41,6 @@ public class ReadingJSON {
     }
 
     /** If the json files for games, users, and marketplace does not exist, creates them.
-     *
      */
     private static void filesOpener() {
         individualFileOpener(Game, fileNameGame);
@@ -74,17 +75,17 @@ public class ReadingJSON {
             reader.close();
             return games;
         } catch (IOException fileNotFoundException) {
-            System.out.println("Games file not found.");
+            System.out.println("Games" + fileNotFoundError);
         } catch (JsonSyntaxException e){
-            System.out.println("Games file not in correct format.");
+            System.out.println("Games" + fileFormatError);
         }
         return new ArrayList<>();
     }
 
-    /**
+    /** Return a hashmap of Games where the key is the unique id and value is the game object made from the gameslist
      *
-     * @param gamesList list of games
-     * @return
+     * @param gamesList list of games to be turned into a hashmap
+     * @return hashmap of Games where the key is the unique id and value is the game object
      */
     private static HashMap<Integer, Game> setGamesList(List<Game> gamesList) {
         HashMap<Integer, Game> gameIDAll = new HashMap<Integer, Game>();
@@ -96,6 +97,10 @@ public class ReadingJSON {
         return gameIDAll;
     }
 
+    /** Remove any sellers with duplicate names from the users list
+     * 
+     * @param users list of users to be cleaned up
+     */
     private static void removeDuplicateSellers(List<AbstractUser> users) {
         ArrayList<String> uniqueSellers = new ArrayList<String>();
 
@@ -109,6 +114,11 @@ public class ReadingJSON {
         }
     }
 
+    /** Returns a list of Users that are created from the users file.
+     * 
+     * @param gamesList List of games in the system
+     * @return list of Users
+     */
     public static List<AbstractUser> readUsersFile(List<Game> gamesList) {
         try {
             Reader reader = Files.newBufferedReader(Paths.get(fileNameUser));  // create a reader
@@ -129,13 +139,18 @@ public class ReadingJSON {
             return users;
 
         } catch (IOException fileNotFoundException) {
-            System.out.println("Users file not found.");
+            System.out.println("Users" + fileNotFoundError);
         } catch (JsonSyntaxException e){
-            System.out.println("Users file not in proper format.");
+            System.out.println("Users" + fileFormatError);
         }
         return new ArrayList<>();
     }
 
+    /** Return a hashmap from a List of User objects where the key-value pair is the username-User object
+     * 
+     * @param listUsers list of users to be turned into a hashmap
+     * @return a hashmap where the key is the user name and value is user object
+     */
     private static HashMap<String, AbstractUser> getUserHashmap(List<AbstractUser> listUsers) {
         HashMap<String, AbstractUser> userIDs = new HashMap<String, AbstractUser>();
         if (listUsers != null) {
@@ -146,6 +161,12 @@ public class ReadingJSON {
         return userIDs;
     }
 
+    /** Return a Marketplace that is created from the given market file.
+     * 
+     * @param listGames List of games in the system
+     * @param listUsers list of users in the system
+     * @return a Marketplace object from the given market file.
+     */
     public static Marketplace readMarketFile(List<Game> listGames, List<AbstractUser> listUsers) {
         try {
             Reader reader = Files.newBufferedReader(Paths.get(fileNameMarket));  // create a reader
@@ -163,10 +184,10 @@ public class ReadingJSON {
             return market;
 
         } catch (IOException fileNotFoundException) {
-            System.out.println("Market file not found.");
+            System.out.println("Market" + fileNotFoundError);
         }
         catch (JsonSyntaxException e){
-            System.out.println("Market file not in proper format.");
+            System.out.println("Market" + fileFormatError);
         }
         return new Marketplace(false, new HashMap<String,ArrayList<Game>>());
     }

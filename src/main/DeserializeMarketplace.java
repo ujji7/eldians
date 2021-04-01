@@ -11,7 +11,6 @@ import java.util.*;
  *
  */
 
-// did this.board = board for the hashmaps - FIX THATTTT
     // SET INITIALIZING MARKET TO ORIGINALLY WITH FALSE AUCTION SALE
 public class DeserializeMarketplace implements JsonDeserializer<Marketplace> {
     private HashMap<Integer, Game> gameIDs;
@@ -19,15 +18,40 @@ public class DeserializeMarketplace implements JsonDeserializer<Marketplace> {
     private static final String id = "game";
     private static final String auctionSale = "auctionSale";
     private static final String gamesOnSale = "gamesOnSale";
+    private static final int MAX_USERNAME_LENGTH = 15;
 
+    /** Setter method for the game IDs attribute.
+     *
+     * @param ids the game ids to be set
+     */
     public void setGameIDs(HashMap<Integer, Game> ids) {
-        this.gameIDs = ids;
+        HashMap<Integer, Game> copy = new HashMap<Integer, Game>();
+        for (Map.Entry<Integer, Game> entry : ids.entrySet())
+        {
+            copy.put(entry.getKey(),entry.getValue());
+        }
+        this.gameIDs = copy;
     }
 
+    /** Setter method for the game users attribute
+     * 
+     * @param u the users to be set
+     */
     public void setUsers(HashMap<String, AbstractUser> u) {
-        this.users = u;
+        HashMap<String, AbstractUser> copy = new HashMap<String, AbstractUser>();
+        for (Map.Entry<String, AbstractUser> entry : u.entrySet())
+        {
+            copy.put(entry.getKey(),entry.getValue());
+        }
+        this.users = copy;
     }
 
+    /** If the given jsonObject does not have the correct attributes to be turned into a Marketplace object, (auction 
+     * Sale, games on sale), or the attributes are not of the required type, set the correct attributes to create a 
+     * working Marketplace.
+     * 
+     * @param jsonObject json Object to check for correct market attributes
+     */
     public void correctMarketType(JsonObject jsonObject) {
         if (!(jsonObject.has(auctionSale) || jsonObject.has(gamesOnSale))){
             jsonObject.addProperty(auctionSale, false);
@@ -53,13 +77,19 @@ public class DeserializeMarketplace implements JsonDeserializer<Marketplace> {
         }
     }
 
+    /** Remove duplicate sellers from the games on sale attribute
+     * 
+     * @param json json object of the games on sale attribute in Marketplace
+     * @return a new json object after removing any duplicate sellers, or sellers whose names do not match the 
+     * requirements.
+     */
     private JsonObject removeDuplicateSellers(JsonObject json) {
 
         Set<String> sellers = json.keySet();
 
         JsonObject jsonNew = new JsonObject();
         for (String s : sellers) { //for each new seller
-            if (!jsonNew.has(s) && this.users.containsKey(s) && s.length() <= 15) {
+            if (!jsonNew.has(s) && this.users.containsKey(s) && s.length() <= MAX_USERNAME_LENGTH) {
                 JsonElement games = json.get(s);
                 jsonNew.add(s, games);
             }
@@ -68,6 +98,13 @@ public class DeserializeMarketplace implements JsonDeserializer<Marketplace> {
     }
 
 
+    /** Return an array list of game objects, that this user is selling. Checks for constraints such as if the unique 
+     * id is in the games list and the Game's seller matches the given seller name.
+     * 
+     * @param name of the seller
+     * @param gamesSelling Json array filled with unique id's corresponding to game objects
+     * @return an array list of Game objects, that this user is selling.
+     */
     public ArrayList<Game> gameIDsToGames(String name, JsonArray gamesSelling) {
         ArrayList<Game> gamesOnSale = new ArrayList<Game>();
 
@@ -80,10 +117,10 @@ public class DeserializeMarketplace implements JsonDeserializer<Marketplace> {
         return gamesOnSale;
     }
 
-    private AbstractUser findUser(String name) {
-        return users.get(name);
-    }
-
+    /** Return a Json array of integers from a json array of objects, where the integer is the json element.
+     * @param array Json array of json objects
+     * @return Return Json array of integers from the json objects
+     */
     protected JsonArray getIntegersFromObject(JsonArray array) {
         JsonArray jsonObjects = new JsonArray();
         for (JsonElement jsonArrayObject : array) {
@@ -98,6 +135,15 @@ public class DeserializeMarketplace implements JsonDeserializer<Marketplace> {
         return jsonObjects;
     }
 
+    /** Return a Marketplace object using the json element or an Empty Marketplace if a Marketplace cannot be created 
+     * using the attributes from the passed in element.
+     *
+     * @param json the json element to be turned into a Marketplace object.
+     * @param typeOfT The type of object to turn the json element into (Marketplace object)
+     * @param context the context for deserializing to be used in this custom deserializer
+     * @return A Marketplace object using the json element or an empty Marketplace if a Marketplace cannot be created.
+     * @throws JsonParseException if there is an error in the file reading.
+     */
     @Override
     public Marketplace deserialize(JsonElement json, Type typeOfT,
                                     JsonDeserializationContext context) throws JsonParseException {
