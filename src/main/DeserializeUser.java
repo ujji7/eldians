@@ -6,10 +6,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-//https://howtodoinjava.com/gson/custom-serialization-deserialization/
-
+/** A DeserializeUser class that given a json file of User objects, creates them. It ensures that improper/incomplete
+ * formatting and input of users are not created.
+ * This was adapted from a website post written by Lokesh Gupta here:
+ * https://howtodoinjava.com/gson/custom-serialization-deserialization/
+ *
+ */
 public class DeserializeUser implements JsonDeserializer<AbstractUser> {
-    public HashMap<Integer, Game> gameIDs;
+    private HashMap<Integer, Game> gameIDs;
     private static final String name = "username";
     private static final String type = "type";
     private static final String credit = "accountBalance";
@@ -19,6 +23,10 @@ public class DeserializeUser implements JsonDeserializer<AbstractUser> {
     private static final String sellType = "SS";
     private static final String adminType = "AA";
     private static final String fullType = "FS";
+
+    public void setGameIDs(HashMap<Integer, Game> ids) {
+        this.gameIDs = ids;
+    }
 
     public Boolean correctUserTypes(JsonObject jsonObject) {
         if (!(jsonObject.has(name) && jsonObject.has(type) && jsonObject.has(credit)  &&

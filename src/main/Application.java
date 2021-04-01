@@ -10,7 +10,6 @@ import java.util.Set;
 public class Application {
 
     public static ArrayList<AbstractUser> userList;
-
     public Marketplace market;
 //    public Marketplace yesterdaysMarketplace;
     public ArrayList<Game> gamesList;

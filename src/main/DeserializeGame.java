@@ -6,9 +6,15 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
 import java.lang.reflect.Type;
-//EDIT THIS WITH NEW IMPLEMENTATION OF GAME
-//https://howtodoinjava.com/gson/custom-serialization-deserialization/
 
+/** A DeserializeGame class that given a json file of Game objects, creates them. It ensures that improper/incomplete
+ * formatting and input of games are not created.
+ * This was adapted from a website post written by Lokesh Gupta here:
+ * https://howtodoinjava.com/gson/custom-serialization-deserialization/
+ *
+ *
+ *
+ */
 public class DeserializeGame implements JsonDeserializer<Game> {
     private final String name = "name";
     private final String price = "price";
@@ -42,7 +48,16 @@ public class DeserializeGame implements JsonDeserializer<Game> {
         return game;
     }
 
+    // Code adapted from Stack Overflow post: How to check the type of a value from a JSONObject:
     // https://stackoverflow.com/questions/15920212/how-to-check-the-type-of-a-value-from-a-jsonobject/15920281
+    // Code used from gson javadoc documentation: JsonElement:
+    // https://www.javadoc.io/doc/com.google.code.gson/gson/2.6.2/com/google/gson/JsonElement.html
+
+    /**
+     *
+     * @param jsonObject
+     * @return
+     */
     public Boolean correctTypes(JsonObject jsonObject) {
         if (!(jsonObject.has(name) && jsonObject.has(price) && jsonObject.has(seller) && jsonObject.has(gameID) &&
                 jsonObject.has(discount) && jsonObject.has(onHold))) {

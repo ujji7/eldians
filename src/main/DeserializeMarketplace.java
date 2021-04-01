@@ -4,12 +4,27 @@ import com.google.gson.*;
 import java.lang.reflect.Type;
 import java.util.*;
 
+/** A DeserializeMarketplace class that given a json file of a Marketplace object, creates it. It ensures that
+ * improper/incomplete formatting and input of games does not prevent a marketplace from being created.
+ * This was adapted from a website post written by Lokesh Gupta here:
+ * https://howtodoinjava.com/gson/custom-serialization-deserialization/
+ *
+ */
+
+// did this.board = board for the hashmaps - FIX THATTTT
 public class DeserializeMarketplace implements JsonDeserializer<Marketplace> {
-    public HashMap<Integer, Game> gameIDs;
-    public HashMap<String, AbstractUser> users;
+    private HashMap<Integer, Game> gameIDs;
+    private HashMap<String, AbstractUser> users;
     private static final String auctionSale = "auctionSale";
     private static final String gamesOnSale = "gamesOnSale";
 
+    public void setGameIDs(HashMap<Integer, Game> ids) {
+        this.gameIDs = ids;
+    }
+
+    public void setUsers(HashMap<String, AbstractUser> u) {
+        this.users = u;
+    }
 
     public void correctMarketType(JsonObject jsonObject) {
         if (!(jsonObject.has(auctionSale) || jsonObject.has(gamesOnSale))){

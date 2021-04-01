@@ -402,7 +402,7 @@ public class Client {
 
     public static void main(String[] args){
 //        Client client = new Client("/Users/Danielle/Documents/Documents/School/6Y2S/CSC207/a2-eldians/src/main/admindaily.txt");
-        Client client = new Client("dailyc.txt");
+        Client client = new Client("dailyc2.txt");
 
     }
 

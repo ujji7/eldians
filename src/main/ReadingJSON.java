@@ -23,6 +23,11 @@ public class ReadingJSON {
     private static final String fileNameUser = "userc.json";
     private static final String fileNameMarket = "marketc.json";
 
+    /** If a file with the name does not exist, creates a file with the name
+     *
+     * @param file the file to create/look for
+     * @param name name of file to
+     */
     private static void individualFileOpener(File file, String name) {
         if (!(file = new File(name)).exists()) { //if game file does not exist, we can assume all 3 ones exist
             try {
@@ -33,6 +38,9 @@ public class ReadingJSON {
         }
     }
 
+    /** If the json files for games, users, and marketplace does not exist, creates them.
+     *
+     */
     private static void filesOpener() {
         individualFileOpener(Game, fileNameGame);
         individualFileOpener(User, fileNameUser);
@@ -40,12 +48,14 @@ public class ReadingJSON {
     }
 
 
-    // Code adapted from MSDN example: HOW TO CITE A FUNCTION
-    // http://msdn.microsoft.com/en-us/library/ms680578(VS.85).aspx
+    /** Returns a list of Game objects that are created from the games file.
+     *
+     * @return List of game objects
+     */
     public static List<Game> readGamesFile() {
         try {
             Reader reader = Files.newBufferedReader(Paths.get(fileNameGame)); // create a reader to read the games file
-            System.out.println("game file is found.");
+//            System.out.println("game file is found.");
             Gson gson = new GsonBuilder().registerTypeAdapter(Game.class, new DeserializeGame()).create(); //create Gson
             // object to build the List of games
             List<Game> games = gson.fromJson(reader, new TypeToken<List<Game>>() {}.getType()); //Return list of games
@@ -71,6 +81,11 @@ public class ReadingJSON {
         return new ArrayList<>();
     }
 
+    /**
+     *
+     * @param gamesList list of games
+     * @return
+     */
     private static HashMap<Integer, Game> setGamesList(List<Game> gamesList) {
         HashMap<Integer, Game> gameIDAll = new HashMap<Integer, Game>();
         if (gamesList != null) {
@@ -101,7 +116,7 @@ public class ReadingJSON {
             DeserializeUser deserializer = new DeserializeUser();
             gsonBuilder.registerTypeAdapter(AbstractUser.class, deserializer);
 
-            deserializer.gameIDs = setGamesList(gamesList); // create the games parameter in deserializer
+            deserializer.setGameIDs(setGamesList(gamesList)); // create the games parameter in deserializer
             Gson gson = gsonBuilder.create();
 
             List<AbstractUser> users = gson.fromJson(reader, new TypeToken<List<AbstractUser>>() {}.getType());
@@ -138,8 +153,8 @@ public class ReadingJSON {
             DeserializeMarketplace deserializer = new DeserializeMarketplace();
             gsonBuilder.registerTypeAdapter(Marketplace.class, deserializer);
 
-            deserializer.gameIDs = setGamesList(listGames);
-            deserializer.users = getUserHashmap(listUsers);
+            deserializer.setGameIDs(setGamesList(listGames)); // create the games parameter in deserializer
+            deserializer.setUsers(getUserHashmap(listUsers));
 
             Gson gson = gsonBuilder.create();
 
