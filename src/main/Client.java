@@ -115,6 +115,9 @@ public class Client {
             TransactionFactory myTranFactory = new TransactionFactory();
 
                         //VERIFY WITH MAD
+//            for (String data: tranSeq){
+//                System.out.println(data);
+//            }
 
             this.validTransactions.add(myTranFactory.buildTransaction(tranSeq));
 
@@ -399,7 +402,7 @@ public class Client {
 
     public static void main(String[] args){
 //        Client client = new Client("/Users/Danielle/Documents/Documents/School/6Y2S/CSC207/a2-eldians/src/main/admindaily.txt");
-        Client client = new Client("C:/Users/bhara/Documents/CSC207/a2-eldians/src/main/dailyc.txt");
+        Client client = new Client("dailyc3.txt");
     }
 
 }
