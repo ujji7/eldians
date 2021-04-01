@@ -102,7 +102,7 @@ public abstract class AbstractUser {
      */
     public void transferFunds(double amount){
         this.setAccountBalance(this.getAccountBalance() + amount);
-        System.out.println("$" + amount + " added to" + this.username);
+        System.out.println("$" + amount + " added to " + this.username);
         System.out.println("Most updated account balance is $" + this.getAccountBalance());
     }
 
