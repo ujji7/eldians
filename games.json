@@ -27,7 +27,7 @@
     "name": "Gamecool",
     "price": 23.56,
     "supplierID": "Bob",
-    "uniqueID": 101,
+    "uniqueID": 0,
     "discount": 20.0,
     "onHold": true
   }

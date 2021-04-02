@@ -17,7 +17,7 @@ public class Application {
     public AbstractUser login;
 
     public Application(){
-        this.userList = new ArrayList<>();
+        userList = new ArrayList<>();
     }
 
     public static void addUser(AbstractUser user) {
@@ -27,24 +27,24 @@ public class Application {
     private void BODRead() {
 //        ReadingJSON readJson = new ReadingJSON();
         List<Game> games = ReadingJSON.readGamesFile();
-        System.out.println("games: " + games);
+//        System.out.println("games: " + games);
         List<AbstractUser> users = ReadingJSON.readUsersFile(games);
-        System.out.println("users: " + users);
+//        System.out.println("users: " + users);
         Marketplace market = ReadingJSON.readMarketFile(games, users);
         userList = (ArrayList<AbstractUser>) users;
         this.gamesList = (ArrayList<Game>) games;
         this.market = market;
-        Set<String> usersv2 = this.market.getGamesOnSale().keySet();
-        for (String u : usersv2) {
-            System.out.println(u + "'s games: " + market.getGamesOnSale().get(u));
-        }
+//        Set<String> usersv2 = this.market.getGamesOnSale().keySet();
+//        for (String u : usersv2) {
+//            System.out.println(u + "'s games: " + market.getGamesOnSale().get(u));
+//        }
     }
 
     private void EODWrite(){
         DatabaseController databaseController = new DatabaseController();
         try {
             databaseController.writeGame(this.gamesList);
-            databaseController.writeUser(this.userList);
+            databaseController.writeUser(userList);
             databaseController.writeMarket(this.market);
         }catch (IOException e){
             System.out.println("Cannot write files");
@@ -56,7 +56,7 @@ public class Application {
         BODRead();
         for (Transaction transac : transactions) {
             if (transac instanceof Login || login != null) {
-                login = transac.execute(this.userList, this.gamesList, this.market, this.login);
+                login = transac.execute(userList, this.gamesList, this.market, this.login);
             } else {
                 System.out.println("FATAL ERROR: < There is no user logged in, cannot execute transaction. >");
             }

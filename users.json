@@ -2,15 +2,18 @@
   {
     "username": "Bob",
     "type": "BS",
-    "accountBalance": 561.56,
+    "accountBalance": 1017.56,
     "inventory": [
       {
         "uniqueID": 1
       }
     ],
-    "newFunds": 456.0,
+    "newFunds": 912.0,
     "transactionHistory": [
-      "User: Bob added $561.56 to their account"
+      "User: Bob added $561.56 to their account",
+      "$456.0 were added to the user\u0027s account",
+      "User: Bob added $1017.56 to their account",
+      "$456.0 were added to the user\u0027s account"
     ]
   },
   {

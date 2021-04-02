@@ -153,7 +153,6 @@ public class BuyUser extends AbstractUser {
         }
 
         public UserBuilder inventoryGames(ArrayList<Game> inventory){
-            System.out.println("adding the games to the user now");
             this.inventory.addAll(inventory);
 
             return this;

@@ -100,9 +100,6 @@ public class AdminUser extends AbstractUser {
 //                System.out.println("new user name is: " + username);
                 return newUser;
             }
-            System.out.println("ERROR: \\< Failed Constraint: New User could not be created since" +
-                    " a User already exists with given name. >//");
-            System.out.println("baby is alive: " + username);
         }
         System.out.println("ERROR: \\< Failed Constraint: New User could not be created since "
                 + Double.toString(credit) + " amount is invalid. >//");

@@ -232,7 +232,6 @@ public class Client {
             String gameName = this.stripSpace(transaction.substring(3,28));
             String sellerName = this.stripSpace(transaction.substring(29,44));
             String buyerName = this.stripSpace(transaction.substring(45,60));
-            System.out.println("client's buyer buyer: " + buyerName);
             // checking if we received the Seller Name and Game name
             if (this.containsData(sellerName) && this.containsData(gameName)){
                 result.add(tranType);
@@ -342,7 +341,6 @@ public class Client {
      *
      */
     private void initialiseReg(){
-        //  System.out.println("i got in init REG");
         this.regMap = new HashMap<>();
         // Login, Logout, Create, Add-Credit, Delete, Auction-Sale regex format
         regMap.put("00", regLLCADT);

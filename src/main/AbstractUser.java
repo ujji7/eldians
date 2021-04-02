@@ -141,7 +141,8 @@ public abstract class AbstractUser {
             double newFunds = DAILYLIMIT - this.newFunds;
 
             System.out.println("ERROR: \\ < Failed Constraint: "+ this.username +
-                    "'s daily limit would be reached upon addition of funds!\nOnly $" + newFunds+ " can be added to the account");
+                    "'s daily limit would be reached upon addition of funds!\n" +
+                    "You can only add $" + newFunds+ " to the account for the rest of today.");
 
             // Add the difference to the account
             /*this.newFunds = DAILYLIMIT;
