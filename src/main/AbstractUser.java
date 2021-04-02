@@ -4,7 +4,7 @@ import java.util.HashMap;
 //line 401
 //REMOVE ANY UNNECESSARY PRINT STATEMENTS IN CREATE AND BUY
 
-
+//SELL DOES NOT CHECK FOR GAMES ALREADY SOLD BY SELLER
 //we need an auction sale method - i implemented it at botfitom check it out
 // also look at readme for add credit - there is another implementations for admin type
 

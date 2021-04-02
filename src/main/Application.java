@@ -10,7 +10,6 @@ import java.util.Set;
 public class Application {
 
     public static ArrayList<AbstractUser> userList;
-
     public Marketplace market;
 //    public Marketplace yesterdaysMarketplace;
     public ArrayList<Game> gamesList;
@@ -27,18 +26,17 @@ public class Application {
     private void BODRead() {
 //        ReadingJSON readJson = new ReadingJSON();
         List<Game> games = ReadingJSON.readGamesFile();
-//        System.out.println(games);
+        System.out.println(games);
         List<AbstractUser> users = ReadingJSON.readUsersFile(games);
-//        System.out.println(users);
+        System.out.println(users);
         Marketplace market = ReadingJSON.readMarketFile(games, users);
         userList = (ArrayList<AbstractUser>) users;
         this.gamesList = (ArrayList<Game>) games;
         this.market = market;
         Set<String> usersv2 = this.market.getGamesOnSale().keySet();
         for (String u : usersv2) {
-            System.out.println(u + "'s game: " + market.getGamesOnSale().get(u));
+            System.out.println(u + "'s games: " + market.getGamesOnSale().get(u));
         }
-//        System.out.println(market);
     }
 
     private void EODWrite(){
