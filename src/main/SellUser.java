@@ -66,8 +66,12 @@ public class SellUser extends AbstractUser {
                 boolean inSenMar = market.checkSellerSellingGame(this.getUsername(), gameName);
                 // User can send the gift, game is added to the Receiver's inventory
                 if (inSenMar){
-                   // Game added to the receiver's inventory
-                    this.inventory.add(game);
+                   // Game added to the receiver's inventory and
+                    // updating the transaction history for the users
+                    String senderTran = this.getUsername() + " has gifted: " + gameName + " to " + reciever.getUsername();
+                    String recTran = reciever.getUsername() + " has received " + gameName + " from " + this.getUsername();
+                    this.getTransactionHistory().add(senderTran);
+                    reciever.getTransactionHistory().add(recTran);
                 }
                 // Sender doesn't have the game
                 else{
@@ -97,7 +101,8 @@ public class SellUser extends AbstractUser {
         // remove from Market
         if(iAmOffering){
             market.removeGame(this.getUsername(), currGame);
-            System.out.println(game.getName()+ " was removed from the User's offering on the Market.");
+            String tran = game.getName()+ " was removed from the User's offering on the Market.";
+            this.addTranHis(tran);
         }
         // else printing out the error from Market
     }
