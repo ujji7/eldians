@@ -1,6 +1,7 @@
 package transactions;
 
 import main.AbstractUser;
+import main.Application;
 import main.Game;
 import main.Marketplace;
 
@@ -37,9 +38,12 @@ public class Create implements Transaction {
     @Override
     public AbstractUser execute(ArrayList<AbstractUser> users, ArrayList<Game> games, Marketplace market,
                                 AbstractUser login) {
-
+        Finder finder = new Finder();
         // Create user, AbstractUser.create handles errors.
-        login.create(this.username, this.type, this.funds);
+        if(finder.findUser(this.username, users) == null) {
+            AbstractUser newUser = login.create(this.username, this.type, this.funds);
+            users.add(newUser);
+        }
         return login;
     }
 }

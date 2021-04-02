@@ -348,9 +348,10 @@ public abstract class AbstractUser {
         return false;
     }
 
-    public void create(String username, String type, double credit){
+    public AbstractUser create(String username, String type, double credit){
         System.out.println("ERROR: \\ < Failed Constraint: "+ this.username + " does not have the ability to create " +
                 "another user");
+        return null;
     }
 
 
