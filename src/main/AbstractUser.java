@@ -271,10 +271,11 @@ public abstract class AbstractUser {
     public void sell(Game game, Marketplace market){
 
         // if game doesn't follow contraints end here
-        if (!this.sellConstraints(game, market)) return;
+        if (!this.sellConstraints(game)) return;
 
         HashMap<String, ArrayList<Game>> map = market.getGamesOnSale(); // var for less typing
         // if user has previously put games on the market, add to list of games
+
         if (map.containsKey(this.username)) {
             map.get(this.username).add(game);
             this.transactionHistory.add("User: " + this.username + " is now selling " + game.getName() +
@@ -283,12 +284,7 @@ public abstract class AbstractUser {
                     game.getPrice() + " at a " + game.getDiscount()+"% discount, will be availble for purchase tomorrow");
 
         } else {
-            // Create a new ArrayList
-            ArrayList<Game> gameList = new ArrayList<Game>();
-            // Add game to the ArrayList
-            gameList.add(game);
-            // Insert the new Key-Value pairing to the market
-            map.put(this.username, gameList);
+            market.addNewSeller(this.username);
 
             // Report to console and transactionHistory
             this.transactionHistory.add("User: " + this.username + " is now selling " + game.getName() +
@@ -306,7 +302,7 @@ public abstract class AbstractUser {
 
 
 
-    private boolean sellConstraints(Game game, Marketplace market) {
+    private boolean sellConstraints(Game game) {
 
         String gameName = game.getName();
         String userName = this.getUsername();

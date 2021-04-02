@@ -43,9 +43,6 @@ public class Sell implements Transaction {
     public AbstractUser execute(ArrayList<AbstractUser> users, ArrayList<Game> games, Marketplace market,
                                 AbstractUser login) {
 
-        // Generate UniqueID
-        int uid = market. // TEMPORARY! REMOVE WHEN WE HAVE A WAY TO GENERATE UNIQUEID'S
-
         if (!login.getUsername().equals(this.seller)) {
             System.out.println("WARNING: < Logged in user does not match username: " + this.seller +
                     ", proceeding using logged in user as the seller. >");
@@ -57,21 +54,27 @@ public class Sell implements Transaction {
                     this.gameName + " as User is already selling this exact game > //");
             return login;
         }
+
+
+        // Generate UniqueID
+        int uid = market.getUid();
+        market.incrementUID();// TEMPORARY! REMOVE WHEN WE HAVE A WAY TO GENERATE UNIQUEID'S
+
         // Create the game
         Game newGame = new Game(this.gameName, this.salePrice, login.getUsername(), uid, this.discount);
 
-        System.out.println(newGame.getName());
-        System.out.println(newGame.getDiscount());
-        System.out.println(newGame.getPrice());
-        System.out.println(newGame.getUniqueID());
-        System.out.println(newGame.getSupplierID());
+//        System.out.println(newGame.getName());
+//        System.out.println(newGame.getDiscount());
+//        System.out.println(newGame.getPrice());
+//        System.out.println(newGame.getUniqueID());
+//        System.out.println(newGame.getSupplierID());
 
         // Sell the game
         login.sell(newGame, market);
-        ArrayList<Game> sellerGames = market.getGamesOnSale().get(seller);
-        for (Game g : sellerGames) {
-            System.out.println("game is: " + g.getName());
-        }
+//        ArrayList<Game> sellerGames = market.getGamesOnSale().get(seller);
+//        for (Game g : sellerGames) {
+//            System.out.println("game is: " + g.getName());
+//        }
 
         // Add game to games list
         games.add(newGame);

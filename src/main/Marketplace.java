@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Marketplace {
     public boolean auctionSale = true;
-    private Integer uid = 0;
+    private int uid = 0;
 
     public HashMap<String, ArrayList<Game>> gamesOnSale, todaySale;
 
@@ -38,11 +38,11 @@ public class Marketplace {
     // for some reason the data types cannot be accessed in abstract class - something to do with packages and main?
 
 
-    private void incrementUID(){
+    public void incrementUID(){
         this.uid ++;
     }
 
-    private Integer getUid(){
+    public int getUid(){
         return this.uid;
     }
 
@@ -241,6 +241,7 @@ public class Marketplace {
         // removing the game from the User's offering
         gamesOnSale.get(seller).remove(toRemove);
     }
+
 
 
     /**
