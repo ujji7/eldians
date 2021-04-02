@@ -44,7 +44,7 @@ public class Sell implements Transaction {
                                 AbstractUser login) {
 
         // Generate UniqueID
-        int uid = 101; // TEMPORARY! REMOVE WHEN WE HAVE A WAY TO GENERATE UNIQUEID'S
+        int uid = market. // TEMPORARY! REMOVE WHEN WE HAVE A WAY TO GENERATE UNIQUEID'S
 
         if (!login.getUsername().equals(this.seller)) {
             System.out.println("WARNING: < Logged in user does not match username: " + this.seller +
