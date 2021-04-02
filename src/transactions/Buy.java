@@ -1,5 +1,5 @@
 package transactions;
-
+//lLINE 42 PRINT STATEMENT - CHANGES Alice to alice
 import main.AbstractUser;
 import main.Game;
 import main.Marketplace;
@@ -8,9 +8,9 @@ import java.util.ArrayList;
 
 public class Buy implements Transaction {
 
-    String game;
-    String buyer;
-    String seller;
+    private final String game;
+    private final String buyer;
+    private final String seller;
 
     /**
      * Creates a new Buy transaction.
@@ -19,10 +19,12 @@ public class Buy implements Transaction {
      * @param b String representing the buyer.
      * @param s String representing the seller.
      */
-    public Buy(String g, String b, String s) {
+    public Buy(String g, String s, String b) {
         this.game = g;
         this.buyer = b;
+        System.out.println("buyer: " + this.buyer);
         this.seller = s;
+        System.out.println("seller: " + this.seller);
     }
 
     /**
@@ -38,13 +40,11 @@ public class Buy implements Transaction {
     public AbstractUser execute(ArrayList<AbstractUser> users, ArrayList<Game> games, Marketplace market,
                                 AbstractUser login) {
 
+        Finder find = new Finder();
+        System.out.println(this.buyer + users);
+
         // Find the buyer
-        AbstractUser buyer = null;
-        for(AbstractUser user : users) {
-            if (user.getUsername().equals(this.buyer)) {
-                buyer = user;
-            }
-        }
+        AbstractUser buyer = find.findUser(this.buyer, users);
         if (buyer == null) {
             System.out.println("ERROR: < Buyer not found in database. >");
         }
@@ -54,24 +54,14 @@ public class Buy implements Transaction {
         } else {
 
             // Find the seller
-            AbstractUser seller = null;
-            for(AbstractUser user : users) {
-                if (user.getUsername().equals(this.seller)) {
-                    seller = user;
-                }
-            }
+            AbstractUser seller = find.findUser(this.seller, users);
 
             if (seller == null) {
                 System.out.println("ERROR: < Seller not found in database. >");
             } else {
 
                 // Find the game
-                Game gameOnSale = null;
-                for(Game game : games) {
-                    if (game.getName().equals(this.game) && game.getSupplierID().equals(this.seller)) {
-                        gameOnSale = game;
-                    }
-                }
+                Game gameOnSale = find.findGame(this.game, games);
                 if (gameOnSale == null) {
                     System.out.println("ERROR: < Game not found in database. >");
                 } else {

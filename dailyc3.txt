@@ -1,0 +1,8 @@
+00 Bob             AA 000124.00
+01 bob'sfriend     BS 000300.00
+01 alice's fr      SS 000000.00
+01 fullStanU1      FS 300000.00
+04 Mouse trap                Alice           admin1
+03 Gamecool                  admin1          20.00 023.56
+06 bob'sfriend     BS 000456.00
+10 Bob             AA 000100.00

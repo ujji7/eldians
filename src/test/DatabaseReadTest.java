@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 // source for how to test print statements
 //https://stackoverflow.com/questions/1119385/junit-test-for-system-out-println
 
-public class AbstractUserTest {
+public class DatabaseReadTest {
     AdminUser adminUser1;
     BuyUser buyUser1;
     SellUser sellUser1;
@@ -213,7 +213,7 @@ public class AbstractUserTest {
     public void testSimpleBuy(){
         buyUser1.buy(sellUser1, monopoly, market.getAuctionSale(), market);
         String result = "dora" + " has bought Monopoly from boots for 23.50.";
-                                                                // check about multiple print statemetns check!!
+        // check about multiple print statemetns check!!
         assertEquals(result, outContent.toString());
     }
 
@@ -237,7 +237,7 @@ public class AbstractUserTest {
     // Test for right type of user to buy a game already in their inventory from a different seller
     public void buyAgainFromDiffSeller(){
         sellUser1.sell(pacman1, market);
-                                                            // check about multiple print statemetns check!!
+        // check about multiple print statemetns check!!
         buyUser1.buy(sellUser1, pacman1, market.getAuctionSale(), market);
         String result = "ERROR: \\ < Failed Constraint:  " + "dora already owns Monopoly. Cannot buy it again.";
         assertEquals(result, outContent.toString());
@@ -255,7 +255,7 @@ public class AbstractUserTest {
     // Test for Full-Standard to buy a game they have up for sale
     @Test
     public void fullStanBuyGameFromTheirItemList(){
-                                                                            // Missing from current Buy()
+        // Missing from current Buy()
         fullStandardUser1.buy(sellUser1, pacman1, true, market);
         String result = "ERROR: \\ < Failed Constraint:  " + "You can't buy Pacman as you are also selling it.";
         assertEquals(result, outContent.toString());

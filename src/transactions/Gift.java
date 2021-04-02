@@ -1,6 +1,7 @@
 package transactions;
 
 import main.AbstractUser;
+import main.AdminUser;
 import main.Game;
 import main.Marketplace;
 
@@ -8,9 +9,9 @@ import java.util.ArrayList;
 
 public class Gift implements Transaction {
 
-    String gameName;
-    String ownerName;
-    String receiverName;
+    private final String gameName;
+    private final String ownerName;
+    private final String receiverName;
 
     /**
      * Constructs a Gift object with the given parameters.
@@ -38,29 +39,16 @@ public class Gift implements Transaction {
     public AbstractUser execute(ArrayList<AbstractUser> users, ArrayList<Game> games, Marketplace market,
                                 AbstractUser login) {
 
+        Finder find = new Finder();
+
         // Find game
-        Game game = null;
-        for (Game g: games) {
-            if (g.getName().equals(this.gameName) && g.getSupplierID().equals(this.ownerName)) {
-                game = g;
-            }
-        }
+        Game game = find.findGame(this.gameName, games);
 
         // Find owner
-        AbstractUser owner = null;
-        for (AbstractUser user: users) {
-            if (user.getUsername().equals(this.ownerName)) {
-                owner = user;
-            }
-        }
+        AbstractUser owner = find.findUser(ownerName, users);
 
         // Find receiver
-        AbstractUser receiver = null;
-        for (AbstractUser user: users) {
-            if (user.getUsername().equals(this.receiverName)) {
-                receiver = user;
-            }
-        }
+        AbstractUser receiver = find.findUser(receiverName, users);
 
         // If game, owner, and receiver all exist, execute AbstractUser.gift, raise error otherwise
         if (game == null) {
@@ -69,17 +57,17 @@ public class Gift implements Transaction {
             System.out.println("ERROR: < Cannot find " + this.ownerName + " in the system. > ");
         } else if (receiver == null) {
             System.out.println("ERROR: < Cannot find " + this.receiverName + " in the system. > ");
+        } else if (login instanceof AdminUser){
+
+            // Admin user may be trying to gift someone else's game.
+            ((AdminUser) login).gift(game, owner, receiver, market);
         } else {
-            // If normal user
-            //FORMAT gift(GAME, RECEIVER, MARKET)
 
-            // IF admin and valid sender name provided
-            // FORMAT gift(GAME, SENDER, RECEIVER, MARKET)
-
-
+            // Normal gifting functionality
             login.gift(game, receiver, market);
         }
 
         return login;
     }
+
 }

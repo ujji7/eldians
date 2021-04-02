@@ -23,7 +23,7 @@ public class Client {
 
     // private List<String> allLines;
     private ArrayList<ArrayList<String>> validFormatTrans;
-    private ArrayList<Transaction> validTranasctions;
+    private ArrayList<Transaction> validTransactions;
     // Login, Logout, Create, Add-Credit, Delete, Auction-Sale regex format
     private static String regLLCADT = "(0[0-7]|10)\\s(.{15})\\s(AA|FS|BS|SS)\\s(\\d{6}\\.\\d{2})";
     // Sell, Buy, Refund transaction regex
@@ -109,23 +109,26 @@ public class Client {
      *
      */
     private void makeAndExecute() {
-        this.validTranasctions = new ArrayList<Transaction>();
-        // make an array list of Transaction Oject
+        this.validTransactions = new ArrayList<Transaction>();
+        // make an array list of Transaction Object
         for (ArrayList<String> tranSeq : validFormatTrans) {
             TransactionFactory myTranFactory = new TransactionFactory();
 
                         //VERIFY WITH MAD
+//            for (String data: tranSeq){
+//                System.out.println(data);
+//            }
 
-            this.validTranasctions.add(myTranFactory.buildTransaction(tranSeq));
+            this.validTransactions.add(myTranFactory.buildTransaction(tranSeq));
 
         }
         // If there are transaction objects then send them to Application
-        if(validTranasctions.size() >1){
+        if(validTransactions.size() >1){
             Application app = new Application();
 
                     //VERIFY WITH MAD
 
-            app.Run(validTranasctions);
+            app.Run(validTransactions);
 
         }
         else{
@@ -229,6 +232,7 @@ public class Client {
             String gameName = this.stripSpace(transaction.substring(3,28));
             String sellerName = this.stripSpace(transaction.substring(29,44));
             String buyerName = this.stripSpace(transaction.substring(45,60));
+            System.out.println("client's buyer buyer: " + buyerName);
             // checking if we received the Seller Name and Game name
             if (this.containsData(sellerName) && this.containsData(gameName)){
                 result.add(tranType);
@@ -312,7 +316,7 @@ public class Client {
             ArrayList<String> result = new ArrayList<>();
             // Extracting the data from the transaction and adding it to the ArrayList
             String gameName = this.stripSpace(transaction.substring(3,28));
-            String sellerName = transaction.substring(29,44);
+            String sellerName = this.stripSpace(transaction.substring(29,44));
             String discount = transaction.substring(45,50);
             String price = transaction.substring(51,57);
             if(this.containsData(gameName)){
@@ -397,7 +401,9 @@ public class Client {
 
 
     public static void main(String[] args){
-        Client client = new Client("/Users/Danielle/Documents/Documents/School/6Y2S/CSC207/a2-eldians/src/main/admindaily.txt");
+//        Client client = new Client("/Users/Danielle/Documents/Documents/School/6Y2S/CSC207/a2-eldians/src/main/admindaily.txt");
+        Client client = new Client("dailyc.txt");
+
     }
 
 }

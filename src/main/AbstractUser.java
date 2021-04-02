@@ -1,13 +1,13 @@
 package main;
 import java.util.ArrayList;
 import java.util.HashMap;
+//line 401
+//REMOVE ANY UNNECESSARY PRINT STATEMENTS IN CREATE AND BUY
 
+//SELL DOES NOT CHECK FOR GAMES ALREADY SOLD BY SELLER
 //we need an auction sale method - i implemented it at botfitom check it out
 // also look at readme for add credit - there is another implementations for admin type
 
-
-//BUY USER NOW HAS CORRECT FORMAT OF ERRORS - WHEN WE SWITCH those error codes to abstract and the abstract code
-//to admin, we can use buy user's code
 
 //I made in game that returns the price with discount applied since we'll probs need it in many places.
 
@@ -35,10 +35,10 @@ public abstract class AbstractUser {
     protected ArrayList<Game> inventory = new ArrayList<Game>();
     protected double newFunds = 0;
     public ArrayList<String> transactionHistory = new ArrayList<String>();
-    public static final double MAXFUNDS = 999999.99f;
+    protected static final double MAXFUNDS = 999999.99f;
     // can change minFunds to allow overdrafts for future improvements
-    private static final float MINFUNDS = 0f;
-    private static final float DAILYLIMIT = 1000f;
+    protected static final float MINFUNDS = 0f;
+    protected static final float DAILYLIMIT = 1000f;
     private static final float NEWFUNDSTODAY = 0f;
 
 //    public AbstractUser(String username){
@@ -102,7 +102,7 @@ public abstract class AbstractUser {
      */
     public void transferFunds(double amount){
         this.setAccountBalance(this.getAccountBalance() + amount);
-        System.out.println("$" + amount + " added to" + this.username);
+        System.out.println("$" + amount + " added to " + this.username);
         System.out.println("Most updated account balance is $" + this.getAccountBalance());
     }
 
@@ -162,8 +162,8 @@ public abstract class AbstractUser {
      */
     //helper for buy
     private boolean sellingGame(Game game, Marketplace market) {
-        if (market.getGamesOnSale().containsKey(this)) { //user is selling a game in the mkt place
-            for (Game g : market.getGamesOnSale().get(this)) {
+        if (market.getGamesOnSale().containsKey(this.username)) { //user is selling a game in the mkt place
+            for (Game g : market.getGamesOnSale().get(this.username)) {
                 if (g.getUniqueID() == game.getUniqueID()) {
                     return true;
                 }
@@ -222,12 +222,14 @@ public abstract class AbstractUser {
 
     public void buy(AbstractUser seller, Game game, boolean saleToggle, Marketplace market){
         if (!seller.sellingGame(game, market)) {
-            System.out.println("ERROR: \\ < Failed Constraint: " + seller.getUsername() + "is not selling " +
+            System.out.println("ERROR: \\ < Failed Constraint: " + seller.getUsername() + " is not selling " +
                     game.getName() + " on the market.");
+            return;
         }
         if (this.sellingGame(game, market)) {
             System.out.println("ERROR: \\ < Failed Constraint: " + this.getUsername() + "is selling " + game.getName()
                     + " on the market.");
+            return;
         }
         if (gameInInventory(game)) { //check that game isn't already in inventory
             System.out.println("ERROR: \\ < Failed Constraint: "+ this.username + " already owns " + game.getName() +
@@ -274,6 +276,11 @@ public abstract class AbstractUser {
         // if user has previously put games on the market, add to list of games
         if (map.containsKey(this.username)) {
             map.get(this.username).add(game);
+            this.transactionHistory.add("User: " + this.username + " is now selling " + game.getName() +
+                    " for " + game.getPrice());
+            System.out.println("Game: " + game.getName() + " is now being sold by " + this.getUsername() + " for $" +
+                    game.getPrice() + " at a " + game.getDiscount()+"% discount, will be availble for purchase tomorrow");
+
         } else {
             // Create a new ArrayList
             ArrayList<Game> gameList = new ArrayList<Game>();
@@ -350,58 +357,66 @@ public abstract class AbstractUser {
         return false;
     }
 
-
-    /**
-     * creates a new user of given type and adds them to the Application userList
-     * @param username a string with a length: 1-15
-     * @param type a string representing the User type of the newly created user
-     *             where AA=admin, FS=full-standard, BS=buy-standard, SS=sell-standard
-     * @param credit a float representing the amount of credits to add to the newly
-     *               created user's account balance
-     */
     public void create(String username, String type, double credit){
-        if(MINFUNDS <= credit || credit <= MAXFUNDS){
-            AbstractUser newUser;
-            switch (type) {
-                case "AA":
-                    AdminUser.UserBuilder AAbuilder = new AdminUser.UserBuilder(username);
-                    AAbuilder.balance(credit);
-                    newUser = AAbuilder.build();
-                    break;
-                case "FS":
-                    FullStandardUser.UserBuilder FSbuilder = new FullStandardUser.UserBuilder(username);
-                    FSbuilder.balance(credit);
-                    newUser = FSbuilder.build();
-                    break;
-                case "BS":
-                    BuyUser.UserBuilder BSbuilder = new BuyUser.UserBuilder(username);
-                    BSbuilder.balance(credit);
-                    newUser = BSbuilder.build();
-                    break;
-                case "SS":
-                    SellUser.UserBuilder SSbuilder = new SellUser.UserBuilder(username);
-                    SSbuilder.balance(credit);
-                    newUser = SSbuilder.build();
-                    break;
-                default:
-                    // if user isn't initialized we stop the create function
-                    System.out.println("ERROR: \\< Failed Constraint: New User could not be created since user type " +
-                            "does not exist. > //");
-                    return;
-            }
-            if(!Application.userList.contains(newUser)) {
-                Application.addUser(newUser);
-                this.transactionHistory.add("User: " + this.username + " has created user " +
-                    newUser.getUsername());
-                System.out.println("A new user was created: \n" + newUser.toString());
-            }
-            System.out.println("ERROR: \\< Failed Constraint: New User could not be created since" +
-                    "a User already exists with given name. >//");
-        }
-        System.out.println("ERROR: \\< Failed Constraint: New User could not be created since "
-                + Double.toString(credit) + "amount is invalid. >//");
-
+        System.out.println("ERROR: \\ < Failed Constraint: "+ this.username + " does not have the ability to create " +
+                "another user");
     }
+
+
+//    /**
+//     * creates a new user of given type and adds them to the Application userList
+//     * @param username a string with a length: 1-15
+//     * @param type a string representing the User type of the newly created user
+//     *             where AA=admin, FS=full-standard, BS=buy-standard, SS=sell-standard
+//     * @param credit a float representing the amount of credits to add to the newly
+//     *               created user's account balance
+//     */
+//    public void create(String username, String type, double credit){
+//        if(MINFUNDS <= credit || credit <= MAXFUNDS){
+//            AbstractUser newUser;
+//            switch (type) {
+//                case "AA":
+//                    AdminUser.UserBuilder AAbuilder = new AdminUser.UserBuilder(username);
+//                    AAbuilder.balance(credit);
+//                    newUser = AAbuilder.build();
+//                    break;
+//                case "FS":
+//                    FullStandardUser.UserBuilder FSbuilder = new FullStandardUser.UserBuilder(username);
+//                    FSbuilder.balance(credit);
+//                    newUser = FSbuilder.build();
+//                    break;
+//                case "BS":
+//                    BuyUser.UserBuilder BSbuilder = new BuyUser.UserBuilder(username);
+//                    BSbuilder.balance(credit);
+//                    newUser = BSbuilder.build();
+//                    break;
+//                case "SS":
+//                    SellUser.UserBuilder SSbuilder = new SellUser.UserBuilder(username);
+//                    SSbuilder.balance(credit);
+//                    newUser = SSbuilder.build();
+//                    break;
+//                default:
+//                    // if user isn't initialized we stop the create function
+//                    System.out.println("ERROR: \\< Failed Constraint: New User could not be created since user type " +
+//                            "does not exist. > //");
+//                    return;
+//            }
+//            if(!Application.userList.contains(newUser)) {
+//                Application.addUser(newUser);
+//                this.transactionHistory.add("User: " + this.username + " has created user " +
+//                    newUser.getUsername());
+//                System.out.println("A new user was created: \n" + username); //+ newUser.toString()
+////                System.out.println("new user name is: " + username);
+//                return;
+//            }
+//            System.out.println("ERROR: \\< Failed Constraint: New User could not be created since" +
+//                    " a User already exists with given name. >//");
+//            System.out.println("baby is alive: " + username);
+//        }
+//        System.out.println("ERROR: \\< Failed Constraint: New User could not be created since "
+//                + Double.toString(credit) + " amount is invalid. >//");
+//
+//    }
 
 
     /**

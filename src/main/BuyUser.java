@@ -131,7 +131,7 @@ public class BuyUser extends AbstractUser {
         private String username; // required
         //        public String type;
         public double accountBalance;
-        public ArrayList<Game> inventory;
+        public ArrayList<Game> inventory = new ArrayList<Game>();
         public double newFunds;
         public ArrayList<String> transactionHistory;
 
@@ -147,7 +147,9 @@ public class BuyUser extends AbstractUser {
         }
 
         public UserBuilder inventoryGames(ArrayList<Game> inventory){
+            System.out.println("adding the games to the user now");
             this.inventory.addAll(inventory);
+
             return this;
         }
 
