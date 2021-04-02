@@ -19,11 +19,25 @@ import com.google.gson.reflect.TypeToken;
  */
 public class ReadingJSON {
     private static File Game, User, Market;
-    private static final String fileNameGame = "gamec.json"; //games file
-    private static final String fileNameUser = "userc.json"; //users file
-    private static final String fileNameMarket = "marketc.json"; //market file
-    private static final String fileNotFoundError = " file not found.";
-    private static final String fileFormatError =" file not in correct format.";
+    private static String fileNameGame = "game1.json"; //games file
+    private static String fileNameUser = "userc.json"; //users file
+    private static String fileNameMarket = "marketc.json"; //market file
+    private static final String fileNotFoundError = " file not found. An empty ";
+    private static final String fileFormatError =" file not in correct format. An empty ";
+    private static final String fileErrorEnd =" will be created.";
+    
+    public static void setGameFileName(String filename) {
+        fileNameGame = filename;
+    }
+
+    public static void setUserFileName(String filename) {
+        fileNameUser = filename;
+    }
+
+    public static void setMarketFileName(String filename) {
+        fileNameMarket = filename;
+    }
+    
 
     /** If a file with the name does not exist, creates a file with the name
      *
@@ -57,8 +71,8 @@ public class ReadingJSON {
         try {
             Reader reader = Files.newBufferedReader(Paths.get(fileNameGame)); // create a reader to read the games file
 //            System.out.println("game file is found.");
-            Gson gson = new GsonBuilder().registerTypeAdapter(Game.class, new DeserializeGame()).create(); //create Gson
-            // object to build the List of games
+            Gson gson = new GsonBuilder().registerTypeAdapter(Game.class, new DeserializeGame()).create(); 
+            //create Gson object to build the List of games
             List<Game> games = gson.fromJson(reader, new TypeToken<List<Game>>() {}.getType()); //Return list of games
             // according to game deserializer
             games.removeIf(Objects::isNull);
@@ -75,11 +89,11 @@ public class ReadingJSON {
             reader.close();
             return games;
         } catch (IOException fileNotFoundException) {
-            System.out.println("Games" + fileNotFoundError);
-        } catch (JsonSyntaxException e){
-            System.out.println("Games" + fileFormatError);
+            System.out.println("Games" + fileNotFoundError + "list of games" + fileErrorEnd);
+        } catch (JsonSyntaxException | NullPointerException e){
+            System.out.println("Games" + fileFormatError + "list of games" + fileErrorEnd);
         }
-        return new ArrayList<>();
+        return new ArrayList<Game>();
     }
 
     /** Return a hashmap of Games where the key is the unique id and value is the game object made from the gameslist
@@ -104,7 +118,7 @@ public class ReadingJSON {
     private static void removeDuplicateSellers(List<AbstractUser> users) {
         ArrayList<String> uniqueSellers = new ArrayList<String>();
 
-        for (Iterator<AbstractUser> it = users.iterator(); it.hasNext(); ) { //checl for duplictae seller Ids
+        for (Iterator<AbstractUser> it = users.iterator(); it.hasNext(); ) { 
             AbstractUser u = it.next();
             if (!(uniqueSellers.contains(u.getUsername()))) {
                 uniqueSellers.add(u.getUsername());
@@ -121,7 +135,7 @@ public class ReadingJSON {
      */
     public static List<AbstractUser> readUsersFile(List<Game> gamesList) {
         try {
-            Reader reader = Files.newBufferedReader(Paths.get(fileNameUser));  // create a reader
+            Reader reader = Files.newBufferedReader(Paths.get(fileNameUser));
             GsonBuilder gsonBuilder = new GsonBuilder();
             DeserializeUser deserializer = new DeserializeUser();
             gsonBuilder.registerTypeAdapter(AbstractUser.class, deserializer);
@@ -135,15 +149,15 @@ public class ReadingJSON {
 
             removeDuplicateSellers(users); // remove duplicate sellers
 
-            reader.close(); // close reader
+            reader.close();
             return users;
 
         } catch (IOException fileNotFoundException) {
-            System.out.println("Users" + fileNotFoundError);
-        } catch (JsonSyntaxException e){
-            System.out.println("Users" + fileFormatError);
+            System.out.println("Users" + fileNotFoundError + "list of users" + fileErrorEnd);
+        } catch (JsonSyntaxException | NullPointerException e){
+            System.out.println("Users" + fileFormatError + "list of users" + fileErrorEnd);
         }
-        return new ArrayList<>();
+        return new ArrayList<AbstractUser>();
     }
 
     /** Return a hashmap from a List of User objects where the key-value pair is the username-User object
@@ -184,10 +198,10 @@ public class ReadingJSON {
             return market;
 
         } catch (IOException fileNotFoundException) {
-            System.out.println("Market" + fileNotFoundError);
+            System.out.println("Market" + fileNotFoundError + "market" + fileErrorEnd);
         }
-        catch (JsonSyntaxException e){
-            System.out.println("Market" + fileFormatError);
+        catch (JsonSyntaxException | NullPointerException e){
+            System.out.println("Market" + fileFormatError + "market" + fileErrorEnd);
         }
         return new Marketplace(false, new HashMap<String,ArrayList<Game>>());
     }

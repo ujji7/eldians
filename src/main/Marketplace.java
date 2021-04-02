@@ -44,6 +44,8 @@ public class Marketplace {
         return this.auctionSale;
     }
 
+    
+    
     /**
      * Toggle the Auction Sale in the market
      *
@@ -72,14 +74,20 @@ public class Marketplace {
 
     /**
      * Helper to get the unique ID associated with the Game
-     *
      * @return the integer value of the UniqueID
      */
     public int getUid(){
         return this.uid;
     }
-
-
+    
+    
+    /** Helper to set the unique ID associated with the Game
+     * @param id the unique ID
+     */
+    public void setUid(Integer id){
+        this.uid = id;
+    }
+    
     /**
      * Checks if the Seller already exists or not, if the Seller does not exist  then the
      * new Seller is added to the market

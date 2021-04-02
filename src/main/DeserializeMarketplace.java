@@ -16,6 +16,7 @@ public class DeserializeMarketplace implements JsonDeserializer<Marketplace> {
     private HashMap<Integer, Game> gameIDs;
     private HashMap<String, AbstractUser> users;
     private static final String id = "uniqueID";
+    private static final String Uid = "Uid";
     private static final String auctionSale = "auctionSale";
     private static final String gamesOnSale = "gamesOnSale";
     private static final int MAX_USERNAME_LENGTH = 15;
@@ -53,7 +54,7 @@ public class DeserializeMarketplace implements JsonDeserializer<Marketplace> {
      * @param jsonObject json Object to check for correct market attributes
      */
     public void correctMarketType(JsonObject jsonObject) {
-        if (!(jsonObject.has(auctionSale) || jsonObject.has(gamesOnSale))){
+        if (!(jsonObject.has(auctionSale) || jsonObject.has(gamesOnSale))){ //has none of them
             jsonObject.addProperty(auctionSale, false);
             JsonObject obj = new JsonObject();
             jsonObject.add(gamesOnSale, obj);
@@ -74,6 +75,30 @@ public class DeserializeMarketplace implements JsonDeserializer<Marketplace> {
             JsonObject obj = new JsonObject();
             jsonObject.add(gamesOnSale, obj);
 
+        }
+
+        correctUidType(jsonObject);
+    }
+
+
+    /** If the Uid in the market does not exist, is not an integer, or is negative, set it to 0.
+     * 
+     * @param jsonObject Market object
+     */
+    private void correctUidType(JsonObject jsonObject) {
+        if (jsonObject.has(Uid)) {
+            try {
+                int UidValue = jsonObject.get(Uid).getAsInt();
+                if (UidValue < 0) {
+                    jsonObject.remove(Uid);
+                    jsonObject.addProperty(Uid, 0);
+                }
+            } catch (Exception e) {
+                jsonObject.remove(Uid);
+                jsonObject.addProperty(Uid, 0);
+            }
+        } else {
+            jsonObject.addProperty(Uid, 0);
         }
     }
 
@@ -152,6 +177,7 @@ public class DeserializeMarketplace implements JsonDeserializer<Marketplace> {
         correctMarketType(jsonObject);
 
         boolean auction = jsonObject.get(auctionSale).getAsBoolean();
+        int UID = jsonObject.get(Uid).getAsInt();
         JsonObject sellersInMarket = jsonObject.get(gamesOnSale).getAsJsonObject();
         JsonObject uniqueSellers = removeDuplicateSellers(sellersInMarket); //now this has no duplicate sellers
 
@@ -167,7 +193,9 @@ public class DeserializeMarketplace implements JsonDeserializer<Marketplace> {
             ArrayList<Game> gamesSoldByUSer = gameIDsToGames(s, listOfIntegers);
             market.put(s, gamesSoldByUSer);
         }
-
-        return new Marketplace(auction, market);
+        
+        Marketplace mkt = new Marketplace(auction, market);
+        mkt.setUid(UID);
+        return mkt;
     }
 }

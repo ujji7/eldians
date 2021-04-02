@@ -89,7 +89,7 @@ public class AbstractUserTest {
                 "53.50" + " at a " + "0" +"% discount, will be available for purchase tomorrow.";
         assertEquals(result1, outContent.toString());
         System.out.println(market.getGamesOnSale().get(adminUser1.getUsername()));
-        assertEquals(monopolyAdmin ,market.getGamesOnSale().get(adminUser1.getUsername()));
+        assertEquals(monopolyAdmin ,market.getGamesOnSale().get(adminUser1.getUsername()).get(0));
     }
 
     //check this out
