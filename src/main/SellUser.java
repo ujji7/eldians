@@ -66,8 +66,12 @@ public class SellUser extends AbstractUser {
                 boolean inSenMar = market.checkSellerSellingGame(this.getUsername(), gameName);
                 // User can send the gift, game is added to the Receiver's inventory
                 if (inSenMar){
-                   // Game added to the receiver's inventory
-                    this.inventory.add(game);
+                   // Game added to the receiver's inventory and
+                    // updating the transaction history for the users
+                    String senderTran = this.getUsername() + " has gifted: " + gameName + " to " + reciever.getUsername();
+                    String recTran = reciever.getUsername() + " has received " + gameName + " from " + this.getUsername();
+                    this.getTransactionHistory().add(senderTran);
+                    reciever.getTransactionHistory().add(recTran);
                 }
                 // Sender doesn't have the game
                 else{

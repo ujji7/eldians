@@ -84,9 +84,14 @@ public class BuyUser extends AbstractUser {
                 boolean inSenInv = this.gameInInventory(game);
                 // User can send the gift, game is added to the Receiver's inventory
                 if (inSenInv){
-                    // Game needs to be removed from the sender's inventory
+                    // Game needs to be removed from the sender's inventory and added to the reciever's
                     this.removeFromInventory(gameName);
-                    this.inventory.add(game);
+                    reciever.addGame(game);
+                    // updating the transaction history for the users
+                    String senderTran = this.getUsername() + " has gifted: " + gameName + " to " + reciever.getUsername();
+                    String recTran = reciever.getUsername() + " has received " + gameName + " from " + this.getUsername();
+                    this.getTransactionHistory().add(senderTran);
+                    reciever.getTransactionHistory().add(recTran);
                 }
                 // Sender doesn't have the game
                 else{
