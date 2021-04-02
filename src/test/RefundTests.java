@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RefundTests {
 
+    AdminUser adminUser1;
     BuyUser refundUser1;
     SellUser refundUser2;
     BuyUser refundUser3;
@@ -35,15 +36,17 @@ public class RefundTests {
     public void setUpStreams() {
         System.setOut(new PrintStream(outContent));
 
-        refundUser1 = new BuyUser("Armin", 0.00f);
-        refundUser2 = new SellUser("Bertholdt", 0.00f);
-        refundUser3 = new BuyUser("Reiner", 13.35f);
-        refundUser4 = new SellUser("Ymir", 25.65f);
-        refundUserMax = new BuyUser("Eren", 999999.99f);
-        refundSellToMax = new SellUser("Mikasa", 101.00f);
-        refundBuy = new BuyUser("Hange", 100.00f);
-        refundSell = new SellUser("Erwin", 100.00f);
-        refundFS = new FullStandardUser("Levi", 100.00f);
+        adminUser1 = new AdminUser("DariusZach", 0.00);
+
+        refundUser1 = new BuyUser("Armin", 0.00);
+        refundUser2 = new SellUser("Bertholdt", 0.00);
+        refundUser3 = new BuyUser("Reiner", 13.35);
+        refundUser4 = new SellUser("Ymir", 25.65);
+        refundUserMax = new BuyUser("Eren", 999999.99);
+        refundSellToMax = new SellUser("Mikasa", 101.00);
+        refundBuy = new BuyUser("Hange", 100.00);
+        refundSell = new SellUser("Erwin", 100.00);
+        refundFS = new FullStandardUser("Levi", 100.00);
     }
 
     @AfterEach
@@ -94,7 +97,7 @@ public class RefundTests {
      * Tests that a SellUser cannot issue a refund.
      */
     @Test
-    public void testBuyRefund() {
+    public void testSellRefund() {
         boolean worked = refundSell.refund(refundBuy, refundFS, 1.00f);
         String result = "ERROR: \\ < Failed Constraint: " + refundBuy.getUsername() + " does not have the ability to " +
                 "issue " + "a refund.";
@@ -106,7 +109,7 @@ public class RefundTests {
      * Tests that a FullStandardUser cannot issue a refund.
      */
     @Test
-    public void testBuyRefund() {
+    public void testFSRefund() {
         boolean worked = refundFS.refund(refundBuy, refundSell, 1.00f);
         String result = "ERROR: \\ < Failed Constraint: " + refundBuy.getUsername() +
                 " does not have the ability to issue a refund.";
