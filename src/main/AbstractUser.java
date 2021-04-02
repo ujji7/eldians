@@ -442,9 +442,8 @@ public abstract class AbstractUser {
     public void gift(Game game, AbstractUser reciever, Marketplace market){
         // Reciever is a Sell user
         if (reciever instanceof SellUser){
-            System.out.println("ERROR: \\< Failed Constraint: Sell User can not accept any gifts. >//");
+            System.out.println("ERROR: \\< Failed Constraint: Sell User can not accept any gifts. >");
         }
-
         else{
             String gameName = game.getName();
             // check if the Receiver has the game in their inventory
@@ -505,7 +504,7 @@ public abstract class AbstractUser {
     /**
      * Helper to remove the game from the User's inventory
      *
-     * @param game remove the game title from the User's inventory
+     * @param game remove the valid game title from the User's inventory
      */
     protected void removeFromInventory(String game){
         ArrayList<Game> currInv = this.inventory;
@@ -517,7 +516,7 @@ public abstract class AbstractUser {
             }
         }
         //  removing the game
-        this.inventory.remove(currGame);
+        this.getInventory().remove(currGame);
     }
 
 
@@ -536,12 +535,15 @@ public abstract class AbstractUser {
         // remove from Market
         if(iAmOffering){
             market.removeGame(this.getUsername(), currGame);
-            System.out.println(game.getName()+ " was removed from the User's offering on the Market.");
+            String tran = game.getName()+ " was removed from the User's offering on the Market.";
+            this.addTranHis(tran);
         }
         // remove from inventory
         else if (inMyInv){
             this.removeFromInventory(currGame);
-            System.out.println(game.getName()+ " was removed from the User's inventory.");
+            String tran = game.getName()+ " was removed from the User's inventory.";
+            this.addTranHis(tran);
+
 
         }
         else if (!inMyInv){
