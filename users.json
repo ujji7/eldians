@@ -2,15 +2,21 @@
   {
     "username": "Bob",
     "type": "BS",
-    "accountBalance": 105.56,
-    "inventory": [],
-    "newFunds": 0.0,
-    "transactionHistory": []
+    "accountBalance": 561.56,
+    "inventory": [
+      {
+        "uniqueID": 1
+      }
+    ],
+    "newFunds": 456.0,
+    "transactionHistory": [
+      "User: Bob added $561.56 to their account"
+    ]
   },
   {
     "username": "Alice",
     "type": "SS",
-    "accountBalance": 117.56,
+    "accountBalance": 105.56,
     "inventory": [],
     "newFunds": 0.0,
     "transactionHistory": []
@@ -18,111 +24,17 @@
   {
     "username": "admin1",
     "type": "AA",
-    "accountBalance": 112.0,
+    "accountBalance": 124.0,
     "inventory": [
       {
-        "game": 3
+        "uniqueID": 1
       }
     ],
     "newFunds": 0.0,
     "transactionHistory": [
       "Created Alice user",
       "Created Bob user",
-      "Bought Clue from Alice",
-      "User: admin1 is now selling Gamecool for 23.56",
-      "User: admin1 is now selling Gamecool for 23.56",
-      "User: admin1 is now selling Gamecool for 23.56",
-      "User: admin1 has created user bob\u0027sfriend",
-      "User: admin1 has created user alice\u0027s fr",
-      "User: admin1 has created user fullStanU1",
-      "User: admin1 is now selling Gamecool for 23.56",
-      "User: admin1 has created user bob\u0027sfriend",
-      "User: admin1 has created user alice\u0027s fr",
-      "User: admin1 has created user fullStanU1",
-      "User: admin1 is now selling Gamecool for 23.56",
-      "User: admin1 has created user bob\u0027sfriend",
-      "User: admin1 has created user alice\u0027s fr",
-      "User: admin1 has created user fullStanU1",
-      "User: admin1 is now selling Gamecool for 23.56",
-      "User: admin1 has created user bob\u0027sfriend",
-      "User: admin1 has created user alice\u0027s fr",
-      "User: admin1 has created user fullStanU1",
-      "User: admin1 is now selling Gamecool for 23.56",
-      "User: admin1 has created user bob\u0027sfriend",
-      "User: admin1 has created user alice\u0027s fr",
-      "User: admin1 has created user fullStanU1",
-      "User: admin1 has created user bob\u0027sfriend",
-      "User: admin1 has created user alice\u0027s fr",
-      "User: admin1 has created user fullStanU1",
-      "User: admin1 bought Mouse trap from Alice",
-      "User: admin1 is now selling Gamecool for 23.56",
-      "User: admin1 has created user bob\u0027sfriend",
-      "User: admin1 has created user alice\u0027s fr",
-      "User: admin1 has created user fullStanU1",
-      "User: admin1 has created user bob\u0027sfriend",
-      "User: admin1 has created user alice\u0027s fr",
-      "User: admin1 has created user fullStanU1",
-      "User: admin1 has created user bob\u0027sfriend",
-      "User: admin1 has created user alice\u0027s fr",
-      "User: admin1 has created user fullStanU1"
+      "Bought Clue from Alice"
     ]
-  },
-  {
-    "username": "bob\u0027sfriend",
-    "type": "BS",
-    "accountBalance": 4404.0,
-    "inventory": [],
-    "newFunds": 456.0,
-    "transactionHistory": [
-      "User: bob\u0027sfriend added $4404.0 to their account"
-    ]
-  },
-  {
-    "username": "alice\u0027s fr",
-    "type": "SS",
-    "accountBalance": 0.0,
-    "inventory": [],
-    "newFunds": 0.0,
-    "transactionHistory": []
-  },
-  {
-    "username": "fullStanU1",
-    "type": "FS",
-    "accountBalance": 300000.0,
-    "inventory": [],
-    "newFunds": 0.0,
-    "transactionHistory": []
-  },
-  {
-    "username": "bob\u0027sfriend",
-    "type": "BS",
-    "accountBalance": 300.0,
-    "inventory": [],
-    "newFunds": 0.0,
-    "transactionHistory": []
-  },
-  {
-    "username": "alice\u0027s fr",
-    "type": "SS",
-    "accountBalance": 0.0,
-    "inventory": [],
-    "newFunds": 0.0,
-    "transactionHistory": []
-  },
-  {
-    "username": "fullStanU1",
-    "type": "FS",
-    "accountBalance": 300000.0,
-    "inventory": [],
-    "newFunds": 0.0,
-    "transactionHistory": []
-  },
-  {
-    "username": "Alice",
-    "type": "SS",
-    "accountBalance": 117.56,
-    "inventory": [],
-    "newFunds": 0.0,
-    "transactionHistory": []
   }
 ]

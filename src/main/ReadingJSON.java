@@ -19,9 +19,9 @@ import com.google.gson.reflect.TypeToken;
  */
 public class ReadingJSON {
     private static File Game, User, Market;
-    private static final String fileNameGame = "games.json"; //games file
-    private static final String fileNameUser = "users.json"; //users file
-    private static final String fileNameMarket = "market.json"; //market file
+    private static final String fileNameGame = "gamec.json"; //games file
+    private static final String fileNameUser = "userc.json"; //users file
+    private static final String fileNameMarket = "marketc.json"; //market file
     private static final String fileNotFoundError = " file not found.";
     private static final String fileFormatError =" file not in correct format.";
 

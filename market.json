@@ -3,18 +3,15 @@
   "gamesOnSale": {
     "Alice": [
       {
-        "game": 1
+        "uniqueID": 1
       },
       {
-        "game": 3
+        "uniqueID": 3
       }
     ],
     "admin1": [
       {
-        "game": 2
-      },
-      {
-        "game": 101
+        "uniqueID": 2
       }
     ]
   }

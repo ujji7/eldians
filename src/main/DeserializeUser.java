@@ -17,7 +17,7 @@ public class DeserializeUser implements JsonDeserializer<AbstractUser> {
     private HashMap<Integer, Game> gameIDs;
     private static final String name = "username";
     private static final String type = "type";
-    private static final String id = "game";
+    private static final String id = "uniqueID";
     private static final String credit = "accountBalance";
     private static final String inventory = "inventory";
     private static final String transactionHistory = "transactionHistory";

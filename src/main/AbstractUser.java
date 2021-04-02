@@ -163,6 +163,7 @@ public abstract class AbstractUser {
     //helper for buy
     private boolean sellingGame(Game game, Marketplace market) {
         if (market.getGamesOnSale().containsKey(this.username)) { //user is selling a game in the mkt place
+            System.out.println( this.username + " in market");
             for (Game g : market.getGamesOnSale().get(this.username)) {
                 if (g.getUniqueID() == game.getUniqueID()) {
                     return true;

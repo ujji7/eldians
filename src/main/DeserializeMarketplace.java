@@ -15,7 +15,7 @@ import java.util.*;
 public class DeserializeMarketplace implements JsonDeserializer<Marketplace> {
     private HashMap<Integer, Game> gameIDs;
     private HashMap<String, AbstractUser> users;
-    private static final String id = "game";
+    private static final String id = "uniqueID";
     private static final String auctionSale = "auctionSale";
     private static final String gamesOnSale = "gamesOnSale";
     private static final int MAX_USERNAME_LENGTH = 15;

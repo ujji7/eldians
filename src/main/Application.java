@@ -26,9 +26,9 @@ public class Application {
     private void BODRead() {
 //        ReadingJSON readJson = new ReadingJSON();
         List<Game> games = ReadingJSON.readGamesFile();
-        System.out.println(games);
+        System.out.println("games: " + games);
         List<AbstractUser> users = ReadingJSON.readUsersFile(games);
-        System.out.println(users);
+        System.out.println("users: " + users);
         Marketplace market = ReadingJSON.readMarketFile(games, users);
         userList = (ArrayList<AbstractUser>) users;
         this.gamesList = (ArrayList<Game>) games;
