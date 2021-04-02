@@ -409,6 +409,27 @@ public abstract class AbstractUser {
 //
 //    }
 
+    /**
+     * get the inventory for the user
+     *
+     * @return all the games in their inventory
+     */
+    public ArrayList<Game> getInventory(){
+        return this.inventory;
+    }
+
+    /**
+     * Helper to add the Gift being recieved, to the User's inventory
+     *
+     * @param gift Game to be added to the inventory
+     */
+    public void addGame(Game gift){
+
+        // get the inventory and add the game
+        this.getInventory().add(gift);
+
+    }
+
 
     /**
      * Sends Games to a User if they can accept this Game
@@ -441,7 +462,13 @@ public abstract class AbstractUser {
                     if(inSenInv){
                         this.removeFromInventory(gameName);
                     }
-                    this.inventory.add(game);
+                    reciever.addGame(game);
+                    // updating the transaction history for the users
+                    String senderTran = this.getUsername() + " has gifted: " + gameName + " to " + reciever.getUsername();
+                    String recTran = reciever.getUsername() + " has received " + gameName + " from " + this.getUsername();
+                    this.getTransactionHistory().add(senderTran);
+                    reciever.getTransactionHistory().add(recTran);
+
                 }
                 // Sender doesn't have the game
                 else{
@@ -457,7 +484,14 @@ public abstract class AbstractUser {
         }
     }
 
-
+    /**
+     * Helper to get the transaction History for the User
+     *
+     * @return the ArrayList og the Tran History
+     */
+    public ArrayList<String> getTransactionHistory() {
+        return transactionHistory;
+    }
     /**
      * Helper to remove the game from the User's inventory
      *
