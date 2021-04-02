@@ -102,6 +102,7 @@ public class Client {
         }
     }
 
+
     /**
      * Sends all the properly formatted transactions to the Transaction Factory and then sends it to the application
      * for processing
@@ -373,7 +374,6 @@ public class Client {
         return result;
     }
 
-
     /**
      * Strips the trailing whitespaces from a transaction field
      *
@@ -383,7 +383,6 @@ public class Client {
     private String stripSpace(String field){
         String spaceReg = "\\s+$";
         return field.replaceAll(spaceReg, "");
-
     }
 
     /**
