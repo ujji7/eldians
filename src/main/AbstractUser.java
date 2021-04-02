@@ -335,13 +335,7 @@ public abstract class AbstractUser {
                     "amount. > //");
             return false;
         }
-        // If game is already on market, do not put another on market (end here)
 
-        if (this.sellingGame(game, market)) {
-            System.out.println("ERROR: \\ < Failed Constraint: " + this.getUsername() + " could not sell " +
-                    game.getName() + " as User is already selling this exact game > //");
-            return false;
-        }
         // passes all checks / follows all constraints
         return true;
     }
