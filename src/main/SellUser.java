@@ -101,7 +101,8 @@ public class SellUser extends AbstractUser {
         // remove from Market
         if(iAmOffering){
             market.removeGame(this.getUsername(), currGame);
-            System.out.println(game.getName()+ " was removed from the User's offering on the Market.");
+            String tran = game.getName()+ " was removed from the User's offering on the Market.";
+            this.addTranHis(tran);
         }
         // else printing out the error from Market
     }
