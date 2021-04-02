@@ -63,7 +63,7 @@ public class AdminUser extends AbstractUser {
      *               created user's account balance
      */
     @Override
-    public void create(String username, String type, double credit){
+    public AbstractUser create(String username, String type, double credit){
         if(MINFUNDS <= credit || credit <= MAXFUNDS){
             AbstractUser newUser;
             switch (type) {
@@ -91,23 +91,20 @@ public class AdminUser extends AbstractUser {
                     // if user isn't initialized we stop the create function
                     System.out.println("ERROR: \\< Failed Constraint: New User could not be created since user type " +
                             "does not exist. > //");
-                    return;
+                    return null;
             }
-            if(!Application.userList.contains(newUser)) {
-                Application.addUser(newUser);
+            if(!newUser.getUsername().equals("")) {
                 this.transactionHistory.add("User: " + this.username + " has created user " +
                         newUser.getUsername());
                 System.out.println("A new user was created: \n" + username); //+ newUser.toString()
 //                System.out.println("new user name is: " + username);
-                return;
+                return newUser;
             }
-            System.out.println("ERROR: \\< Failed Constraint: New User could not be created since" +
-                    " a User already exists with given name. >//");
-            System.out.println("baby is alive: " + username);
         }
         System.out.println("ERROR: \\< Failed Constraint: New User could not be created since "
                 + Double.toString(credit) + " amount is invalid. >//");
 
+        return null;
     }
 
     /** If there is currently no reduced price on games, turn on a sale for this amount. Else, turn off the sale.

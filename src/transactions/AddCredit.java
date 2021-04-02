@@ -58,7 +58,11 @@ public class AddCredit implements Transaction {
                 ((AdminUser) login).addCreditTo(this.credit, foundUser);
             }
 
-        } else {
+        }
+            else {
+                if(!login.getUsername().equals(this.username)){
+                    System.out.println("ERROR: < Given User does not match logged in user. >");
+                }
             login.addCredit(this.credit);
         }
         return login;

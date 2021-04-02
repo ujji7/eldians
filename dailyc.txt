@@ -5,4 +5,6 @@
 04 Mouse trap                Alice           admin1         
 03 Gamecool                  admin1          20.00 023.56
 06 bob'sfriend     BS 000456.00
-10 admin1          AA 000100.00
+06 bob'sfriend     BS 000456.00
+06 bob'sfriend     BS 999999.00
+10 Bob             BS 000100.00

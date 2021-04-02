@@ -69,6 +69,7 @@ public abstract class AbstractUser {
 
     /**
      * Sets the account balance for our User
+     *
      * @param balance the amount to balance to-be in the user's account
      */
     public void setAccountBalance(double balance){
@@ -79,6 +80,7 @@ public abstract class AbstractUser {
 
     /**
      * Get the current User's unique username
+     *
      * @return username String
      */
     public String getUsername(){
@@ -106,7 +108,6 @@ public abstract class AbstractUser {
         System.out.println("Most updated account balance is $" + this.getAccountBalance());
     }
 
-
     /**
      * Adds the amount of funds to be added to the User's account and prints out the Status
      *
@@ -116,10 +117,12 @@ public abstract class AbstractUser {
     public void addCredit(double amount) {
         // check the constraints of daily limit
         if (this.dailyLimitCheck(amount)) {
+            double fundsAdded;
             // check if the account will be maxed upon addition of funds
             if(this.canAcceptFunds(amount)){
                 this.transferFunds(amount);
                 this.newFunds += amount;
+                fundsAdded = amount;
             }
             // Max out their account with the difference            @666 Piazza
             else{
@@ -128,7 +131,11 @@ public abstract class AbstractUser {
                 System.out.println("ERROR: \\ < Failed Constraint: "+ this.username +
                         "'s balance was Maxed out!\n$" + newFunds+ " were added to the account");
                 this.newFunds += newFunds;
+                fundsAdded = newFunds;
             }
+
+            String tran  = "$"+ fundsAdded + " were added to the user's account";
+            this.addTranHis(tran);
         }
         // Reject the transaction               @701 Piazza
         else {
@@ -136,9 +143,10 @@ public abstract class AbstractUser {
             double newFunds = DAILYLIMIT - this.newFunds;
 
             System.out.println("ERROR: \\ < Failed Constraint: "+ this.username +
-            "'s daily limit would be reached upon addition of funds!\nOnly $" + newFunds+ " can be added to the account");
+                    "'s daily limit would be reached upon addition of funds!\n" +
+                    "You can only add $" + newFunds+ " to the account for the rest of today.");
 
-            // Add the difference to the account
+            // Add the difference to the account            For future improvements
             /*this.newFunds = DAILYLIMIT;
             // If the user's account will not be maxed out to add the funds
             if(this.canAcceptFunds(newFunds)){
@@ -348,9 +356,10 @@ public abstract class AbstractUser {
         return false;
     }
 
-    public void create(String username, String type, double credit){
+    public AbstractUser create(String username, String type, double credit){
         System.out.println("ERROR: \\ < Failed Constraint: "+ this.username + " does not have the ability to create " +
                 "another user");
+        return null;
     }
 
 
@@ -423,7 +432,7 @@ public abstract class AbstractUser {
      *
      * @param gift Game to be added to the inventory
      */
-    public void addGame(Game gift){
+    protected void addGame(Game gift){
 
         // get the inventory and add the game
         this.getInventory().add(gift);
@@ -475,7 +484,7 @@ public abstract class AbstractUser {
                             ".\n Gift transaction failed.");
                 }
             }
-            // Reciever already has the game
+            // Receiver already has the game
             else{
                 System.out.println("ERROR: \\" + reciever.getUsername() + " already has " +gameName+
                         ".\n Gift transaction failed.");
@@ -535,19 +544,17 @@ public abstract class AbstractUser {
         // remove from Market
         if(iAmOffering){
             market.removeGame(this.getUsername(), currGame);
-            String tran = game.getName()+ " was removed from the User's offering on the Market.";
+            String tran = currGame+ " was removed from the User's offering on the Market.";
             this.addTranHis(tran);
         }
         // remove from inventory
         else if (inMyInv){
             this.removeFromInventory(currGame);
-            String tran = game.getName()+ " was removed from the User's inventory.";
+            String tran = currGame+ " was removed from the User's inventory.";
             this.addTranHis(tran);
-
-
         }
         else if (!inMyInv){
-            System.out.println(game.getName()+ " was not found in the User's inventory.");
+            System.out.println(currGame+ " was not found in the User's inventory.");
         }
         // else printing out the error from Market for Game not being currently offered
     }

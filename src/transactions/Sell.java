@@ -27,7 +27,7 @@ public class Sell implements Transaction {
         this.discount = Double.parseDouble(d);
         this.salePrice = Double.parseDouble(p);
 //        System.out.println(g + " " +  s + " " +  d + " " + p);
-        System.out.println(gameName + " " +seller +  " " +discount + " " +salePrice);
+//        System.out.println(gameName + " " +seller +  " " +discount + " " +salePrice);
     }
 
     /**
@@ -63,18 +63,9 @@ public class Sell implements Transaction {
         // Create the game
         Game newGame = new Game(this.gameName, this.salePrice, login.getUsername(), uid, this.discount);
 
-//        System.out.println(newGame.getName());
-//        System.out.println(newGame.getDiscount());
-//        System.out.println(newGame.getPrice());
-//        System.out.println(newGame.getUniqueID());
-//        System.out.println(newGame.getSupplierID());
-
         // Sell the game
         login.sell(newGame, market);
-//        ArrayList<Game> sellerGames = market.getGamesOnSale().get(seller);
-//        for (Game g : sellerGames) {
-//            System.out.println("game is: " + g.getName());
-//        }
+
 
         // Add game to games list
         games.add(newGame);
