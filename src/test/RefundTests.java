@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RefundTests {
 
+    AdminUser adminUser1;
     BuyUser refundUser1;
     SellUser refundUser2;
     BuyUser refundUser3;
@@ -35,6 +36,17 @@ public class RefundTests {
     @BeforeEach
     public void setUpStreams() {
         System.setOut(new PrintStream(outContent));
+
+        refundUser1 = new BuyUser("Armin", 0.00);
+        refundUser2 = new SellUser("Bertholdt", 0.00);
+        refundUser3 = new BuyUser("Reiner", 13.35);
+        refundUser4 = new SellUser("Ymir", 25.65);
+        refundUserMax = new BuyUser("Eren", 999999.99);
+        refundSellToMax = new SellUser("Mikasa", 101.00);
+        refundBuy = new BuyUser("Hange", 100.00);
+        refundSell = new SellUser("Erwin", 100.00);
+        refundFS = new FullStandardUser("Levi", 100.00);
+
         adminUser1 = new AdminUser.UserBuilder("diego").balance(42).build();
         refundUser1 = new BuyUser.UserBuilder("Armin").balance(0.00).build();
         refundUser2 = new SellUser.UserBuilder("Bertholdt").balance(0.00).build();
@@ -95,7 +107,7 @@ public class RefundTests {
      * Tests that a SellUser cannot issue a refund.
      */
     @Test
-    public void testBuyRefund2() {
+    public void testSellRefund() {
         boolean worked = refundSell.refund(refundBuy, refundFS, 1.00f);
         String result = "ERROR: \\ < Failed Constraint: " + refundBuy.getUsername() + " does not have the ability to " +
                 "issue " + "a refund.";
@@ -107,7 +119,7 @@ public class RefundTests {
      * Tests that a FullStandardUser cannot issue a refund.
      */
     @Test
-    public void testBuyRefund3() {
+    public void testFSRefund() {
         boolean worked = refundFS.refund(refundBuy, refundSell, 1.00f);
         String result = "ERROR: \\ < Failed Constraint: " + refundBuy.getUsername() +
                 " does not have the ability to issue a refund.";
