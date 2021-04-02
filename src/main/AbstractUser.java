@@ -466,8 +466,8 @@ public abstract class AbstractUser {
                     // updating the transaction history for the users
                     String senderTran = this.getUsername() + " has gifted: " + gameName + " to " + reciever.getUsername();
                     String recTran = reciever.getUsername() + " has received " + gameName + " from " + this.getUsername();
-                    this.getTransactionHistory().add(senderTran);
-                    reciever.getTransactionHistory().add(recTran);
+                    this.addTranHis(senderTran);
+                    reciever.addTranHis(recTran);
 
                 }
                 // Sender doesn't have the game
@@ -492,6 +492,16 @@ public abstract class AbstractUser {
     public ArrayList<String> getTransactionHistory() {
         return transactionHistory;
     }
+
+    /**
+     * Helper to add the transaction history to the User's history
+     *
+     * @param message the thing to be added to the User's history
+     */
+    public void addTranHis(String message){
+        this.getTransactionHistory().add(message);
+    }
+
     /**
      * Helper to remove the game from the User's inventory
      *
