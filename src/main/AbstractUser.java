@@ -69,6 +69,7 @@ public abstract class AbstractUser {
 
     /**
      * Sets the account balance for our User
+     *
      * @param balance the amount to balance to-be in the user's account
      */
     public void setAccountBalance(double balance){
@@ -79,6 +80,7 @@ public abstract class AbstractUser {
 
     /**
      * Get the current User's unique username
+     *
      * @return username String
      */
     public String getUsername(){
