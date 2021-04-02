@@ -4,7 +4,9 @@ import java.util.HashMap;
 //line 401
 //REMOVE ANY UNNECESSARY PRINT STATEMENTS IN CREATE AND BUY
 
-//SELL DOES NOT CHECK FOR GAMES ALREADY SOLD BY SELLER
+//SELL DOES NOT CHECK FOR GAMES ALREADY SOLD BY SELLER 
+//SELL DOES NOT CHECK FOR IF THE GAME IS IN THEIR INVENTORY
+
 //we need an auction sale method - i implemented it at botfitom check it out
 // also look at readme for add credit - there is another implementations for admin type
 
@@ -37,9 +39,9 @@ public abstract class AbstractUser {
     public ArrayList<String> transactionHistory = new ArrayList<String>();
     protected static final double MAXFUNDS = 999999.99f;
     // can change minFunds to allow overdrafts for future improvements
-    protected static final float MINFUNDS = 0f;
-    protected static final float DAILYLIMIT = 1000f;
-    private static final float NEWFUNDSTODAY = 0f;
+    protected static final double MINFUNDS = 0f;
+    protected static final double DAILYLIMIT = 1000f;
+    private static final double NEWFUNDSTODAY = 0f;
 
 //    public AbstractUser(String username){
 //        this.username = username;
@@ -171,7 +173,7 @@ public abstract class AbstractUser {
     //helper for buy
     private boolean sellingGame(Game game, Marketplace market) {
         if (market.getGamesOnSale().containsKey(this.username)) { //user is selling a game in the mkt place
-            System.out.println( this.username + " in market");
+//            System.out.println( this.username + " in market");
             for (Game g : market.getGamesOnSale().get(this.username)) {
                 if (g.getUniqueID() == game.getUniqueID()) {
                     return true;
@@ -254,8 +256,8 @@ public abstract class AbstractUser {
             else if (!seller.canAcceptFunds(price)) { //seller's account maxed out
                 this.payAndAddGame(seller, price, game);
                 seller.accountBalance = MAXFUNDS;
-                System.out.println("ERROR: \\ < Failed Constraint: "+ this.username +
-                        "'s balance was Maxed out upon sale of game.");
+                System.out.println("Warning: "+ this.username +
+                        "'s balance was maxed out upon sale of game.");
             }
             else { // make normal add and print message
                 this.payAndAddGame(seller, price, game);
@@ -278,8 +280,13 @@ public abstract class AbstractUser {
      */
     public void sell(Game game, Marketplace market){
 
-        // if game doesn't follow contraints end here
+        // if game doesn't follow constraints end here
         if (!this.sellConstraints(game)) return;
+        
+        if (this.gameInInventory(game)) {
+            System.out.println("ERROR: \\ < Failed Constraint: " + this.getUsername() + " could not sell " +
+                    game.getName() + " as they have bought this exact game. >");
+        }
 
         HashMap<String, ArrayList<Game>> map = market.getGamesOnSale(); // var for less typing
         // if user has previously put games on the market, add to list of games
@@ -289,7 +296,7 @@ public abstract class AbstractUser {
             this.transactionHistory.add("User: " + this.username + " is now selling " + game.getName() +
                     " for " + game.getPrice());
             System.out.println("Game: " + game.getName() + " is now being sold by " + this.getUsername() + " for $" +
-                    game.getPrice() + " at a " + game.getDiscount()+"% discount, will be availble for purchase tomorrow");
+                    game.getPrice() + " at a " + game.getDiscount()+"% discount, will be available for purchase tomorrow.");
 
         } else {
             market.addNewSeller(this.username);
@@ -298,7 +305,7 @@ public abstract class AbstractUser {
             this.transactionHistory.add("User: " + this.username + " is now selling " + game.getName() +
                     " for " + game.getPrice());
             System.out.println("Game: " + game.getName() + " is now being sold by " + this.getUsername() + " for $" +
-                    game.getPrice() + " at a " + game.getDiscount()+"% discount, will be availble for purchase tomorrow");
+                    game.getPrice() + " at a " + game.getDiscount()+"% discount, will be available for purchase tomorrow.");
         }
     }
 
@@ -307,9 +314,6 @@ public abstract class AbstractUser {
      *
      * @param game, Game being sold.
      */
-
-
-
     private boolean sellConstraints(Game game) {
 
         String gameName = game.getName();
@@ -318,12 +322,19 @@ public abstract class AbstractUser {
         double gameDiscount = game.getDiscount();
 
         // check if game price is gt max game price
-        float maxPrice = 999.99f;
+        double maxPrice = 999.99;
         if (gamePrice > maxPrice) {
             System.out.println("ERROR: \\ < Failed Constraint: " + userName + " could not sell " +
                     gameName + " for $" + gamePrice + " as it exceeds the maximum sale price. > //");
             return false;
         }
+        
+        if (gamePrice < 0) {
+            System.out.println("ERROR: \\ < Failed Constraint: " + userName + " could not sell " +
+                    gameName + " for $" + gamePrice + " as the price cannot be negative. > //");
+            return false;
+        }
+        
         // Check if game name is gt max name length
         int maxNameLength = 25;
         if (gameName.length() > maxNameLength) {
