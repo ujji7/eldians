@@ -431,7 +431,7 @@ public abstract class AbstractUser {
      *
      * @param gift Game to be added to the inventory
      */
-    public void addGame(Game gift){
+    protected void addGame(Game gift){
 
         // get the inventory and add the game
         this.getInventory().add(gift);
@@ -483,7 +483,7 @@ public abstract class AbstractUser {
                             ".\n Gift transaction failed.");
                 }
             }
-            // Reciever already has the game
+            // Receiver already has the game
             else{
                 System.out.println("ERROR: \\" + reciever.getUsername() + " already has " +gameName+
                         ".\n Gift transaction failed.");
