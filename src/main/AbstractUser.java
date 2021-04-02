@@ -543,17 +543,17 @@ public abstract class AbstractUser {
         // remove from Market
         if(iAmOffering){
             market.removeGame(this.getUsername(), currGame);
-            String tran = game.getName()+ " was removed from the User's offering on the Market.";
+            String tran = currGame+ " was removed from the User's offering on the Market.";
             this.addTranHis(tran);
         }
         // remove from inventory
         else if (inMyInv){
             this.removeFromInventory(currGame);
-            String tran = game.getName()+ " was removed from the User's inventory.";
+            String tran = currGame+ " was removed from the User's inventory.";
             this.addTranHis(tran);
         }
         else if (!inMyInv){
-            System.out.println(game.getName()+ " was not found in the User's inventory.");
+            System.out.println(currGame+ " was not found in the User's inventory.");
         }
         // else printing out the error from Market for Game not being currently offered
     }
