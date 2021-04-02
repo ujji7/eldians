@@ -394,8 +394,7 @@ public class Client {
      */
     private String stripSpace(String field){
         String spaceReg = "\\s+$";
-        String result = field.replaceAll(spaceReg, "");
-        return result;
+        return field.replaceAll(spaceReg, "");
 
     }
 
