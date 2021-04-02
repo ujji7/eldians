@@ -143,7 +143,7 @@ public abstract class AbstractUser {
             System.out.println("ERROR: \\ < Failed Constraint: "+ this.username +
                     "'s daily limit would be reached upon addition of funds!\nOnly $" + newFunds+ " can be added to the account");
 
-            // Add the difference to the account
+            // Add the difference to the account            For future improvements
             /*this.newFunds = DAILYLIMIT;
             // If the user's account will not be maxed out to add the funds
             if(this.canAcceptFunds(newFunds)){
@@ -549,8 +549,6 @@ public abstract class AbstractUser {
             this.removeFromInventory(currGame);
             String tran = game.getName()+ " was removed from the User's inventory.";
             this.addTranHis(tran);
-
-
         }
         else if (!inMyInv){
             System.out.println(game.getName()+ " was not found in the User's inventory.");
