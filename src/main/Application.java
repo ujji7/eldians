@@ -1,6 +1,7 @@
 package main;
 
 import transactions.Transaction;
+import transactions.Login;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -54,7 +55,11 @@ public class Application {
     public void Run(ArrayList<Transaction> transactions) {
         BODRead();
         for (Transaction transac : transactions) {
-            login = transac.execute(this.userList, this.gamesList, this.market, this.login);
+            if (transac instanceof Login || login != null) {
+                login = transac.execute(this.userList, this.gamesList, this.market, this.login);
+            } else {
+                System.out.println("FATAL ERROR: < There is no user logged in, cannot execute transaction. >");
+            }
         }
         EODWrite();
     }
