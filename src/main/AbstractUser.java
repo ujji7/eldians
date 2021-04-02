@@ -106,7 +106,6 @@ public abstract class AbstractUser {
         System.out.println("Most updated account balance is $" + this.getAccountBalance());
     }
 
-
     /**
      * Adds the amount of funds to be added to the User's account and prints out the Status
      *
@@ -116,10 +115,12 @@ public abstract class AbstractUser {
     public void addCredit(double amount) {
         // check the constraints of daily limit
         if (this.dailyLimitCheck(amount)) {
+            double fundsAdded;
             // check if the account will be maxed upon addition of funds
             if(this.canAcceptFunds(amount)){
                 this.transferFunds(amount);
                 this.newFunds += amount;
+                fundsAdded = amount;
             }
             // Max out their account with the difference            @666 Piazza
             else{
@@ -128,7 +129,11 @@ public abstract class AbstractUser {
                 System.out.println("ERROR: \\ < Failed Constraint: "+ this.username +
                         "'s balance was Maxed out!\n$" + newFunds+ " were added to the account");
                 this.newFunds += newFunds;
+                fundsAdded = newFunds;
             }
+
+            String tran  = "$"+ fundsAdded + " were added to the user's account";
+            this.addTranHis(tran);
         }
         // Reject the transaction               @701 Piazza
         else {
@@ -136,7 +141,7 @@ public abstract class AbstractUser {
             double newFunds = DAILYLIMIT - this.newFunds;
 
             System.out.println("ERROR: \\ < Failed Constraint: "+ this.username +
-            "'s daily limit would be reached upon addition of funds!\nOnly $" + newFunds+ " can be added to the account");
+                    "'s daily limit would be reached upon addition of funds!\nOnly $" + newFunds+ " can be added to the account");
 
             // Add the difference to the account
             /*this.newFunds = DAILYLIMIT;
