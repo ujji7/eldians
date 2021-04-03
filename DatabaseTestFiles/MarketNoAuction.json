@@ -1,0 +1,7 @@
+{
+  "Uid": 5,
+  "gamesOnSale": {
+    "S1": [{"uniqueID":  1}, {"uniqueID":  3}],
+    "A1":[{"uniqueID":  2}]
+  }
+}

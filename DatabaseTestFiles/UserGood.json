@@ -1,0 +1,21 @@
+[  { "username": "S1",
+  "type": "SS",
+  "accountBalance": 105.56,
+  "inventory": [],
+  "transactionHistory": ["Sold Half-Life to Valve"]
+},
+  { "username": "A1",
+    "type": "AA",
+    "accountBalance": 105.56,
+    "inventory": [{ "uniqueID": 1
+    }],
+    "transactionHistory": ["Bought Half-Life from Valve"]
+  },
+  { "username": "B1",
+    "type": "BS",
+    "accountBalance": 105,
+    "inventory": [{ "uniqueID": 1
+    }],
+    "transactionHistory": ["Bought Half-Life from Valve"]
+  }
+]

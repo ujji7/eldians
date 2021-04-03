@@ -21,4 +21,11 @@
     "uniqueID": 3,
     "discount": 9.85,
     "onHold": true
-  }]
+  },{
+  "name": "G4" ,
+  "price": 12.0,
+  "supplierID": "S1",
+  "uniqueID": 4,
+  "discount": 9.85,
+  "onHold": true
+}]

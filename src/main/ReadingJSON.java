@@ -19,9 +19,9 @@ import com.google.gson.reflect.TypeToken;
  */
 public class ReadingJSON {
     private static File Game, User, Market;
-    private static String fileNameGame = "game1.json"; //games file
+    private static String fileNameGame = "gamec.json"; //games file
     private static String fileNameUser = "userc.json"; //users file
-    private static String fileNameMarket = "marketc.json"; //market file
+    private static String fileNameMarket = "market.json"; //market file
     private static final String fileNotFoundError = " file not found. An empty ";
     private static final String fileFormatError =" file not in correct format. An empty ";
     private static final String fileErrorEnd =" will be created.";
@@ -190,20 +190,22 @@ public class ReadingJSON {
 
             deserializer.setGameIDs(setGamesList(listGames)); // create the games parameter in deserializer
             deserializer.setUsers(getUserHashmap(listUsers));
-
+            
             Gson gson = gsonBuilder.create();
 
             Marketplace market = gson.fromJson(reader, Marketplace.class);
             reader.close();
+            if (market == null) {
+                System.out.println("Market" + fileFormatError + "market" + fileErrorEnd);
+                return new Marketplace();
+            }
             return market;
-
         } catch (IOException fileNotFoundException) {
             System.out.println("Market" + fileNotFoundError + "market" + fileErrorEnd);
-        }
-        catch (JsonSyntaxException | NullPointerException e){
+        } catch (JsonSyntaxException | NullPointerException e){
             System.out.println("Market" + fileFormatError + "market" + fileErrorEnd);
         }
-        return new Marketplace(false, new HashMap<String,ArrayList<Game>>());
+        return new Marketplace();
     }
 
 //    public static void main (String[]args){

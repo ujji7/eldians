@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public class Marketplace {
     // Boolean to account for Auction Sale
-    public boolean auctionSale = true;
+    public boolean auctionSale = false;
     // Unique ID associated with each game being offered by a Seller
     private int uid = 0;
     // Keeps a record for Seller against their offerings

@@ -127,3 +127,12 @@
 
 ###Marketplace
 - a hashmap of all the availiable sellers with their games for sale as the values
+
+
+## Database Requirements
+#### Requirements:
+- All transactions performed throughout the day must be updated to be used in the next day
+
+#### Clarifications:
+- Database files may not be guaranteed to follow our format or may give incorrect details such as 
+  invalid names and duplicate users - must ensure that database does not crash

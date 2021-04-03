@@ -34,9 +34,9 @@ public class BuyUser extends AbstractUser {
         return this.type;
     }
 
-    public ArrayList<Game> getInventory(){
-        return this.inventory;
-    }
+//    public ArrayList<Game> getInventory(){
+//        return this.inventory;
+//    }
 
     public double getAccountBalance(){
         return this.accountBalance;

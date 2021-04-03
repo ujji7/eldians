@@ -11,19 +11,9 @@ import org.junit.jupiter.api.AfterEach;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-//THIS TEST IS TO CHECK THAT DATABASE READS INFO CORRECTLY
-//HAVE DIFF TEST FILES - ONE FOR ALL THE WEIRD AND EDGE CASE
-//ONE EMPTY FILE
-//ONE NON EXISTENT FILE
-//ONE FILE WITH WEIRD STUFF
-//FOR THE GAME AND USERS, ONE FILE WITH {}
 
 /** A Database Readtest J unit 5.4 test class that tests that the database reads all files properly and initializes
  * the game, user and market objects appropriately.
@@ -31,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class DatabaseReadTest {
 
-    File Game, User, Market;
     String filePath = "DatabaseTestFiles/";
     String fileNameGameErrors = filePath + "GameErrors.json";
     String fileNameGameNonExistent = filePath + "GameNonExistent.json";
@@ -78,7 +67,7 @@ public class DatabaseReadTest {
     }
 
     
-    public ArrayList<Integer> unequalValues(ArrayList<Integer> search, ArrayList<Integer> all) {
+    public ArrayList<Integer> unequalIntegers(ArrayList<Integer> search, ArrayList<Integer> all) {
         
         ArrayList<Integer> diff = new ArrayList<Integer>();
         for (Integer i : search) {
@@ -141,7 +130,7 @@ public class DatabaseReadTest {
         }
         ArrayList<Integer> search = new ArrayList<>(Arrays.asList(1, 2, 5, 6, 7, 12, 13));
         assertTrue(allIds.containsAll(search));
-        assertEquals(new ArrayList<Integer>(), unequalValues(search, allIds));
+        assertEquals(new ArrayList<Integer>(), unequalIntegers(search, allIds));
     }
 
     @Test
@@ -218,21 +207,26 @@ public class DatabaseReadTest {
         assertEquals(emptyUsers, users);
     }
 
+
+    
+
     @Nested
     class UsersErrorsTest {
         List<AbstractUser> users;
+        List<Game> games;
         
         @BeforeEach
         void beforeEach() {
             ReadingJSON.setGameFileName(fileNameGameGood);
             ReadingJSON.setUserFileName(fileNameUserErrors);
-            List<Game> games = ReadingJSON.readGamesFile();
+            games = ReadingJSON.readGamesFile();
             users = ReadingJSON.readUsersFile(games);
         }
 
         @AfterEach
         void afterEach() {
-            
+            games = new ArrayList<>();
+            users = new ArrayList<>();
         }
 
         ArrayList<String> differentStrings(ArrayList<String> search, ArrayList<String> all) {
@@ -255,9 +249,14 @@ public class DatabaseReadTest {
 
         @Test
         void sizeTest() {
-            assertEquals(12, users.size());
+            assertEquals(4, games.size());
+            assertEquals(15, users.size());
         }
 
+        /** test to confirm that any user with invalid types: name too long, seller with inventory, etc are not added
+         * to the system.
+         * 
+         */
         @Test
         void equalityTest() {
             ArrayList<String> userNames= new ArrayList<String>();
@@ -267,19 +266,293 @@ public class DatabaseReadTest {
             
             ArrayList<String> correctUsers = new ArrayList<>(Arrays.asList("YesValve2", "YesValve23", "YesMadeo", 
                     "YesMadeoNoBuy", "YesNoTrans", "YesRegular", "YesGameNoExist", "YesCreditLimit", 
-                    "YesCreditInt","YesOneInv", "SameName", "YesInvWrongType"));
+                    "YesCreditInt","YesOneInv", "SameName", "YesInvWrongType", "S1", "A1", "YesInvWrong"));
             assertEquals(new ArrayList<>(), differentStrings(userNames, correctUsers));
         }
         
         @Test
-        void emptyInventory() {
+        void sellerInventory() {
             for (AbstractUser u : users) {
                 if (u instanceof SellUser) {
                     assertNull(u.getInventory());
                 }
             }
         }
+
+        @Test
+        void inventoryWrongType() {
+            AbstractUser user = null;
+            for (AbstractUser u : users) {
+                if (u.getUsername().equals("YesInvWrongType")) {
+                    user = u;
+                }
+            }
+            assertNotNull(user);
+            assertEquals(new ArrayList<>(), user.getInventory());
+        }
+
+        @Test
+        void checkInventory() {
+            AbstractUser user = null;
+            for (AbstractUser u : users) {
+                if (u.getUsername().equals("YesCreditInt")) {
+                    user = u;
+                }
+            }
+            assertNotNull(user);
+            assertEquals(999.0, user.getAccountBalance());
+            assertEquals(1, user.getInventory().size());
+            assertEquals("G2", user.getInventory().get(0).getName());
+        }
+
+        @Test
+        void inventoryZero() {
+            AbstractUser user = null;
+            for (AbstractUser u : users) {
+                if (u.getUsername().equals("YesInvWrong")) {
+                    user = u;
+                }
+            }
+            assertNotNull(user);
+            assertEquals(999.9, user.getAccountBalance());
+            assertEquals(0, user.getInventory().size());
+        }
+
+        @Test
+        void inventoryOneWrong() {
+            AbstractUser user = null;
+            for (AbstractUser u : users) {
+                if (u.getUsername().equals("YesOneInv")) {
+                    user = u;
+                }
+            }
+            assertNotNull(user);
+            assertEquals(2, user.getInventory().size());
+        }        
     }
-    
+
+
+    @Nested
+    class MarketBasicTest {
+        List<AbstractUser> users;
+        List<Game> games;
+
+        @BeforeEach
+        void beforeEach() {
+            System.setOut(new PrintStream(outContent));
+            ReadingJSON.setGameFileName(fileNameGameGood);
+            ReadingJSON.setUserFileName(fileNameUserGood);
+            games = ReadingJSON.readGamesFile();
+            users = ReadingJSON.readUsersFile(games);
+        }
+
+        @AfterEach
+        void afterEach() {
+            games = new ArrayList<>();
+            users = new ArrayList<>();
+            System.setOut(originalOut);
+        }
+
+        @Test
+        void sizeTest() {
+            assertEquals(4, games.size());
+            assertEquals(3, users.size());
+        }
+
+        @Test
+        public void testMarketNonExistent() {
+            ReadingJSON.setMarketFileName(fileNameMarketNonExistent);
+            Marketplace market = ReadingJSON.readMarketFile(games, users);
+            assertEquals("Market" + fileNotFoundError + "market" + fileErrorEnd, outContent.toString());
+            assertFalse(market.getAuctionSale());
+            assertEquals(new HashMap<>(), market.getGamesOnSale());
+        }
+
+        @Test
+        public void testMarketEmpty() {
+            ReadingJSON.setMarketFileName(fileNameMarketEmpty);
+            Marketplace market = ReadingJSON.readMarketFile(games, users);
+            assertNotNull(market);
+            assertFalse(market.getAuctionSale());
+            assertEquals(new HashMap<>(), market.getGamesOnSale());
+            assertEquals("Market" + fileFormatError + "market" + fileErrorEnd, outContent.toString());
+        }
+        
+
+        @Test
+        public void testMarketFormat() {
+            ReadingJSON.setMarketFileName(fileNameMarketFormat);
+            Marketplace market = ReadingJSON.readMarketFile(games, users);
+            assertEquals("Market" + fileFormatError + "market" + fileErrorEnd, outContent.toString());
+            assertFalse(market.getAuctionSale());
+            assertEquals(new HashMap<>(), market.getGamesOnSale());
+        }
+
+        @Test
+        public void testMarketNoAuction() {
+            ReadingJSON.setMarketFileName(fileNameMarketNoAuction);
+            Marketplace market = ReadingJSON.readMarketFile(games, users);
+            
+            assertNotNull(market);
+            assertFalse(market.getAuctionSale());
+        }
+
+        @Test
+        public void testMarketAuctionWrong() {
+            ReadingJSON.setMarketFileName(fileNameMarketAuctionWrong);
+            Marketplace market = ReadingJSON.readMarketFile(games, users);
+
+            assertNotNull(market);
+            assertFalse(market.getAuctionSale());
+            assertEquals(2, market.getGamesOnSale().size());
+
+            ArrayList<String> sellers = new ArrayList<String>(market.getGamesOnSale().keySet());
+            assertEquals(2, sellers.size());
+        }
+
+        @Test
+        public void testMarketNoUID() {
+            ReadingJSON.setMarketFileName(fileNameMarketNoUID);
+            Marketplace market = ReadingJSON.readMarketFile(games, users);
+            assertNotNull(market);
+            assertTrue(market.getAuctionSale());
+            assertEquals(0, market.getUid());
+            assertEquals(2, market.getGamesOnSale().size());
+
+            ArrayList<Game> gamesNames = new ArrayList<Game>();
+            for (String s : market.getGamesOnSale().keySet()) {
+                gamesNames.addAll(market.getGamesOnSale().get(s));
+            }
+            assertEquals(3, gamesNames.size());
+        }
+
+        @Test
+        public void testMarketGood() {
+            ReadingJSON.setMarketFileName(fileNameMarketGood);
+            Marketplace market = ReadingJSON.readMarketFile(games, users);
+            assertNotNull(market);
+            assertFalse(market.getAuctionSale());
+            assertEquals(2, market.getGamesOnSale().size());
+            assertEquals(4, market.getUid());
+
+            ArrayList<Game> gamesNames = new ArrayList<Game>();
+            for (String s : market.getGamesOnSale().keySet()) {
+                gamesNames.addAll(market.getGamesOnSale().get(s));
+            }
+            assertEquals(3, gamesNames.size());
+        }
+        
+        
+    }
+
+    @Nested
+    class MarketErrorsTest {
+        List<AbstractUser> users;
+        List<Game> games;
+        Marketplace market;
+        
+
+        @BeforeEach
+        void beforeEach() {
+            ReadingJSON.setGameFileName(fileNameGameGood);
+            ReadingJSON.setUserFileName(fileNameUserGood);
+            ReadingJSON.setMarketFileName(fileNameMarketErrors);
+            games = ReadingJSON.readGamesFile();
+            users = ReadingJSON.readUsersFile(games);
+            market = ReadingJSON.readMarketFile(games, users);
+        }
+
+        @AfterEach
+        void afterEach() {
+            games = new ArrayList<>();
+            users = new ArrayList<>();
+            market = new Marketplace();
+        }
+
+        @Test
+        void sizeTest() {
+            assertEquals(4, games.size());
+            assertEquals(3, users.size());
+        }
+        
+        @Test
+        public void testMarketBasic() {
+            ReadingJSON.setMarketFileName(fileNameMarketGood);
+            Marketplace market = ReadingJSON.readMarketFile(games, users);
+            assertNotNull(market);
+            assertEquals(2, market.getGamesOnSale().size());
+            assertEquals(4, market.getUid());
+        }
+
+        @Test
+        public void testMarketDuplicateSeller() {
+            ReadingJSON.setMarketFileName(fileNameMarketGood);
+            Marketplace market = ReadingJSON.readMarketFile(games, users);
+            assertNotNull(market);
+
+            ArrayList<Game> userGames = market.getGamesOnSale().get("S1");
+            ArrayList<Integer> gameIDS = new ArrayList<Integer>();
+            ArrayList<Integer> correctIDS = new ArrayList<Integer>(Arrays.asList(1, 3));
+            for (Game g : userGames) {
+                gameIDS.add(g.getUniqueID());
+            }
+            
+            assertEquals(2, userGames.size());
+            assertEquals(new ArrayList<>(), unequalIntegers(gameIDS, correctIDS));
+        }
+
+        @Test
+        public void testMarketDuplicateID() {
+            ReadingJSON.setMarketFileName(fileNameMarketGood);
+            Marketplace market = ReadingJSON.readMarketFile(games, users);
+            assertNotNull(market);
+
+            ArrayList<Game> userGames = market.getGamesOnSale().get("A1");
+            ArrayList<Integer> gameIDS = new ArrayList<Integer>();
+            ArrayList<Integer> correctIDS = new ArrayList<Integer>(Collections.singletonList(2));
+            for (Game g : userGames) {
+                gameIDS.add(g.getUniqueID());
+            }
+
+            assertEquals(1, userGames.size());
+            assertEquals(new ArrayList<>(), unequalIntegers(gameIDS, correctIDS));
+        }
+
+        @Test
+        public void testMarketNoExistGame() {
+            ReadingJSON.setMarketFileName(fileNameMarketGood);
+            Marketplace market = ReadingJSON.readMarketFile(games, users);
+            assertNotNull(market);
+
+            ArrayList<Game> userGames = market.getGamesOnSale().get("A1");
+            ArrayList<Integer> gameIDS = new ArrayList<Integer>();
+            ArrayList<Integer> correctIDS = new ArrayList<Integer>(Collections.singletonList(2));
+            for (Game g : userGames) {
+                gameIDS.add(g.getUniqueID());
+            }
+
+            assertEquals(1, userGames.size());
+            assertEquals(new ArrayList<>(), unequalIntegers(gameIDS, correctIDS));
+        }
+
+        @Test
+        public void testMarketBuyUser() {
+            ReadingJSON.setMarketFileName(fileNameMarketGood);
+            Marketplace market = ReadingJSON.readMarketFile(games, users);
+            assertNotNull(market);
+
+            assertNull(market.getGamesOnSale().get("B1"));
+        }
+
+        @Test
+        public void testMarketNonUser() {
+            ReadingJSON.setMarketFileName(fileNameMarketGood);
+            Marketplace market = ReadingJSON.readMarketFile(games, users);
+            assertNotNull(market);
+
+            assertNull(market.getGamesOnSale().get("A2"));
+        }
+        
+    }
     
 }

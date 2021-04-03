@@ -183,7 +183,7 @@ public class DeserializeMarketplace implements JsonDeserializer<Marketplace> {
 
         Set<String> sellers = uniqueSellers.keySet(); // get all sellers
         HashMap<String, ArrayList<Game>> market = new HashMap<String, ArrayList<Game>>();
-
+        
         for (String s : sellers) {
 //            AbstractUser user = findUser(s); //add this if hashmap <user obj, list.
             JsonArray gameIDList = uniqueSellers.get(s).getAsJsonArray();
@@ -191,6 +191,7 @@ public class DeserializeMarketplace implements JsonDeserializer<Marketplace> {
             JsonArray listOfIntegers = getIntegersFromObject(gameIDList);
 //            System.out.println("list of integers" + listOfIntegers);
             ArrayList<Game> gamesSoldByUSer = gameIDsToGames(s, listOfIntegers);
+            System.out.println(s + gamesSoldByUSer);
             market.put(s, gamesSoldByUSer);
         }
         

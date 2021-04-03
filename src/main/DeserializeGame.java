@@ -96,7 +96,6 @@ public class DeserializeGame implements JsonDeserializer<Game> {
                             JsonDeserializationContext context) throws JsonParseException {
 
         JsonObject jsonObject = json.getAsJsonObject();
-
         if (!correctTypes(jsonObject)) { //check that all values exist and are of correct type
             return null;
         }
