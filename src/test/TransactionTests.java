@@ -1,7 +1,7 @@
 package test;
 
 import main.*;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import transactions.*;
@@ -77,9 +77,9 @@ public class TransactionTests {
 
         market = new Marketplace();
         market.addNewSeller(sellUser1.getUsername());
-        market.gamesOnSale.get(sellUser1.getUsername()).add(csgo);
+        market.getGamesOnSale().get(sellUser1.getUsername()).add(csgo);
         market.addNewSeller(fullStandardUser1.getUsername());
-        market.gamesOnSale.get(fullStandardUser1.getUsername()).add(valorant);
+        market.getGamesOnSale().get(fullStandardUser1.getUsername()).add(valorant);
     }
 
     @AfterEach
