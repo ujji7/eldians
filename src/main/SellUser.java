@@ -38,17 +38,19 @@ public class SellUser extends AbstractUser {
     /**
      * Sends Games to a User if they can accept this Game
      *
-     * @param game a Game to be gifted
+     * @param INgame a Game to be gifted
      * @param reciever person who will be recieving the Gift
      * @param market the current Market
      */
     @Override
-    public void gift(Game game, AbstractUser reciever, Marketplace market){
+    public void gift(Game INgame, AbstractUser reciever, Marketplace market){
         // Reciever is a Sell user
         if (reciever instanceof SellUser){
             System.out.println("ERROR: \\< Failed Constraint: Sell User can not accept any gifts. >//");
         }
         else{
+            // deep-copying the Game to work with
+            Game game = this.gameCopy(INgame);
             String gameName = game.getName();
             // Check if the Receiver has the game up for Sale on the Market
             boolean inRecMar = !market.checkSellerSellingGame(reciever.getUsername(), gameName);
@@ -64,6 +66,9 @@ public class SellUser extends AbstractUser {
                     String recTran = reciever.getUsername() + " has received " + gameName + " from " + this.getUsername();
                     this.addTranHis(senderTran);
                     reciever.addTranHis(recTran);
+                    reciever.addGame(game);
+                    System.out.println(senderTran);
+                    System.out.println(recTran);
                 }
                 // Sender doesn't have the game
                 else{
@@ -82,11 +87,13 @@ public class SellUser extends AbstractUser {
     /**
      * Checks and removes the game for the User
      *
-     * @param game The game being removed
+     * @param INgame The game being removed
      * @param market The current market
      */
     @Override
-    public void removegame(Game game, Marketplace market){
+    public void removegame(Game INgame, Marketplace market){
+        // deep-copying the Game to work with
+        Game game = this.gameCopy(INgame);
         String currGame = game.getName();
         // check if the User is Selling the Game on the Market
         boolean iAmOffering = market.checkSellerSellingGame(this.getUsername(), currGame);
@@ -95,6 +102,7 @@ public class SellUser extends AbstractUser {
             market.removeGame(this.getUsername(), currGame);
             String tran = game.getName()+ " was removed from the User's offering on the Market.";
             this.addTranHis(tran);
+            System.out.println(tran);
         }
         // else printing out the error from Market
     }
