@@ -30,43 +30,45 @@ public class DatabaseController {
     }
 
     public void writeMarket(Marketplace market) throws IOException {
+        flush(fileMarketplace);
         GsonBuilder invBuilder = new GsonBuilder();
-        invBuilder.registerTypeAdapter(Game.class, new userSerializer()).setPrettyPrinting();
+        invBuilder.registerTypeAdapter(Game.class, new gameSerializer()).setPrettyPrinting();
         Gson user = invBuilder.create();
         writeData(fileMarketplace, user.toJson(market));
-
+        close(fileMarketplace);
     }
 
     public void writeUser(ArrayList<AbstractUser> userList) throws IOException {
         try {
+            ArrayList<String> data = new ArrayList<String>();
             flush(fileUser);
             for(AbstractUser user: userList) {
                 if (user instanceof SellUser) {
-                    writeSellStandard(user);
+                    GsonBuilder sellBuilder = new GsonBuilder();
+                    sellBuilder.registerTypeAdapter(SellUser.class, new sellerSerializer()).setPrettyPrinting();
+                    Gson sellSer = sellBuilder.create();
+                    data.add(sellSer.toJson(user));
                 } else {
                     GsonBuilder invBuilder = new GsonBuilder();
-                    invBuilder.registerTypeAdapter(Game.class, new userSerializer()).setPrettyPrinting();
+                    invBuilder.registerTypeAdapter(Game.class, new gameSerializer()).setPrettyPrinting();
                     Gson userSer = invBuilder.create();
-                    writeData(fileUser, userSer.toJson(user));
+                    data.add(userSer.toJson(user));
+
                 }
             }
+            writeData(fileUser, gson.toJson(data));
             close(fileUser);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void writeSellStandard(AbstractUser user) throws IOException{
-        try{
-            writeData(fileUser, gson.toJson(user));
-        } catch (IOException e){
-            e.printStackTrace();
-        }
-    }
     
     public void writeGame(ArrayList<Game> gameList) throws IOException {
         try {
+            flush(fileGame);
             writeData(fileGame, gson.toJson(gameList));
+            close(fileGame);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -88,9 +90,9 @@ public class DatabaseController {
 
 }
 
-class userSerializer implements JsonSerializer<Game>{
+class gameSerializer implements JsonSerializer<Game> {
     @Override
-    public JsonElement serialize(Game game, Type type, JsonSerializationContext context){
+    public JsonElement serialize(Game game, Type type, JsonSerializationContext context) {
         JsonObject object = new JsonObject();
         object.addProperty("uniqueID", game.getUniqueID());
 //        object.addProperty("username", usr.username);
@@ -103,6 +105,17 @@ class userSerializer implements JsonSerializer<Game>{
 //        }
 //        object.addProperty("inventory", String.valueOf(inv));
 //        object.addProperty("transactionHistory", String.valueOf(usr.transactionHistory));
+        return object;
+    }
+}
+
+class sellerSerializer implements JsonSerializer<SellUser> {
+    @Override
+    public JsonElement serialize(SellUser seller, Type type, JsonSerializationContext context) {
+        JsonObject object = new JsonObject();
+        object.addProperty("username", seller.getUsername());
+        object.addProperty("accountBalance", seller.getAccountBalance());
+        object.addProperty("type", seller.getType());
         return object;
     }
 }
