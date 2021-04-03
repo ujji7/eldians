@@ -542,15 +542,9 @@ public abstract class AbstractUser {
     
     /** Prints that the user cannot implement an auction sale.
      */
-<<<<<<< HEAD
-    public void auctionSale(double amount) {
-        System.out.println("ERROR: \\< Failed Constraint: Current User: " + this.getUsername() +
-                "is not allowed to toggle an auction sale. >//");
-=======
     public void auctionSale() {
-        System.out.println(this.getUsername() + "cannot implement an auction sale.");
-    }
->>>>>>> client-Req
+       System.out.println("ERROR: \\< Failed Constraint: Current User: " + this.getUsername() +
+                "is not allowed to toggle an auction sale. >//");
 
     /**
      * For a valid existing game object create and return a deep copy of the Game
