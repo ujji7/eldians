@@ -1,27 +1,27 @@
 [{ "username": "YesValve2",
   "type": "BS",
   "accountBalance": 105.56,
-  "inventory": [10057],
+  "inventory": [1],
   "transactionHistory": ["Bought Counter-Strike from Madeo"]
 },
   { "username": "NoMadeoBuy",
     "type": "SS",
     "accountBalance": 105.50,
-    "inventory": [10057],
+    "inventory": [1],
     "transactionHistory": ["Bought Counter-Strike from Valve"]
   },
 
   { "username": "NoValve",
     "type": "BS",
     "accountBalance": 105.56,
-    "inventory": [10067],
+    "inventory": [2],
     "transactioHistory": ["Bought Counter-Strike from Madeo"]
   },
 
   { "username": "YesValve23",
     "type": "BS",
     "accountBalance": 105.56,
-    "inventory": [10057, 10067],
+    "inventory": [1, 2],
     "transactionHistory": ["Bought Counter-Strike from Valve", "Bought Half-Life from Valve"]
   },
 
@@ -39,23 +39,16 @@
     "transactionHistory": []
   },
 
-  { "username": "YesValve2",
-    "type": "BS",
-    "accountBalance": 105.56,
-    "inventory": [10057],
-    "transactionHistory": ["No, because same username. Bought Half-Life from Valve"]
-  },
-
   { "username": "YesNoTrans",
     "type": "BS",
     "accountBalance": 105.56,
-    "inventory": [10067],
+    "inventory": [2],
     "transactionHistory": []
   },
   { "username": "YesRegular",
     "type": "BS",
     "accountBalance": 105.56,
-    "inventory": [10057],
+    "inventory": [1],
     "transactionHistory": ["Bought Half-Life from Valve"]
   },
   { "username": "YesGameNoExist",
@@ -71,7 +64,7 @@
     "inventory": [345],
     "transactionHistory": []
   },
-  { "username": "NoInvWrongType",
+  { "username": "YesInvWrongType",
     "type": "AA",
     "accountBalance": 999.5,
     "inventory": ["hi there"],
@@ -87,46 +80,46 @@
   { "username": "YesCreditLimit",
     "type": "BS",
     "accountBalance": 999999.99,
-    "inventory": [10067],
+    "inventory": [2],
     "transactionHistory": []
   },
   { "username": "NoCreditOver",
     "type": "BS",
     "accountBalance": 1000000.00,
-    "inventory": [10067],
+    "inventory": [2],
     "transactionHistory": []
   },
   { "username": "YesCreditInt",
     "type": "BS",
     "accountBalance": 999,
-    "inventory": [10067],
+    "inventory": [2],
     "transactionHistory": []
   },
-  {"username": "YesValve",
+  {"username": "NoValve",
     "type": "SS",
     "accountBalance": 105.56,
-    "inventory": [10067],
+    "inventory": [2],
     "transactionHistory": ["Sold Counter-Strike from Madeo"]
   },
   { "username": "YesOneInv",
     "type": "BS",
     "accountBalance": 99.5,
-    "inventory": [10067, 10057, "hi there"],
+    "inventory": [2, 1, "hi there"],
     "transactionHistory": []
   },
   { "type": "BS",
     "accountBalance": 1000000.00,
-    "inventory": [10067],
+    "inventory": [2],
     "transactionHistory": []
   },
   { "username": "NoType",
     "accountBalance": 1000000.00,
-    "inventory": [10067],
+    "inventory": [2],
     "transactionHistory": []
   },
   { "username": "NoBal",
     "type": "BS",
-    "inventory": [10067],
+    "inventory": [2],
     "transactionHistory": []
   },
   { "username": "NoInv",
@@ -137,6 +130,20 @@
   { "username": "NoTrans",
     "type": "BS",
     "accountBalance": 1000000.00,
-    "inventory": [10067]
+    "inventory": [2]
+  },
+
+  { "username": "SameName",
+    "type": "BS",
+    "accountBalance": 105.56,
+    "inventory": [1],
+    "transactionHistory": ["Bought Half-Life from Valve"]
+  },
+
+  { "username": "SameName",
+    "type": "BS",
+    "accountBalance": 105.56,
+    "inventory": [1],
+    "transactionHistory": ["Bought Half-Life from Valve"]
   }
 ]

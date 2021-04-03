@@ -46,7 +46,7 @@
     "supplierID": "Valve",
     "uniqueID": 5,
     "discount": 85,
-    "onHold": true
+    "onHold": false
   },
   {"name": "YesHalf-LifeAfterBob" ,
     "price": 23.45,
@@ -60,6 +60,14 @@
     "supplierID": "YesValve",
     "uniqueID": 7,
     "discount": 90,
+    "onHold": true
+  },
+  {
+    "name": "NoHalfNonUnique" ,
+    "price": 23.45,
+    "supplierID": "Valve",
+    "uniqueID": 7,
+    "discount": 0.00,
     "onHold": true
   },
   {"name": "NoHalfDiscHigh" ,
@@ -83,14 +91,7 @@
     "disc": 0,
     "onHold": true
   },
-  {
-    "name": "NoHalfNonUnique" ,
-    "price": 23.45,
-    "supplierID": "Valve",
-    "uniqueID": 11,
-    "discount": 0.00,
-    "onHold": true
-  },
+  
   { "name": "YesDiffSell" ,
     "price": 23.45,
     "supplierID": "Bob",

@@ -34,7 +34,7 @@ public abstract class AbstractUser {
     protected String username;
     protected String type;
     protected double accountBalance = 0;
-    protected ArrayList<Game> inventory = new ArrayList<Game>();
+    protected ArrayList<Game> inventory;
     protected double newFunds = 0;
     public ArrayList<String> transactionHistory = new ArrayList<String>();
     protected static final double MAXFUNDS = 999999.99f;
