@@ -24,14 +24,15 @@ It should work now.\
 File > Settings > Editor > General > Scroll down to On Save \
 Ensure that "Remove trailing spaces on" is unchecked.
 
-DATABASE READING: Done using GSON library that is used to convert Java Objects into a JSON representation and vice versa:
+## DATABASE READING/WRITING: 
+Done using GSON library that is used to convert Java Objects into a JSON representation and vice versa:
 There must be 3 files, one for the game objects, one for the user objects, and one for 
-the Marketplace object. Indenting and new lines do not matter for the files
+the Marketplace object. Indenting and new lines do not matter for the files, as json 
 
 games file must be named: games.json, users file must be named users.json and marketplace file must
 be name market.json
 
-GAMES FILE: \
+### GAMES FILE: \
 Must be in the given format, where the file begins with a '[' and ends with a ']': \
 [{
 "name": "Game1",
@@ -68,7 +69,7 @@ If any game object does not follow the specifications, it will not be added to t
 If the entire game file does not follow the specified format, aka an empty file, a file with just "," 
 would lead to the creation of an empty list of games.
 
-USERS FILE:
+### USERS FILE:
 Must be in the given format, where the file begins with a '[' and ends with a ']':
 
 [{
@@ -119,12 +120,13 @@ If any user object does not follow the specifications, it will not be added to t
 If the entire users file does not follow the specified format, aka an empty file, a file with just ","
 would lead to the creation of an empty list of users.
 
-MARKETPLACE FILE: 
+### MARKETPLACE FILE: 
 This is a list of each seller, and the games they are selling
 
 Must be in the given format, where the file begins with a '{' and ends with a '}':
 
 {"auctionSale": false,
+"Uid": 0,
 "gamesOnSale": {
 "Alice": [{"id": 1 }, {"id": 3 }],
 "admin1": [{"id": 2 }, {"id": 101 }
@@ -133,6 +135,10 @@ Must be in the given format, where the file begins with a '{' and ends with a '}
 Where:
 * "auctionSale" is a boolean telling whether the auction sale is on (true) or off (false)
   * if no "auctionSale" attribute exists in the file, or it is not a boolean, it will be defaulted to false
+* "Uid" is a integer telling the correct unique id in the database
+    * As more games are added, this Uid increases to allow for new games with unique ids to be created.
+    * If there is no Uid, or it is not an integer, or it is <0, it will be default set to 0
+    
 * "gamesOnSale" is the actual marketplace, consisting of usernames which correspond to a list of 
 game unique ids
   * if "gamesOnSale" does not exist or does not follow the specified format, an empty marketplace will be created

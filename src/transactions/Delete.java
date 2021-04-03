@@ -65,11 +65,11 @@ public class Delete implements Transaction {
                     "have permissions");
             return login;
         }
-        if(!(delete instanceof SellUser)) {
-            for (Game game : (delete.getInventory())) {
-                games.remove(game);
-            }
-        }
+//        if(!(delete instanceof SellUser)) {
+//            for (Game game : (delete.getInventory())) {
+//                games.remove(game);
+//            }
+//        }
         if(!(delete instanceof BuyUser)) {
             market.getGamesOnSale().remove(this.username);
         }
