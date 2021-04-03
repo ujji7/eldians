@@ -23,8 +23,9 @@ public class BuyUser extends AbstractUser {
      */
     //THIS DOES NOT FOLLOW THE RIGHT FORMAT
     @Override
-    public void sell(Game game, Marketplace market){
+    public boolean sell(Game game, Marketplace market){
         System.out.println("ERROR: \\ < Failed Constraint: "+ this.username + " does not have the ability to sell games.");
+        return false;
     }
 
 

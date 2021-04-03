@@ -1,12 +1,9 @@
 package test;
 //NEVER CHECKS NEGATIVE PRICES
-import jdk.jfr.StackTrace;
 import main.*;
-
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.AfterEach;
-
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -140,7 +137,7 @@ public class AbstractUserTest {
 
     @Test
     public void testSellConstraintsZeroPrice() {
-        Game monopolyHigh = new Game("Monopoly2.0", 0.0, "boots", 2, 00.0);
+        Game monopolyHigh = new Game("Monopoly2.0", 0.0, "boots", 2, 0.00);
         sellUser1.sell(monopolyHigh, market);
         String result1 = "Seller: boots added to the market";
         String result = "Game: Monopoly2.0" + " is now being sold by " + "boots" + " for $" +

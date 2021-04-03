@@ -34,7 +34,7 @@ public abstract class AbstractUser {
     protected String username;
     protected String type;
     protected double accountBalance = 0;
-    protected ArrayList<Game> inventory;
+    protected ArrayList<Game> inventory = new ArrayList<Game>();
     protected double newFunds = 0;
     public ArrayList<String> transactionHistory = new ArrayList<String>();
     protected static final double MAXFUNDS = 999999.99f;
@@ -315,14 +315,15 @@ public abstract class AbstractUser {
      * @param game Game object being sold to the market
      * @param market Marketplace that will sell this game
      */
-    public void sell(Game game, Marketplace market){
+    public boolean sell(Game game, Marketplace market){
 
         // if game doesn't follow constraints end here
-        if (!this.sellConstraints(game)) return;
+        if (!this.sellConstraints(game)) return false;
         
         if (this.gameInInventory(game)) {
             System.out.println("ERROR: \\ < Failed Constraint: " + this.getUsername() + " could not sell " +
                     game.getName() + " as they have bought this exact game. >");
+            return false;
         }
 
         HashMap<String, ArrayList<Game>> map = market.getGamesOnSale(); // var for less typing
@@ -337,13 +338,14 @@ public abstract class AbstractUser {
 
         } else {
             market.addNewSeller(this.username);
-
+            map.get(this.username).add(game);
             // Report to console and transactionHistory
             this.transactionHistory.add("User: " + this.username + " is now selling " + game.getName() +
                     " for " + game.getPrice());
             System.out.println("Game: " + game.getName() + " is now being sold by " + this.getUsername() + " for $" +
                     game.getPrice() + " at a " + game.getDiscount()+"% discount, will be available for purchase tomorrow.");
         }
+        return true;
     }
 
     /**

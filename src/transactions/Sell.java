@@ -64,11 +64,11 @@ public class Sell implements Transaction {
         Game newGame = new Game(this.gameName, this.salePrice, login.getUsername(), uid, this.discount);
 
         // Sell the game
-        login.sell(newGame, market);
+        boolean worked = login.sell(newGame, market);
 
 
         // Add game to games list
-        games.add(newGame);
+        if (worked) games.add(newGame);
 
         return login;
     }

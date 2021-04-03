@@ -49,7 +49,7 @@ public class RemoveGame implements Transaction {
             System.out.println("ERROR: < User: " + this.ownerName + " does not exist in database. >");
         } else if (game == null) {
             System.out.println("ERROR: < Game: " + this.gameName + " does not exist in database. >");
-        } else if (owner instanceof AdminUser) {
+        } else if (login instanceof AdminUser) {
             ((AdminUser) login).removegame(game, owner, market);
         } else {
             login.removegame(game, market);

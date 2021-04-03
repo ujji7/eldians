@@ -61,7 +61,8 @@ public class Login implements Transaction{
         }
         if ((log instanceof main.SellUser && !this.type.equals("SS")) ||
                 (log instanceof main.BuyUser && !this.type.equals("BS")) ||
-                (log instanceof main.FullStandardUser && !this.type.equals("FS"))) {
+                (log instanceof main.FullStandardUser && !this.type.equals("FS")) ||
+                (log instanceof main.AdminUser && !this.type.equalsIgnoreCase("AA"))) {
             System.out.println("WARNING: < User logging in is not of correct type, proceeding with login. >");
         }
 

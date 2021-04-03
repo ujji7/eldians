@@ -55,7 +55,8 @@ public class Logout implements Transaction{
 
         if ((login instanceof main.SellUser && !this.type.equals("SS")) ||
                 (login instanceof main.BuyUser && !this.type.equals("BS")) ||
-                (login instanceof main.FullStandardUser && !this.type.equals("FS"))) {
+                (login instanceof main.FullStandardUser && !this.type.equals("FS")) ||
+                (login instanceof  main.AdminUser && !this.type.equals("AA"))) {
             System.out.println("WARNING: < User logging out is not of correct type, proceeding with loggout. >");
         }
 
