@@ -412,16 +412,18 @@ public abstract class AbstractUser {
      * Sends Games to a User if they can accept this Game
      * This method is used by Admin and Full-Standard User
      *
-     * @param game a Game to be gifted
+     * @param INgame a Game to be gifted
      * @param reciever person who will be recieving the Gift
      * @param market the current Market
      */
-    public void gift(Game game, AbstractUser reciever, Marketplace market){
+    public void gift(Game INgame, AbstractUser reciever, Marketplace market){
         // Reciever is a Sell user
         if (reciever instanceof SellUser){
             System.out.println("ERROR: \\< Failed Constraint: Sell User can not accept any gifts. >");
         }
         else{
+            // deep-copying the Game to work with
+            Game game = this.gameCopy(INgame);
             String gameName = game.getName();
             // check if the Receiver has the game in their inventory
             boolean inRecInv = !reciever.gameInInventory(game);
@@ -484,10 +486,12 @@ public abstract class AbstractUser {
      * Checks and removes the game for the User
      * Method is used by Admin and Full-Standard
      *
-     * @param game The game being removed
+     * @param INgame The game being removed
      * @param market The current market
      */
-    public void removegame(Game game, Marketplace market){
+    public void removegame(Game INgame, Marketplace market){
+        // deep-copying the Game to work with
+        Game game = this.gameCopy(INgame);
         String currGame = game.getName();
         // check if the User is Selling the Game on the Market
         boolean iAmOffering = market.checkSellerSellingGame(this.getUsername(), currGame);
@@ -521,10 +525,20 @@ public abstract class AbstractUser {
     }
     
     /** Prints that the user cannot implement an auction sale.
-     * @param amount amount by which to reduce prices of games by.
      */
-    public void auctionSale(double amount) {
+    public void auctionSale() {
         System.out.println(this.getUsername() + "cannot implement an auction sale.");
+    }
+
+    /**
+     * For a valid existing game object create and return a deep copy of the Game
+     *
+     * @param game Game name
+     * @return a deep copied Game
+     */
+    private Game gameCopy(Game game){
+        Game gameCopy = new Game(game.getName(), game.getPrice(), game.getSupplierID(), game.getUniqueID(), game.getDiscount())
+        return gameCopy;
     }
 
 

@@ -4,24 +4,68 @@
 ## Part 1
 ### Daily Transaction Text Files (DTTF):
 ####Requirements:
+- Must be of .txt format
+- Needs to be stored in the same folder that is the root of the project
+
 
 ####Clarifications:
 
-- does each transaction file count as a day
-- 
-    - 
+- Q) does each transaction file count as a day?
+    - Yes each transaction file counts as a day 
+- Q) Invalid format for a transaction in the file is considered a fatal error?
+    -  Yes
+
     
 ###Transactions:
 - we'll need to save and load each user to and from a .txt
     - will have to hold every attribute
     
 ##Sell:
-- the price is the price after discount percentage if present
+####Requirements:
+- The transaction requires Game name the price and the discount to be offered for the game
+- Game Name: an alphanumeric String of max length of 25
+- Game price: a positive 2dp significant double that can not exceed 999.99
+- Discount: a positive 2dp significant float that can exceed 90.00
+
+####Clarifications:
+- Q) Can an admin user put up a game for other users?
+    - No
+    
+- Q) Can a full-Standard/Admin user put up a Game for sale that is in their inventory?
+    - No
+
+- Q) Can I have multiple copies of the same Game with different prices/discounts up for sale? 
+    - No, you can only have a single copy up for Sale
+    
+- Q) Do you execute the transaction, if the Seller's name is not provided or does not match the current logged-in User's name?
+    - Yes, display an error but execute the transaction.
 
 ##Buy:
-- needs a game name and a seller name
+####Requirements:
+- The transaction requires a game name and a seller name
+- Game Name: an alphanumeric String of max length of 25
+- Seller, a valid Seller selling the game
+
+
+####Clarifications:
+- Q) Can an admin user buy a game on behalf of other users?
+    - No
+
+- Q) Can a full-Standard/Admin user buy a Game that they are selling?
+    - No
+    
+- Q) Can I buy same game titles from different Sellers?
+    - No
+
+- Q) Do you execute the transaction, if the Buyer's name is not provided or does not match the current logged-in User's name?
+    - Yes, display an error but execute the transaction.
 
 ##Refund:
+####Requirements:
+
+####Clarifications:
+
+
 
 ##AddCredit:
 -limit of 1000 per day
