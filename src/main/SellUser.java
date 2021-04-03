@@ -25,7 +25,13 @@ public class SellUser extends AbstractUser {
 
     @Override
     public void buy(AbstractUser seller, Game game, boolean saleToggle, Marketplace market){
-        System.out.println(this.username + " cannot buy games.");
+        System.out.println("ERROR: \\< Failed Constraint: Sell User: "+ this.username + " cannot buy games.>//");
+    }
+
+    @Override
+    public ArrayList<Game> getInventory(){
+        System.out.println("ERROR: \\< Failed Constraint: Sell User does not have inventory. >//");
+        return null;
     }
 
 
