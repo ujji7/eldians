@@ -1,0 +1,145 @@
+[
+  {
+    "name": "YesCounter-Strike" ,
+    "price": 20.99,
+    "supplierID": "Valve",
+    "uniqueID": 1,
+    "discount": 10.06,
+    "onHold": true
+  },
+  {
+    "name": "YesHalf-Life" ,
+    "price": 23.45,
+    "supplierID": "Valve",
+    "uniqueID": 2,
+    "discount": 0.00,
+    "onHold": true
+  },
+
+  {"named": "NoHalf-LifeHeaderWrong" ,
+    "price": 23.45,
+    "supplierID": "Valve",
+    "uniqueID": 3,
+    "discount": 0,
+    "onHold": true
+  },
+
+  {"name": "NoHalf-LifePriceType" ,
+    "price": "two",
+    "supplierID": "Valve",
+    "uniqueID": 9,
+    "discount": 20,
+    "onHold": true
+  },
+  {
+    "name": "NoHalf-LifeTooLong12345678901223455689" ,
+    "price": 23.45,
+    "supplierID": "Valve",
+    "uniqueID": 4,
+    "discount": 89.0,
+    "onHold": true
+  },
+
+  {"bob": "",
+    "name": "YesHalf-LifeButBobInFront" ,
+    "price": 23.45,
+    "supplierID": "Valve",
+    "uniqueID": 5,
+    "discount": 85,
+    "onHold": false
+  },
+  {"name": "YesHalf-LifeAfterBob" ,
+    "price": 23.45,
+    "supplierID": "Valve",
+    "uniqueID": 6,
+    "discount": 85,
+    "onHold": true
+  },
+  {"name": "YesHalfDiscLimit" ,
+    "price": 23.45,
+    "supplierID": "YesValve",
+    "uniqueID": 7,
+    "discount": 90,
+    "onHold": true
+  },
+  {
+    "name": "NoHalfNonUnique" ,
+    "price": 23.45,
+    "supplierID": "Valve",
+    "uniqueID": 7,
+    "discount": 0.00,
+    "onHold": true
+  },
+  {"name": "NoHalfDiscHigh" ,
+    "price": 23.45,
+    "supplierID": "Valve",
+    "uniqueID": 8,
+    "discount": 90.1,
+    "onHold": true
+  },
+  {"name": "NoDiscount" ,
+    "price": 23.45,
+    "supplierID": "Valve",
+    "uniqueID": 10,
+    "disc": 0,
+    "onHold": true
+  },
+  {"name": "NoHalf-LifePriceNull" ,
+    "price": null,
+    "supplierID": "Valve",
+    "uniqueID": 11,
+    "disc": 0,
+    "onHold": true
+  },
+  
+  { "name": "YesDiffSell" ,
+    "price": 23.45,
+    "supplierID": "Bob",
+    "uniqueID": 12,
+    "discount": 0.00,
+    "onHold": true
+  },
+  { "name": "YesDiffSell" ,
+    "price": 23.45,
+    "supplierID": "Alice",
+    "uniqueID": 13,
+    "discount": 0.00,
+    "onHold": true
+  },
+  { "price": 23.45,
+    "supplierID": "Bob",
+    "uniqueID": 14,
+    "discount": 0.00,
+    "onHold": true
+  },
+  {"name": "NoHalf-LifeNoSeller" ,
+    "price": "two",
+    "uniqueID": 15,
+    "discount": 20,
+    "onHold": true
+  },
+  {"name": "NoPrice" ,
+    "supplierID": "Valve",
+    "uniqueID": 16,
+    "discount": 20,
+    "onHold": true
+  },
+  { "name": "NoID" ,
+    "price": 23.45,
+    "supplierID": "Bob",
+    "discount": 0.00,
+    "onHold": true
+  },
+  { "name": "NoDiscount" ,
+    "price": 23.45,
+    "supplierID": "Bob",
+    "uniqueID": 17,
+    "onHold": true
+  },
+  { "name": "NoHold" ,
+    "price": 23.45,
+    "supplierID": "Bob",
+    "uniqueID": 18,
+    "discount": 0.00
+  }
+]

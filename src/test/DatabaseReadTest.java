@@ -1,9 +1,9 @@
 package test;
 
-import jdk.jfr.StackTrace;
 import main.*;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
 
@@ -11,311 +11,548 @@ import org.junit.jupiter.api.AfterEach;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import java.util.*;
 
-// source for how to test print statements
-//https://stackoverflow.com/questions/1119385/junit-test-for-system-out-println
+import static org.junit.jupiter.api.Assertions.*;
 
+/** A Database Readtest J unit 5.4 test class that tests that the database reads all files properly and initializes
+ * the game, user and market objects appropriately.
+ * 
+ */
 public class DatabaseReadTest {
-    AdminUser adminUser1;
-    BuyUser buyUser1;
-    SellUser sellUser1;
-    FullStandardUser fullStandardUser1;
-    Game monopoly, pacman, pacman1, sonic;
-    Marketplace market;
+
+    String filePath = "DatabaseTestFiles/";
+    String fileNameGameErrors = filePath + "GameErrors.json";
+    String fileNameGameNonExistent = filePath + "GameNonExistent.json";
+    String fileNameGameEmpty = filePath + "GameEmpty.json";
+    String fileNameGameFormat = filePath + "GameFormat.json";
+    String fileNameGameOneGame = filePath + "GameOneGame.json";
+    String fileNameGameGood = filePath + "GameGood.json";
+    String fileNameUserErrors = filePath + "UserErrors.json";
+    String fileNameUserNonExistent = filePath + "UserNonExistent.json";
+    String fileNameUserEmpty = filePath + "UserEmpty.json";
+    String fileNameUserFormat = filePath + "UserFormat.json";
+    String fileNameUserOneUser = filePath + "UserOneUser.json";
+    String fileNameUserGood = filePath + "UserGood.json";
+    String fileNameMarketErrors = filePath + "MarketErrors.json";
+    String fileNameMarketNonExistent = filePath + "MarketNonExistent.json";
+    String fileNameMarketEmpty = filePath + "MarketEmpty.json";
+    String fileNameMarketFormat = filePath + "MarketFormat.json";
+    String fileNameMarketNoAuction = filePath + "MarketNoAuction.json";
+    String fileNameMarketAuctionWrong = filePath + "MarketAuctionWrong.json";
+    String fileNameMarketNoUID = filePath + "MarketNoUID.json";
+    String fileNameMarketGood = filePath + "MarketGood.json";
+    String fileNotFoundError = " file not found. An empty ";
+    String fileFormatError = " file not in correct format. An empty ";
+    String fileErrorEnd = " will be created.\r\n";
+    ArrayList<Game> emptyGames;
+    ArrayList<AbstractUser> emptyUsers;
+    List<Game> games;
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final PrintStream originalOut = System.out;
 
+
     @BeforeEach
-    public void setUpStreams() {
+    public void setUp() {
         System.setOut(new PrintStream(outContent));
-        adminUser1 = new AdminUser.UserBuilder("diego").balance(42).build();
-        buyUser1 = new BuyUser.UserBuilder("dora").balance(41.58).build();
-        sellUser1 = new SellUser.UserBuilder("boots").balance(34.13).build();
-        fullStandardUser1 = new FullStandardUser.UserBuilder("swiper").balance(32.40).build();
-        monopoly = new Game("Monopoly", 23.5, "boots", 1, 00.0);
-        pacman = new Game("Pacman", 20.0, "swiper", 2 , 10.0);
-        pacman1 = new Game("Pacman", 22.0, "swiper", 2 , 0 );
-        sonic = new Game("Sonic", 22.0, "swiper", 2 , 0 );
-        market = new Marketplace();
+        ReadingJSON.setGameFileName(fileNameGameErrors);
+        games = ReadingJSON.readGamesFile();
+        emptyGames = new ArrayList<Game>();
+        emptyUsers = new ArrayList<AbstractUser>();
     }
 
     @AfterEach
-    public void restoreStreams() {
+    public void restore() {
         System.setOut(originalOut);
     }
 
-    @Test
-    public void testSellEasy() {
-        sellUser1.sell(monopoly, market);
-        String result = "Game: Monopoly" + " is now being sold by " + "boots" + " for $" +
-                "23.50" + " at a " + "0" +"% discount, will be available for purchase tomorrow.";
-        assertEquals(result, outContent.toString());
-        assertEquals(monopoly ,market.getGamesOnSale().get(sellUser1.getUsername()).get(0));
-    }
-    // Test for a seller trying to sell the same game(game title) again[Maybe implement it in application?]
-    // Test for full-standard trying to sell a game in their Inventory
+    
+    public ArrayList<Integer> unequalIntegers(ArrayList<Integer> search, ArrayList<Integer> all) {
+        
+        ArrayList<Integer> diff = new ArrayList<Integer>();
+        for (Integer i : search) {
+            if (!all.contains(i)) {
+                diff.add(i);
+            }
+        }
 
-    @Test
-    public void testSellFromBuyUser() {
-        Game pacmanR = new Game("Pacman returns", 20.0, "dora", 2 , 10.0);
-        buyUser1.sell(pacmanR, market);
-        String result = "ERROR: \\ < Failed Constraint: "+ "dora" + " cannot sell games.";
-        assertEquals(result, outContent.toString());
-        assertNull(market.getGamesOnSale().get(sellUser1.getUsername()));
+        for (Integer j : all) {
+            if (!search.contains(j)) {
+                diff.add(j);
+            }
+        }
+        
+        return diff;
     }
-
+    
     @Test
-    public void testSellFromBothUser() {
-        fullStandardUser1.sell(pacman, market);
-        String result = "Game: Pacman" + " is now being sold by " + "swiper" + " for $" +
-                "23.50" + " at a " + "0" +"% discount, will be available for purchase tomorrow.";
-        assertEquals(result, outContent.toString());
-        assertEquals(pacman ,market.getGamesOnSale().get(fullStandardUser1.getUsername()).get(0));
+    public void testGameNonExistent() {
+        ReadingJSON.setGameFileName(fileNameGameNonExistent);
+        List<Game> games = ReadingJSON.readGamesFile();
+        assertEquals("Games" + fileNotFoundError + "list of games" + fileErrorEnd, outContent.toString());
+        assertEquals(emptyGames, games);
     }
 
     @Test
-    public void testSellFromAdminUser() {
-        Game monopolyAdmin = new Game("MonopolyForAdmins", 53.5, "diego", 2, 00.0);
-        adminUser1.sell(monopolyAdmin, market);
-        String result = "Game: MonopolyForAdmins" + " is now being sold by " + "diego" + " for $" +
-                "53.50" + " at a " + "0" +"% discount, will be available for purchase tomorrow.";
-        assertEquals(result, outContent.toString());
-        assertEquals(monopolyAdmin ,market.getGamesOnSale().get(adminUser1.getUsername()).get(0));
-    }
-
-    //check this out
-    @Test
-    public void testSellFromSellButAlreadyBought() {
-        sellUser1.sell(monopoly, market);
-        fullStandardUser1.buy(sellUser1, monopoly, false, market);
-        fullStandardUser1.sell(monopoly, market);
-        String result = "Game: Monopoly" + " is now being sold by " + "boots" + " for $" +
-                "23.50" + " at a " + "0" +"% discount, will be available for purchase tomorrow.";
-        String result2 = "swiper" + " has bought " + "Monopoly" + " from " + "boots" + " for "
-                + "23.50" + ".";
-        String result3 = "ERROR: \\ < Failed Constraint: " + "boots" + " could not sell " +
-                "Monopoly" + " as User has bought this exact game. > //";
-        assertEquals(result+result2+result3, outContent.toString());
-    }
-
-    // tests to check validness of game
-
-    @Test
-    public void testSellConstraintsTooHighPrice() {
-        Game monopolyHigh = new Game("Monopoly2.0", 1000.0, "boots", 2, 00.0);
-        sellUser1.sell(monopolyHigh, market);
-        String result = "ERROR: \\ < Failed Constraint: " + "boots" + " could not sell " +
-                "Monopoly2.0 + " + "for $" + "1000.0" + " as it exceeds the maximum sale price. > //";
-        assertEquals(result, outContent.toString());
+    public void testGameEmpty() {
+        ReadingJSON.setGameFileName(fileNameGameEmpty);
+        List<Game> games = ReadingJSON.readGamesFile();
+        assertEquals("Games" + fileFormatError + "list of games" + fileErrorEnd, outContent.toString());
+        assertEquals(emptyGames, games);
     }
 
     @Test
-    public void testSellConstraintsMaxPrice() {
-        Game monopolyHigh = new Game("Monopoly2.0", 999.99, "boots", 2, 00.0);
-        sellUser1.sell(monopolyHigh, market);
-        String result = "Game: Monopoly" + " is now being sold by " + "boots" + " for $" +
-                "999.99" + " at a " + "0" +"% discount, will be available for purchase tomorrow.";
-        assertEquals(result, outContent.toString());
+    public void testGameFormat() {
+        ReadingJSON.setGameFileName(fileNameGameFormat);
+        List<Game> games = ReadingJSON.readGamesFile();
+        assertEquals("Games" + fileFormatError + "list of games" + fileErrorEnd, outContent.toString());
+        assertEquals(emptyGames, games);
     }
 
     @Test
-    public void testSellConstraintsNegativePrice() {
-        Game monopolyHigh = new Game("Monopoly2.0", -99.99, "boots", 2, 00.0);
-        sellUser1.sell(monopolyHigh, market);
-        String result = "ERROR: \\ < Failed Constraint: " + "boots" + " could not sell " +
-                "Monopoly2.0 + " + "for $" + "-99.99" + " as the price cannot be negative. > //";
-        assertEquals(result, outContent.toString());
+    public void testGameOneGame() {
+        ReadingJSON.setGameFileName(fileNameGameOneGame);
+        List<Game> games = ReadingJSON.readGamesFile();
+        assertEquals("Games" + fileFormatError + "list of games" + fileErrorEnd, outContent.toString());
+        assertEquals(emptyGames, games);
     }
 
     @Test
-    public void testSellConstraintsZeroPrice() {
-        Game monopolyHigh = new Game("Monopoly2.0", 0.0, "boots", 2, 00.0);
-        sellUser1.sell(monopolyHigh, market);
-        String result = "Game: Monopoly" + " is now being sold by " + "boots" + " for $" +
-                "0.0" + " at a " + "0" +"% discount, will be available for purchase tomorrow.";
-        assertEquals(result, outContent.toString());
+    public void testGameErrors1() {
+        assertEquals( 7, games.size());
     }
 
     @Test
-    public void testSellConstraintsNameExactLength() { //25 characters
-        Game monopolyHigh = new Game("Monopoly2.0Monopoly2.0Mon", 12.0, "boots", 2, 00.0);
-        sellUser1.sell(monopolyHigh, market);
-        String result = "Game: Monopoly" + " is now being sold by " + "boots" + " for $" +
-                "12.0" + " at a " + "0" +"% discount, will be available for purchase tomorrow.";
-        assertEquals(result, outContent.toString());
+    public void testGameErrors2() {
+        ArrayList<Integer> allIds = new ArrayList<Integer>();
+        for (Game g : games) {
+            allIds.add(g.getUniqueID());
+        }
+        ArrayList<Integer> search = new ArrayList<>(Arrays.asList(1, 2, 5, 6, 7, 12, 13));
+        assertTrue(allIds.containsAll(search));
+        assertEquals(new ArrayList<Integer>(), unequalIntegers(search, allIds));
     }
 
     @Test
-    public void testSellConstraintsNameTooLong() { //26 characters
-        Game monopolyHigh = new Game("Monopoly2.0Monopoly2.0Mono", 12.0, "boots", 2, 00.0);
-        sellUser1.sell(monopolyHigh, market);
-        String result = "ERROR: \\ < Failed Constraint: " + "boots" + " could not sell " +
-                "Monopoly2.0Monopoly2.0Mono" + " for $" + "12.0" + " as it exceeds the maximum name length. > //";
-        assertEquals(result, outContent.toString());
+    public void testGameErrorsCheckItemType() {
+        Game game = null;
+        for (Game g : games) {
+            if (g.getUniqueID() == 1) {
+                game = g;
+            }
+        }
+        assertNotNull(game);
+        assertEquals("YesCounter-Strike", game.getName());
+        assertEquals(20.99, game.getPrice());
+        assertEquals("Valve", game.getSupplierID());
+        assertEquals(1, game.getUniqueID());
+        assertEquals(10.06, game.getDiscount());
+        assertFalse(game.getHold());
     }
 
     @Test
-    public void testSellConstraintsDiscountExact() {
-        Game monopolyHigh = new Game("Monopoly2.0", 12.0, "boots", 2, 90.0);
-        sellUser1.sell(monopolyHigh, market);
-        String result = "Game: Monopoly" + " is now being sold by " + "boots" + " for $" +
-                "12.0" + " at a " + "90" +"% discount, will be available for purchase tomorrow.";
-        assertEquals(result, outContent.toString());
+    public void testGameErrorsCheckItemTypeFalseHold() {
+        Game game = null;
+        for (Game g : games) {
+            if (g.getUniqueID() == 5) {
+                game = g;
+            }
+        }
+        assertNotNull(game);
+        assertEquals("YesHalf-LifeButBobInFront", game.getName());
+        assertEquals(23.45, game.getPrice());
+        assertEquals("Valve", game.getSupplierID());
+        assertEquals(5, game.getUniqueID());
+        assertEquals(85, game.getDiscount());
+        assertFalse(game.getHold());
     }
-
-    //can discount have decimals? like 90.1% if not change this to 91%
+    
     @Test
-    public void testSellConstraintsDiscountTooHigh() {
-        Game monopolyHigh = new Game("Monopoly2.0", 12.0, "boots", 2, 90.1);
-        sellUser1.sell(monopolyHigh, market);
-        String result = "ERROR: \\ < Failed Constraint: " + "boots" + " could not sell " +
-                "Monopoly2.0" + " with " + "90.1" + "% discount as it exceeds the maximum discount " +
-                "amount. > //";
-        assertEquals(result, outContent.toString());
+    public void testUserNonExistent() {
+        ReadingJSON.setGameFileName(fileNameGameGood);
+        ReadingJSON.setUserFileName(fileNameUserNonExistent);
+        List<Game> games = ReadingJSON.readGamesFile();
+        List<AbstractUser> users = ReadingJSON.readUsersFile(games);
+        assertEquals("Users" + fileNotFoundError + "list of users" + fileErrorEnd, outContent.toString());
+        assertEquals(emptyUsers, users);
     }
-
-
-    //this tests for already selling the game and uses game name
-    // may have to edit result to include the first sell's print statement
-    @Test
-    public void testSellConstraintsAlreadySelling() {
-        sellUser1.sell(monopoly, market);
-        Game monopolyHigh = new Game("Monopoly", 12.0, "boots", 2, 90.1);
-        sellUser1.sell(monopolyHigh, market);
-        String result = "ERROR: \\ < Failed Constraint: " + "boots" + " could not sell " +
-                "Monopoly" + " as User is already selling this exact game > //";
-        assertEquals(result, outContent.toString());
-    }
-
-    //tests for if seller is already in market
 
     @Test
-    public void testSellConstraintsAlreadyInMarket() {
-        sellUser1.sell(monopoly, market);
-        Game monopolyHigh = new Game("Monopoly2.0", 22.0, "boots", 3, 50);
-        sellUser1.sell(monopolyHigh, market);
-        String result = "Game: Monopoly" + " is now being sold by " + "boots" + " for $" +
-                "23.50" + " at a " + "0" +"% discount, will be available for purchase tomorrow.";
-
-        String result2 = "Game: Monopoly2.0" + " is now being sold by " + "boots" + " for $" +
-                "22.0" + " at a " + "50" +"% discount, will be available for purchase tomorrow.";
-        assertEquals(result+result2, outContent.toString());
-        assertEquals(monopoly ,market.getGamesOnSale().get(sellUser1).get(0));
-        assertEquals(monopolyHigh, market.getGamesOnSale().get(sellUser1).get(1));
+    public void testUserEmpty() {
+        ReadingJSON.setGameFileName(fileNameGameGood);
+        ReadingJSON.setUserFileName(fileNameUserEmpty);
+        List<Game> games = ReadingJSON.readGamesFile();
+        List<AbstractUser> users = ReadingJSON.readUsersFile(games);
+        assertEquals("Users" + fileFormatError + "list of users" + fileErrorEnd, outContent.toString());
+        assertEquals(emptyUsers, users);
     }
 
-
-    // Test for Buy
     @Test
-    // Test when right type of User to buy a game
-    public void testSimpleBuy(){
-        buyUser1.buy(sellUser1, monopoly, market.getAuctionSale(), market);
-        String result = "dora" + " has bought Monopoly from boots for 23.50.";
-        // check about multiple print statemetns check!!
-        assertEquals(result, outContent.toString());
+    public void testUserFormat() {
+        ReadingJSON.setGameFileName(fileNameGameGood);
+        ReadingJSON.setUserFileName(fileNameUserFormat);
+        List<Game> games = ReadingJSON.readGamesFile();
+        List<AbstractUser> users = ReadingJSON.readUsersFile(games);
+        assertEquals("Users" + fileFormatError + "list of users" + fileErrorEnd, outContent.toString());
+        assertEquals(emptyUsers, users);
     }
 
-    // Test for buying a game with AuctionSale on
     @Test
-    public void auctionSaleBuy(){
-        fullStandardUser1.sell(pacman, market);
-        buyUser1.buy(fullStandardUser1, pacman, true , market);
-        String result = "dora" + " has bought Monopoly from swiper for 18.00.";
-        assertEquals(result, outContent.toString());
+    public void testUserOneUser() {
+        ReadingJSON.setGameFileName(fileNameGameGood);
+        ReadingJSON.setUserFileName(fileNameUserOneUser);
+        List<Game> games = ReadingJSON.readGamesFile();
+        List<AbstractUser> users = ReadingJSON.readUsersFile(games);        
+        assertEquals("Users" + fileFormatError + "list of users" + fileErrorEnd, outContent.toString());
+        assertEquals(emptyUsers, users);
     }
 
-    // Test for right type of user to buy a game already in their inventory
-    @Test
-    public void buyAgainCheck(){
-        buyUser1.buy(fullStandardUser1, pacman, market.getAuctionSale(), market);
-        String result = "ERROR: \\ < Failed Constraint:  " + "dora already owns Monopoly. Cannot buy it again.";
-        assertEquals(result, outContent.toString());
+
+    
+
+    @Nested
+    class UsersErrorsTest {
+        List<AbstractUser> users;
+        List<Game> games;
+        
+        @BeforeEach
+        void beforeEach() {
+            ReadingJSON.setGameFileName(fileNameGameGood);
+            ReadingJSON.setUserFileName(fileNameUserErrors);
+            games = ReadingJSON.readGamesFile();
+            users = ReadingJSON.readUsersFile(games);
+        }
+
+        @AfterEach
+        void afterEach() {
+            games = new ArrayList<>();
+            users = new ArrayList<>();
+        }
+
+        ArrayList<String> differentStrings(ArrayList<String> search, ArrayList<String> all) {
+
+            ArrayList<String> diff = new ArrayList<String>();
+            for (String i : search) {
+                if (!all.contains(i)) {
+                    diff.add(i);
+                }
+            }
+
+            for (String j : all) {
+                if (!search.contains(j)) {
+                    diff.add(j);
+                }
+            }
+
+            return diff;
+        }
+
+        @Test
+        void sizeTest() {
+            assertEquals(4, games.size());
+            assertEquals(15, users.size());
+        }
+
+        /** test to confirm that any user with invalid types: name too long, seller with inventory, etc are not added
+         * to the system.
+         * 
+         */
+        @Test
+        void equalityTest() {
+            ArrayList<String> userNames= new ArrayList<String>();
+            for (AbstractUser u : users) {
+                userNames.add(u.getUsername());
+            }
+            
+            ArrayList<String> correctUsers = new ArrayList<>(Arrays.asList("YesValve2", "YesValve23", "YesMadeo", 
+                    "YesMadeoNoBuy", "YesNoTrans", "YesRegular", "YesGameNoExist", "YesCreditLimit", 
+                    "YesCreditInt","YesOneInv", "SameName", "YesInvWrongType", "S1", "A1", "YesInvWrong"));
+            assertEquals(new ArrayList<>(), differentStrings(userNames, correctUsers));
+        }
+        
+        @Test
+        void sellerInventory() {
+            for (AbstractUser u : users) {
+                if (u instanceof SellUser) {
+                    assertNull(u.getInventory());
+                }
+            }
+        }
+
+        @Test
+        void inventoryWrongType() {
+            AbstractUser user = null;
+            for (AbstractUser u : users) {
+                if (u.getUsername().equals("YesInvWrongType")) {
+                    user = u;
+                }
+            }
+            assertNotNull(user);
+            assertEquals(new ArrayList<>(), user.getInventory());
+        }
+
+        @Test
+        void checkInventory() {
+            AbstractUser user = null;
+            for (AbstractUser u : users) {
+                if (u.getUsername().equals("YesCreditInt")) {
+                    user = u;
+                }
+            }
+            assertNotNull(user);
+            assertEquals(999.0, user.getAccountBalance());
+            assertEquals(1, user.getInventory().size());
+            assertEquals("G2", user.getInventory().get(0).getName());
+        }
+
+        @Test
+        void inventoryZero() {
+            AbstractUser user = null;
+            for (AbstractUser u : users) {
+                if (u.getUsername().equals("YesInvWrong")) {
+                    user = u;
+                }
+            }
+            assertNotNull(user);
+            assertEquals(999.9, user.getAccountBalance());
+            assertEquals(0, user.getInventory().size());
+        }
+
+        @Test
+        void inventoryOneWrong() {
+            AbstractUser user = null;
+            for (AbstractUser u : users) {
+                if (u.getUsername().equals("YesOneInv")) {
+                    user = u;
+                }
+            }
+            assertNotNull(user);
+            assertEquals(2, user.getInventory().size());
+        }        
     }
 
-    // Test for right type of user to buy a game already in their inventory from a different seller
-    public void buyAgainFromDiffSeller(){
-        sellUser1.sell(pacman1, market);
-        // check about multiple print statemetns check!!
-        buyUser1.buy(sellUser1, pacman1, market.getAuctionSale(), market);
-        String result = "ERROR: \\ < Failed Constraint:  " + "dora already owns Monopoly. Cannot buy it again.";
-        assertEquals(result, outContent.toString());
+
+    @Nested
+    class MarketBasicTest {
+        List<AbstractUser> users;
+        List<Game> games;
+
+        @BeforeEach
+        void beforeEach() {
+            System.setOut(new PrintStream(outContent));
+            ReadingJSON.setGameFileName(fileNameGameGood);
+            ReadingJSON.setUserFileName(fileNameUserGood);
+            games = ReadingJSON.readGamesFile();
+            users = ReadingJSON.readUsersFile(games);
+        }
+
+        @AfterEach
+        void afterEach() {
+            games = new ArrayList<>();
+            users = new ArrayList<>();
+            System.setOut(originalOut);
+        }
+
+        @Test
+        void sizeTest() {
+            assertEquals(4, games.size());
+            assertEquals(3, users.size());
+        }
+
+        @Test
+        public void testMarketNonExistent() {
+            ReadingJSON.setMarketFileName(fileNameMarketNonExistent);
+            Marketplace market = ReadingJSON.readMarketFile(games, users);
+            assertEquals("Market" + fileNotFoundError + "market" + fileErrorEnd, outContent.toString());
+            assertFalse(market.getAuctionSale());
+            assertEquals(new HashMap<>(), market.getGamesOnSale());
+        }
+
+        @Test
+        public void testMarketEmpty() {
+            ReadingJSON.setMarketFileName(fileNameMarketEmpty);
+            Marketplace market = ReadingJSON.readMarketFile(games, users);
+            assertNotNull(market);
+            assertFalse(market.getAuctionSale());
+            assertEquals(new HashMap<>(), market.getGamesOnSale());
+            assertEquals("Market" + fileFormatError + "market" + fileErrorEnd, outContent.toString());
+        }
+        
+
+        @Test
+        public void testMarketFormat() {
+            ReadingJSON.setMarketFileName(fileNameMarketFormat);
+            Marketplace market = ReadingJSON.readMarketFile(games, users);
+            assertEquals("Market" + fileFormatError + "market" + fileErrorEnd, outContent.toString());
+            assertFalse(market.getAuctionSale());
+            assertEquals(new HashMap<>(), market.getGamesOnSale());
+        }
+
+        @Test
+        public void testMarketNoAuction() {
+            ReadingJSON.setMarketFileName(fileNameMarketNoAuction);
+            Marketplace market = ReadingJSON.readMarketFile(games, users);
+            
+            assertNotNull(market);
+            assertFalse(market.getAuctionSale());
+        }
+
+        @Test
+        public void testMarketAuctionWrong() {
+            ReadingJSON.setMarketFileName(fileNameMarketAuctionWrong);
+            Marketplace market = ReadingJSON.readMarketFile(games, users);
+
+            assertNotNull(market);
+            assertFalse(market.getAuctionSale());
+            assertEquals(2, market.getGamesOnSale().size());
+
+            ArrayList<String> sellers = new ArrayList<String>(market.getGamesOnSale().keySet());
+            assertEquals(2, sellers.size());
+        }
+
+        @Test
+        public void testMarketNoUID() {
+            ReadingJSON.setMarketFileName(fileNameMarketNoUID);
+            Marketplace market = ReadingJSON.readMarketFile(games, users);
+            assertNotNull(market);
+            assertTrue(market.getAuctionSale());
+            assertEquals(0, market.getUid());
+            assertEquals(2, market.getGamesOnSale().size());
+
+            ArrayList<Game> gamesNames = new ArrayList<Game>();
+            for (String s : market.getGamesOnSale().keySet()) {
+                gamesNames.addAll(market.getGamesOnSale().get(s));
+            }
+            assertEquals(3, gamesNames.size());
+        }
+
+        @Test
+        public void testMarketGood() {
+            ReadingJSON.setMarketFileName(fileNameMarketGood);
+            Marketplace market = ReadingJSON.readMarketFile(games, users);
+            assertNotNull(market);
+            assertFalse(market.getAuctionSale());
+            assertEquals(2, market.getGamesOnSale().size());
+            assertEquals(4, market.getUid());
+
+            ArrayList<Game> gamesNames = new ArrayList<Game>();
+            for (String s : market.getGamesOnSale().keySet()) {
+                gamesNames.addAll(market.getGamesOnSale().get(s));
+            }
+            assertEquals(3, gamesNames.size());
+        }
+        
+        
     }
 
-    // Test for user with insuffcient funds trying to buy a game
-    @Test
-    public void outOfFundsCheck(){
-        sellUser1.sell(sonic, market);
-        buyUser1.buy(sellUser1, sonic, market.getAuctionSale(), market);
-        String result = "ERROR: \\ < Failed Constraint:  " + "dora does not have enough funds to buy Sonic.";
-        assertEquals(result, outContent.toString());
+    @Nested
+    class MarketErrorsTest {
+        List<AbstractUser> users;
+        List<Game> games;
+        Marketplace market;
+        
+
+        @BeforeEach
+        void beforeEach() {
+            ReadingJSON.setGameFileName(fileNameGameGood);
+            ReadingJSON.setUserFileName(fileNameUserGood);
+            ReadingJSON.setMarketFileName(fileNameMarketErrors);
+            games = ReadingJSON.readGamesFile();
+            users = ReadingJSON.readUsersFile(games);
+            market = ReadingJSON.readMarketFile(games, users);
+        }
+
+        @AfterEach
+        void afterEach() {
+            games = new ArrayList<>();
+            users = new ArrayList<>();
+            market = new Marketplace();
+        }
+
+        @Test
+        void sizeTest() {
+            assertEquals(4, games.size());
+            assertEquals(3, users.size());
+        }
+        
+        @Test
+        public void testMarketBasic() {
+            ReadingJSON.setMarketFileName(fileNameMarketGood);
+            Marketplace market = ReadingJSON.readMarketFile(games, users);
+            assertNotNull(market);
+            assertEquals(2, market.getGamesOnSale().size());
+            assertEquals(4, market.getUid());
+        }
+
+        @Test
+        public void testMarketDuplicateSeller() {
+            ReadingJSON.setMarketFileName(fileNameMarketGood);
+            Marketplace market = ReadingJSON.readMarketFile(games, users);
+            assertNotNull(market);
+
+            ArrayList<Game> userGames = market.getGamesOnSale().get("S1");
+            ArrayList<Integer> gameIDS = new ArrayList<Integer>();
+            ArrayList<Integer> correctIDS = new ArrayList<Integer>(Arrays.asList(1, 3));
+            for (Game g : userGames) {
+                gameIDS.add(g.getUniqueID());
+            }
+            
+            assertEquals(2, userGames.size());
+            assertEquals(new ArrayList<>(), unequalIntegers(gameIDS, correctIDS));
+        }
+
+        @Test
+        public void testMarketDuplicateID() {
+            ReadingJSON.setMarketFileName(fileNameMarketGood);
+            Marketplace market = ReadingJSON.readMarketFile(games, users);
+            assertNotNull(market);
+
+            ArrayList<Game> userGames = market.getGamesOnSale().get("A1");
+            ArrayList<Integer> gameIDS = new ArrayList<Integer>();
+            ArrayList<Integer> correctIDS = new ArrayList<Integer>(Collections.singletonList(2));
+            for (Game g : userGames) {
+                gameIDS.add(g.getUniqueID());
+            }
+
+            assertEquals(1, userGames.size());
+            assertEquals(new ArrayList<>(), unequalIntegers(gameIDS, correctIDS));
+        }
+
+        @Test
+        public void testMarketNoExistGame() {
+            ReadingJSON.setMarketFileName(fileNameMarketGood);
+            Marketplace market = ReadingJSON.readMarketFile(games, users);
+            assertNotNull(market);
+
+            ArrayList<Game> userGames = market.getGamesOnSale().get("A1");
+            ArrayList<Integer> gameIDS = new ArrayList<Integer>();
+            ArrayList<Integer> correctIDS = new ArrayList<Integer>(Collections.singletonList(2));
+            for (Game g : userGames) {
+                gameIDS.add(g.getUniqueID());
+            }
+
+            assertEquals(1, userGames.size());
+            assertEquals(new ArrayList<>(), unequalIntegers(gameIDS, correctIDS));
+        }
+
+        @Test
+        public void testMarketBuyUser() {
+            ReadingJSON.setMarketFileName(fileNameMarketGood);
+            Marketplace market = ReadingJSON.readMarketFile(games, users);
+            assertNotNull(market);
+
+            assertNull(market.getGamesOnSale().get("B1"));
+        }
+
+        @Test
+        public void testMarketNonUser() {
+            ReadingJSON.setMarketFileName(fileNameMarketGood);
+            Marketplace market = ReadingJSON.readMarketFile(games, users);
+            assertNotNull(market);
+
+            assertNull(market.getGamesOnSale().get("A2"));
+        }
+        
     }
-
-    // Test for Full-Standard to buy a game they have up for sale
-    @Test
-    public void fullStanBuyGameFromTheirItemList(){
-        // Missing from current Buy()
-        fullStandardUser1.buy(sellUser1, pacman1, true, market);
-        String result = "ERROR: \\ < Failed Constraint:  " + "You can't buy Pacman as you are also selling it.";
-        assertEquals(result, outContent.toString());
-    }
-    // Test for Seller's account maxing out upon the purchase
-    @Test
-    public void accountMaxOnBuy(){
-        FullStandardUser bezoz = new FullStandardUser.UserBuilder("Jeff").balance(999999.99).build();
-        Game amazon = new Game("Alexa", 22, "Jeff", 03, 0);
-        bezoz.sell(amazon, market);
-        adminUser1.buy(bezoz, amazon, market.getAuctionSale(), market);
-        String result =  "ERROR: \\ < Failed Constraint: "+ "Jeff" +
-                "'s balance was Maxed up upon addition of more funds!";
-        assertEquals(result, outContent.toString());
-
-    }
-
-    // Test for standard-Sell to buy a game[Maybe implement it in application?]
-    @Test
-    public void fullStanBuy(){
-        fullStandardUser1.buy(sellUser1, sonic, market.getAuctionSale(), market);
-        String result = "swiper " + " has bought Sonic from boots for 22.00.";
-        assertEquals(result, outContent.toString());
-    }
-
-    // Test for Admin to buy a game
-    public void adminBuy(){
-        adminUser1.buy(sellUser1, sonic, market.getAuctionSale(), market);
-        String result = "diego " + " has bought Sonic from boots for 22.00.";
-        assertEquals(result, outContent.toString());
-    }
-
-    //REFUND TEST
-
-    // Wrong usertype trying to refund
-    // Buyer's account not having enough funds
-    // Seller's account maxing out
-    // Requsting a refund among the wrong users (AllOtherType-Sell) (Buy-AllOtherTypes)
-
-
-    // Create
-
-    // Wrong user trying to call it(All non-priv types)
-    // Admin creating themselves
-    // Admin creating a username already in the System
-    // Admin creating every other types of Users
-
-
-    // Add Credit
-
-    // Admin adding credits to someone's account
-    // User adding credit to their account
-    // User's account maxing out upon addition of new funds
-
-
-
-    // DISCOUNT TEST [Implement in Market/Application]
-
-    // Wrong user trying to call it(All non-priv types)
-    // Toggle discount off
-    // Toggle discount onn
+    
 }
-

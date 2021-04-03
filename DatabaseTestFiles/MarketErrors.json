@@ -1,0 +1,11 @@
+{
+  "auctionSale": false,
+  "Uid": 4,
+  "gamesOnSale": {
+    "S1": [{"uniqueID":  1}, {"uniqueID":  3}, 4],
+    "A1":[{"uniqueID":  2}, {"uniqueID":  5}, {"uniqueID":  2}],
+    "B1": [{"uniqueID": 4}, {"uniqueID": 1}],
+    "A2":[{"uniqueID":  2}],
+    "S1": [{"uniqueID":  1}]
+  }
+}

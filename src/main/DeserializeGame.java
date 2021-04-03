@@ -39,11 +39,11 @@ public class DeserializeGame implements JsonDeserializer<Game> {
 
         if (name.length() > MAX_GAME_LENGTH) { //check name
             return null;
-        } else if (price > MAX_PRICE) {
+        } else if (price > MAX_PRICE || price < 0) {
             return null;
         } else if (seller.length() > MAX_USERNAME_LENGTH) {
             return null;
-        } else if (discount > MAX_DISCOUNT) {
+        } else if (discount > MAX_DISCOUNT || discount < 0) {
             return null;
         }
         Game game = new Game(name, price, seller, gameID, discount);
@@ -96,7 +96,6 @@ public class DeserializeGame implements JsonDeserializer<Game> {
                             JsonDeserializationContext context) throws JsonParseException {
 
         JsonObject jsonObject = json.getAsJsonObject();
-
         if (!correctTypes(jsonObject)) { //check that all values exist and are of correct type
             return null;
         }

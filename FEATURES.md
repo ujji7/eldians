@@ -26,13 +26,14 @@ Ensure that "Remove trailing spaces on" is unchecked.
 
 ## DATABASE READING/WRITING: 
 Done using GSON library that is used to convert Java Objects into a JSON representation and vice versa:
-There must be 3 files, one for the game objects, one for the user objects, and one for 
-the Marketplace object. Indenting and new lines do not matter for the files, as json 
+There must be 3 files, one for the game objects, one for the user objects, and one for
+the Marketplace object. Indenting and new lines do not matter for the files, as json only looks for brackets '{'
+These 3 files must be stored in the a2-eldians directory (not in src, but outside of it)
 
 games file must be named: games.json, users file must be named users.json and marketplace file must
 be name market.json
 
-### GAMES FILE: \
+### GAMES FILE: (games.json)
 Must be in the given format, where the file begins with a '[' and ends with a ']': \
 [{
 "name": "Game1",
@@ -69,7 +70,8 @@ If any game object does not follow the specifications, it will not be added to t
 If the entire game file does not follow the specified format, aka an empty file, a file with just "," 
 would lead to the creation of an empty list of games.
 
-### USERS FILE:
+
+### USERS FILE (users.json):
 Must be in the given format, where the file begins with a '[' and ends with a ']':
 
 [{
@@ -120,7 +122,9 @@ If any user object does not follow the specifications, it will not be added to t
 If the entire users file does not follow the specified format, aka an empty file, a file with just ","
 would lead to the creation of an empty list of users.
 
-### MARKETPLACE FILE: 
+
+### MARKETPLACE FILE (marketplace.json): 
+
 This is a list of each seller, and the games they are selling
 
 Must be in the given format, where the file begins with a '{' and ends with a '}':
