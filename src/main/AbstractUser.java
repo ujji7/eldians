@@ -464,14 +464,18 @@ public abstract class AbstractUser {
     protected void removeFromInventory(String game){
         ArrayList<Game> currInv = this.inventory;
         // finding and setting the game to be removed
-        Game currGame = null;
+//        Game currGame = null;
         for(Game curr : currInv){
             if(curr.getName().equals(game)){
-                currGame = curr;
+                if (!curr.getHold()) {
+                    this.inventory.remove(curr); //  removing the game
+                } else {
+                    System.out.println(game + " cannot be removed as it is on hold.");
+                }
             }
         }
-        //  removing the game
-        this.inventory.remove(currGame);
+        
+        
     }
 
 
@@ -492,17 +496,19 @@ public abstract class AbstractUser {
             market.removeGame(this.getUsername(), currGame);
             String tran = currGame+ " was removed from the User's offering on the Market.";
             this.addTranHis(tran);
-            System.out.println(tran);
+            System.out.println("hi " + tran);
         }
         // remove from inventory
         else if (inMyInv){
             this.removeFromInventory(currGame);
             String tran = currGame+ " was removed from the User's inventory.";
             this.addTranHis(tran);
-            System.out.println(tran);
+            System.out.println("hi " + tran);
         }
         else if (!inMyInv){
             System.out.println(currGame+ " was not found in the User's inventory.");
+        } else {
+            System.out.println("yoy");
         }
         // else printing out the error from Market for Game not being currently offered
     }

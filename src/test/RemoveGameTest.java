@@ -21,9 +21,9 @@ public class RemoveGameTest {
     Marketplace market;
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final PrintStream originalOut = System.out;
-    String result = "Seller: F1 added to the market\n" +
-            "Game: G2 is now being sold by F1 for $20.0 at a 10.0% discount, will be available for purchase tomorrow.\n" +
-            "B1 has bought G2 from F1 for $20.0.";
+    String result = "Seller: F1 added to the market\r\n" +
+            "Game: G2 is now being sold by F1 for $20.0 at a 10.0% discount, will be available for purchase tomorrow.\r\n" +
+            "B1 has bought G2 from F1 for $20.0.\r\n";
 
     @BeforeEach
     public void setUpStreams() {
@@ -49,6 +49,7 @@ public class RemoveGameTest {
     }
 
     
+    
 //    removegame - remove a game from a user's inventory or from being sold
 //    The front end will prompt for the game name and if necessary, the game's owner.
 //    This information is saved to the daily transaction file
@@ -56,7 +57,7 @@ public class RemoveGameTest {
 //    semi-privileged transaction - Non-admins can only remove their own games. In admin mode, this allows any game to be removed from any user.
 //    game can be in the owner's inventory OR one of those the user has put up for sale
 //    cannot remove a game that was purchased or put up to sale on the same day
-
+    
     
  
     //remove from inventory exists and hold is good
@@ -75,17 +76,13 @@ public class RemoveGameTest {
     @Test
     public void testRemoveInvNotToday() {
         B1.removeGame(G2, market);
-        String result = "Seller: F1 added to the market\n" +
-                "Game: G2 is now being sold by F1 for $20.0 at a 10.0% discount, will be available for purchase " +
-                "tomorrow.\n" +
-                "B1 has bought G2 from F1 for $20.0.\n";
-        String result1 = "B1 cannot remove the game";
+        String result1 = "G2 cannot be removed as it is on hold.\r\n\r\n";
         assertEquals(result + result1, outContent.toString());
     }
     
     //remove game from on sale on hold should not go through
     
-    // remove game doesnt exist anywhere
+    // remove game doesn't exist anywhere
     
     // remove game for admin - check first mkt, then inv
     
