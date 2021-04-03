@@ -17,11 +17,6 @@ public class AdminUser extends AbstractUser {
         this.accountBalance = builder.accountBalance;
         this.transactionHistory = builder.transactionHistory;
     }
-
-
-    public ArrayList<Game> getInventory(){
-        return this.inventory;
-    }
     
 
     /** Add credit to an account.

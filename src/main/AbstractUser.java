@@ -69,6 +69,10 @@ public abstract class AbstractUser {
         return this.type;
     }
 
+    public ArrayList<Game> getInventory(){
+        return this.inventory;
+    }
+
 
     public ArrayList<String> getTransactionHistory(){
         

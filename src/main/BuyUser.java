@@ -15,12 +15,6 @@ public class BuyUser extends AbstractUser {
         this.inventory = builder.inventory;
 
     }
-    
-
-    public ArrayList<Game> getInventory(){
-        return this.inventory;
-    }
-
 
     /** Prints that the user cannot sell a game.
      *
