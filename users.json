@@ -3,23 +3,33 @@
     "username": "Bob",
     "type": "BS",
     "accountBalance": 105.56,
-    "inventory": [],
+    "inventory": [
+      {
+        "uniqueID": 1
+      }
+    ],
     "newFunds": 0.0,
     "transactionHistory": []
   },
   {
     "username": "Alice",
     "type": "SS",
-    "accountBalance": 105.56,
-    "inventory": [],
+    "accountBalance": 117.56,
     "newFunds": 0.0,
     "transactionHistory": []
   },
   {
     "username": "admin1",
     "type": "AA",
-    "accountBalance": 124.0,
-    "inventory": [],
+    "accountBalance": 112.0,
+    "inventory": [
+      {
+        "uniqueID": 1
+      },
+      {
+        "uniqueID": 3
+      }
+    ],
     "newFunds": 0.0,
     "transactionHistory": [
       "Created Alice user",
@@ -28,7 +38,36 @@
       "User: admin1 has created user bob\u0027sfriend",
       "User: admin1 has created user alice\u0027s fr",
       "User: admin1 has created user fullStanU1",
+      "User: admin1 bought Mouse trap from Alice",
       "User: admin1 is now selling Gamecool for 23.56"
     ]
+  },
+  {
+    "username": "bob\u0027sfriend",
+    "type": "BS",
+    "accountBalance": 1212.0,
+    "inventory": [],
+    "newFunds": 912.0,
+    "transactionHistory": [
+      "User: bob\u0027sfriend added $756.0 to their account",
+      "$456.0 were added to the user\u0027s account",
+      "User: bob\u0027sfriend added $1212.0 to their account",
+      "$456.0 were added to the user\u0027s account"
+    ]
+  },
+  {
+    "username": "alice\u0027s fr",
+    "type": "SS",
+    "accountBalance": 0.0,
+    "newFunds": 0.0,
+    "transactionHistory": []
+  },
+  {
+    "username": "fullStanU1",
+    "type": "FS",
+    "accountBalance": 300000.0,
+    "inventory": [],
+    "newFunds": 0.0,
+    "transactionHistory": []
   }
 ]
