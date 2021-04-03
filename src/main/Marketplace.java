@@ -2,23 +2,44 @@ package main;
 import java.util.HashMap;
 import java.util.ArrayList;
 
+/**
+ * This Class that keeps a record for what Games are being offered by what seller along with the functionality related
+ * to the MarketPlace
+ *
+ */
 public class Marketplace {
-    public boolean auctionSale = true;
+    // Boolean to account for Auction Sale
+    public boolean auctionSale = false;
+    // Unique ID associated with each game being offered by a Seller
     private int uid = 0;
+    // Keeps a record for Seller against their offerings
+    private HashMap<String, ArrayList<Game>> gamesOnSale;
 
-    public HashMap<String, ArrayList<Game>> gamesOnSale, todaySale;
-
+    /**
+     * Creates a brand new Market with no active Sellers
+     *
+     */
     public Marketplace() {
         this.gamesOnSale = new HashMap<String, ArrayList<Game>>();
-       // this.todaySale = new HashMap<String, ArrayList<Game>>();
 
     }
 
+    /**
+     * Constructs market from previously pre-existing Market with Sellers and Games
+     *
+     * @param auctionSale True if Sale was going on, false otherwise
+     * @param market a hashmap containing all the sellers and their offerings
+     */
     public Marketplace(boolean auctionSale, HashMap<String, ArrayList<Game>> market){
         this.auctionSale = auctionSale;
         this.gamesOnSale = market;
     }
 
+    /**
+     * Gets the current auction sale Status for the Market
+     *
+     * @return true if Sale is offered false otherwise
+     */
     public boolean getAuctionSale(){
         return this.auctionSale;
     }
@@ -31,17 +52,29 @@ public class Marketplace {
         this.auctionSale = !this.auctionSale;
     }
 
+    /**
+     * Helper to get all the games currently being Sold
+     *
+     * @return The Hashmap of the Market, key: UserName value: ArrayList<Game> they have up for sale
+     */
     public HashMap<String, ArrayList<Game>> getGamesOnSale() {
         return this.gamesOnSale;
     }
-    // this is just returning the marketplace change the method name
-    // for some reason the data types cannot be accessed in abstract class - something to do with packages and main?
 
 
+    /**
+     * Helper to increment the unique ID for the Game
+     *
+     */
     public void incrementUID(){
         this.uid ++;
     }
 
+    /**
+     * Helper to get the unique ID associated with the Game
+     *
+     * @return the integer value of the UniqueID
+     */
     public int getUid(){
         return this.uid;
     }
@@ -68,7 +101,7 @@ public class Marketplace {
     }
 
 /*
-    *//**
+    //**
      * Adds the Game for the Seller in the market
      *
      * @param seller User adding the Game to their offerings
@@ -96,31 +129,9 @@ public class Marketplace {
         }
     }
 
-
-    *//**
-     *
-     *
-     * @param seller User adding the Game to their offerings
-     * @param game a Unique game to be put up for Sale
-     *//*
-    private void addForTomMar(String seller, Game game){
-        HashMap<String, ArrayList<Game>> todayMarket = this.todaySale;
-        // check if the user already had put any games up for sale today and add the game
-        if(todayMarket.containsKey(seller)){
-            ArrayList<Game> futOffering = todayMarket.get(seller);
-            futOffering.add(game);
-        }
-        else {
-            ArrayList<Game> futOffering = new ArrayList<Game>();
-            futOffering.add(game);
-            todayMarket.put(seller, futOffering);
-        }
-
-    }*/
-
-
     /**
      * Checks if the game title will be up for sale tomorrow
+     * Can be used for Future improvements and extra features
      *
      * @param seller User offerings the game
      * @param gameTitle the game title to be checked
@@ -193,6 +204,7 @@ public class Marketplace {
 
     /**
      * Returns the list of games the seller is offering
+     * Can be used for Future improvements and extra features
      *
      * @param seller User selling games
      * @return ArrayList of all the offerings
@@ -204,9 +216,10 @@ public class Marketplace {
 
     /**
      * Returns the CURRENT price offering of the game the seller is selling
+     * Can be used for Future improvements and extra features
      *
-     * @param seller User selling games
-     * @param gameTitle The game title being asked for the price
+     * @param seller User selling games, must be a valid seller
+     * @param gameTitle The game title being asked for the price, must exist with the Seller
      * @return the price of the game or -1 incase of Seller is not selling the game
      */
     private double calculatePrice(String seller, String gameTitle){
@@ -241,28 +254,4 @@ public class Marketplace {
         // removing the game from the User's offering
         gamesOnSale.get(seller).remove(toRemove);
     }
-
-
-
-    /**
-     * Sync yesterday's market with Today's market at the end of the day
-     *
-    public void syncMarkets(){
-        // get all the seller and the new games and add them to the tomorrow's market
-        HashMap<String, ArrayList<Game>> todayMarket = this.todaySale;
-
-        // for each seller sync their past offering with the new offerings
-        for (String seller : todayMarket.keySet()) {
-            // get the seller's current offering
-            ArrayList<Game> myOffering = this.getMyOfferings(seller);
-            // get all the games to put up for sale
-            ArrayList<Game> newGames = todayMarket.get(seller);
-            // loop through all the new games they will have up sale on tomorrow
-            // add it to seller's tomorrow's offering
-            myOffering.addAll(newGames);
-        }
-        // empty the today sale <- NEED TO IMPLEMENT the empty today sale.
-        System.out.println("Market is updated for tomorrow.");
-    }*/
-
 }

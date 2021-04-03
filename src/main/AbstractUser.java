@@ -69,6 +69,7 @@ public abstract class AbstractUser {
 
     /**
      * Sets the account balance for our User
+     *
      * @param balance the amount to balance to-be in the user's account
      */
     public void setAccountBalance(double balance){
@@ -79,6 +80,7 @@ public abstract class AbstractUser {
 
     /**
      * Get the current User's unique username
+     *
      * @return username String
      */
     public String getUsername(){
@@ -144,7 +146,7 @@ public abstract class AbstractUser {
                     "'s daily limit would be reached upon addition of funds!\n" +
                     "You can only add $" + newFunds+ " to the account for the rest of today.");
 
-            // Add the difference to the account
+            // Add the difference to the account            For future improvements
             /*this.newFunds = DAILYLIMIT;
             // If the user's account will not be maxed out to add the funds
             if(this.canAcceptFunds(newFunds)){
@@ -430,7 +432,7 @@ public abstract class AbstractUser {
      *
      * @param gift Game to be added to the inventory
      */
-    public void addGame(Game gift){
+    protected void addGame(Game gift){
 
         // get the inventory and add the game
         this.getInventory().add(gift);
@@ -482,7 +484,7 @@ public abstract class AbstractUser {
                             ".\n Gift transaction failed.");
                 }
             }
-            // Reciever already has the game
+            // Receiver already has the game
             else{
                 System.out.println("ERROR: \\" + reciever.getUsername() + " already has " +gameName+
                         ".\n Gift transaction failed.");
@@ -542,19 +544,17 @@ public abstract class AbstractUser {
         // remove from Market
         if(iAmOffering){
             market.removeGame(this.getUsername(), currGame);
-            String tran = game.getName()+ " was removed from the User's offering on the Market.";
+            String tran = currGame+ " was removed from the User's offering on the Market.";
             this.addTranHis(tran);
         }
         // remove from inventory
         else if (inMyInv){
             this.removeFromInventory(currGame);
-            String tran = game.getName()+ " was removed from the User's inventory.";
+            String tran = currGame+ " was removed from the User's inventory.";
             this.addTranHis(tran);
-
-
         }
         else if (!inMyInv){
-            System.out.println(game.getName()+ " was not found in the User's inventory.");
+            System.out.println(currGame+ " was not found in the User's inventory.");
         }
         // else printing out the error from Market for Game not being currently offered
     }

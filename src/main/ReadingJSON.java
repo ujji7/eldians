@@ -28,7 +28,7 @@ public class ReadingJSON {
     /** If a file with the name does not exist, creates a file with the name
      *
      * @param file the file to create/look for
-     * @param name name of file to
+     * @param name name of file to create
      */
     private static void individualFileOpener(File file, String name) {
         if (!(file = new File(name)).exists()) { //if game file does not exist, we can assume all 3 ones exist

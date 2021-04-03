@@ -13,15 +13,12 @@ import java.util.HashMap;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
+/**
+ * class checks for potential fatal errors and reads the "daily.txt" file and
+ * send the transactions to be created and executed
+ */
 public class Client {
-
-
-    /**
-     * class reads the "daily.txt" file and send the transactions to be created to the TransactionFactory
-     * and send an ArrayList of transactions to the Application to process these transactions
-     */
-
-    // private List<String> allLines;
+    // Holds all the right formatted transactions and valid transaction objects to be processed and executed
     private ArrayList<ArrayList<String>> validFormatTrans;
     private ArrayList<Transaction> validTransactions;
     // Login, Logout, Create, Add-Credit, Delete, Auction-Sale regex format
@@ -36,9 +33,12 @@ public class Client {
     private HashMap<String, String> regMap;
 
 
+    /**
+     * Checks the formatting in the transaction file and creates and runs the transactions
+     *
+     * @param destination the location of the file containing all the generated transactions
+     */
     public Client(String destination) {
-        // add the destination of the file
-        // this.dailyTxt = destination;
         BufferedReader br = null;
         String line;
         this.validFormatTrans = new ArrayList<>();
@@ -102,6 +102,7 @@ public class Client {
         }
     }
 
+
     /**
      * Sends all the properly formatted transactions to the Transaction Factory and then sends it to the application
      * for processing
@@ -114,22 +115,13 @@ public class Client {
         for (ArrayList<String> tranSeq : validFormatTrans) {
             TransactionFactory myTranFactory = new TransactionFactory();
 
-                        //VERIFY WITH MAD
-//            for (String data: tranSeq){
-//                System.out.println(data);
-//            }
-
             this.validTransactions.add(myTranFactory.buildTransaction(tranSeq));
 
         }
-        // If there are transaction objects then send them to Application
+        // If there are valid transaction objects then send them to Application upon a valid transaction Sequence
         if(validTransactions.size() >1){
             Application app = new Application();
-
-                    //VERIFY WITH MAD
-
             app.Run(validTransactions);
-
         }
         else{
             System.out.println("<Fatal Error: A valid transaction sequence was not found in" +
@@ -368,7 +360,6 @@ public class Client {
      */
     private boolean formatChecker(String tranType, String transaction){
         boolean result = false;
-
         // Get the regex format for the transaction and check if it's a valid transaction
         String regFormat = this.regMap.get(tranType);
         Pattern pt = Pattern.compile(regFormat);
@@ -383,7 +374,6 @@ public class Client {
         return result;
     }
 
-
     /**
      * Strips the trailing whitespaces from a transaction field
      *
@@ -393,15 +383,15 @@ public class Client {
     private String stripSpace(String field){
         String spaceReg = "\\s+$";
         return field.replaceAll(spaceReg, "");
-
     }
 
-
+    /**
+     * Starts and runs our Program
+     *
+     */
     public static void main(String[] args){
-//        Client client = new Client("/Users/Danielle/Documents/Documents/School/6Y2S/CSC207/a2-eldians/src/main/admindaily.txt");
         Client client = new Client("dailyc.txt");
 
     }
-
 }
 
