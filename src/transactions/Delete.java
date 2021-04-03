@@ -1,8 +1,6 @@
 package transactions;
 
-import main.AbstractUser;
-import main.Game;
-import main.Marketplace;
+import main.*;
 
 import java.util.ArrayList;
 
@@ -56,12 +54,24 @@ public class Delete implements Transaction {
                     "proceeding with deletion. >");
         }
 
-        if ((delete instanceof main.SellUser && !this.type.equals("SS")) ||
+        if((delete instanceof main.SellUser && !this.type.equals("SS")) ||
                 (delete instanceof main.BuyUser && !this.type.equals("BS")) ||
                 (delete instanceof main.FullStandardUser && !this.type.equals("FS"))) {
             System.out.println("WARNING: < User being deleted is not of correct type, proceeding with deletion. >");
         }
 
+        if(!(login instanceof AdminUser)){
+            System.out.println("ERROR: < Cannot delete " + this.username + " as the user logged in does not" +
+                    "have permissions");
+            return login;
+        }
+        for (Game game: delete.getInventory()) {
+            games.remove(game);
+        }
+        if(!(delete instanceof BuyUser)) {
+            market.getGamesOnSale().remove(this.username);
+        }
+        users.remove(delete);
         login.delete(delete, this.funds);
         return login;
     }

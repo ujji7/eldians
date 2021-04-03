@@ -38,7 +38,10 @@ public class AuctionSale implements Transaction {
     @Override
     public AbstractUser execute(ArrayList<AbstractUser> users, ArrayList<Game> games, Marketplace market,
                                 AbstractUser login) {
-        if (login instanceof AdminUser) { market.toggleSale(); }
+        if (login instanceof AdminUser) {
+            market.toggleSale();
+            login.auctionSale(this.funds);
+        }
         else { System.out.println("ERROR: < User " + login.getUsername() + " does not have the authority to toggle an " +
                     "auction sale"); }
         return login;

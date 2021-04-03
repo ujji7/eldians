@@ -60,7 +60,7 @@ public class Gift implements Transaction {
         } else if (login instanceof AdminUser){
 
             // Admin user may be trying to gift someone else's game.
-            ((AdminUser) login).gift(game, owner, receiver, market);
+            ((AdminUser) login).giftTo(game, owner, receiver, market);
         } else {
 
             // Normal gifting functionality

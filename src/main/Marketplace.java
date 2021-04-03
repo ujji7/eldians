@@ -47,8 +47,12 @@ public class Marketplace {
     /**
      * Toggle the Auction Sale in the market
      *
+     *                  ---- WITH THE NEW UNDERSTANDING according to Piazza @692
+     *                  ---- THIS will be implemented in Applicaiton/MarketPlace
+     *                  ---- The setting up of Sale percentage is completed and done in Game
      */
     public void toggleSale(){
+
         this.auctionSale = !this.auctionSale;
     }
 

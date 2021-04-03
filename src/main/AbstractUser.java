@@ -568,7 +568,14 @@ public abstract class AbstractUser {
         System.out.println("ERROR: \\< Failed Constraint: Current User is not allowed to delete someone's account. >//");
 
     }
-
+    
+    /** Prints that the user cannot implement an auction sale.
+     * @param amount amount by which to reduce prices of games by.
+     */
+    public void auctionSale(double amount) {
+        System.out.println("ERROR: \\< Failed Constraint: Current User: " + this.getUsername() +
+                "is not allowed to toggle an auction sale. >//");
+    }
     /**
      * Returns True if the amount of funds are avalible for the current User
      * @param amount the value of funds to check are present for our user
@@ -593,12 +600,7 @@ public abstract class AbstractUser {
     }
 
 
-    /** Prints that the user cannot implement an auction sale.
-     * @param amount amount by which to reduce prices of games by.
-     */
-    public void auctionSale(double amount) {
-        System.out.println(this.getUsername() + "cannot implement an auction sale.");
-    }
+
 
 
 }

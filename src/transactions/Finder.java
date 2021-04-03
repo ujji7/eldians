@@ -22,7 +22,7 @@ public class Finder {
     }
 
     /**
-     * Returns the user located in userList according to username, null otherwise.
+     * Returns the game located in gameList according to username, null otherwise.
      *
      * @param title String representing the game title.
      * @param gameList ArrayList<Game> holding all the system's games.
@@ -34,5 +34,6 @@ public class Finder {
         }
         return null;
     }
+
 
 }

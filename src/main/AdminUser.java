@@ -107,23 +107,17 @@ public class AdminUser extends AbstractUser {
         return null;
     }
 
-    /** If there is currently no reduced price on games, turn on a sale for this amount. Else, turn off the sale.
-     *
-     *
-     *                  ---- WITH THE NEW UNDERSTANDING according to Piazza @692
-     *                  ---- THIS will be implemented in Applicaiton/MarketPlace
-     *                  ---- The setting up of Sale percentage is completed and done in Game
-     *
-     * @param amount amount by which to reduce prices of games by.
-     */
-//    @Override
-//    public void auctionSale(float amount) {
-//        if (Marketplace.getAuctionSale() = 0.00f) {//this should be .equals(00.0) not setting
-//            Marketplace.AuctionSale() = amount;
-//        } else {
-//            Marketplace.getAuctionSale() = 0.00f;
-//        }
-//    }
+    @Override
+    public void delete(AbstractUser user, double credit){
+        this.transactionHistory.add(this.username + "deleted: " + user.getUsername() + "from the Eldians Application");
+        System.out.println("User: " + user.getUsername() + ", deleted successfully.");
+    }
+
+    @Override
+    public void auctionSale(double amount){
+        this.transactionHistory.add(this.username + "toggled an Auction Sale in the Eldians Markeplace");
+        System.out.println(this.username + "toggled an Auction Sale in the Eldians Markeplace successfully.");
+    }
 
     /**
      * Method to send a game gift between users
@@ -134,7 +128,7 @@ public class AdminUser extends AbstractUser {
      * @param reciever A user to recieve the Gift
      * @param market The current Market
      */
-    public void gift(Game game, AbstractUser sender, AbstractUser reciever, Marketplace market){
+    public void giftTo(Game game, AbstractUser sender, AbstractUser reciever, Marketplace market){
         // Attempting the gift transaction
         sender.gift(game, reciever, market);
     }
@@ -172,6 +166,8 @@ public class AdminUser extends AbstractUser {
             seller.transferFunds(-amount);
             buyer.transferFunds(amount);
             result = true;
+            transactionHistory.add(seller.getUsername() + " made a refund to "
+                    + buyer.getUsername() + " for $" + amount);
             System.out.println(seller.getUsername() + " made a refund to "
                     + buyer.getUsername() + " for $" + amount);
         }
