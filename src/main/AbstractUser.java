@@ -207,7 +207,6 @@ public abstract class AbstractUser {
      * @param game Game to check for if user is selling in market
      * @return true if user selling game, else false
      */
-    //helper for buy
     private boolean sellingGame(Game game, Marketplace market) {
         if (market.getGamesOnSale().containsKey(this.username)) { //user is selling a game in the mkt place
 //            System.out.println( this.username + " in market");
@@ -220,24 +219,11 @@ public abstract class AbstractUser {
         return false;
     }
 
-    /** Remove the amount from the user's account, if it does not reduce the user's balance to below the minimum amount.
-     *
-     * @param amount funds to be removed
-     */
-    //HELPER FOR BUY - I DON'T ACTUALLY USE THIS HELPER ANYMORE AND NOW THIS SEEMS A BIT REDUNDANT WE CAN
-    // DELETE THIS HELPER LATER ON UNLESS SOMEONE ELSE USES IT
-//    private void removeFunds(Float amount) {
-//        if (this.canTransferFunds(amount)) {
-//            this.accountBalance = this.accountBalance - (double) amount; //should this be a double? what happens here?
-//        }
-//    }
-
     /** Return true if the game is already in the user's inventory.
      *
      * @param game game to check for in inventory
      * @return true if game in inventory, else false
      */
-    //HELPER FOR BUY
     protected boolean gameInInventory(Game game) {
         for (Game g : this.inventory) {
             if (g.getName().equals(game.getName())) {
@@ -265,36 +251,28 @@ public abstract class AbstractUser {
      * @param seller the supplier of the game
      * @param game the name of the game
      * @param saleToggle the status of Sale being on the market
+     * @param market the market the user is buying the game from
      */
-
-
     public void buy(AbstractUser seller, Game game, boolean saleToggle, Marketplace market){
-        if (!seller.sellingGame(game, market)) {
-            System.out.println("ERROR: \\ < Failed Constraint: " + seller.getUsername() + " is not selling " +
-                    game.getName() + " on the market.");
-            return;
-        }
-        if (this.sellingGame(game, market)) {
+        if (!seller.sellingGame(game, market) || (game.getHold())) {
+            System.out.println("ERROR: \\ < Failed Constraint: " + seller.getUsername() + " is not selling " + 
+                    game.getName() + " on the market currently.");
+        } else if (this.sellingGame(game, market)) {
             System.out.println("ERROR: \\ < Failed Constraint: " + this.getUsername() + "is selling " + game.getName()
-                    + " on the market.");
-            return;
-        }
-        if (gameInInventory(game)) { //check that game isn't already in inventory
+                    + " on the market, cannot buy it as well.");
+        } else if (gameInInventory(game)) { //check that game isn't already in inventory
             System.out.println("ERROR: \\ < Failed Constraint: "+ this.username + " already owns " + game.getName() +
                     ". Cannot buy it again.");
-        }
-
-        else {                                                  // Needs to be implemented in transferFunds()
+        } else {                                                  // Needs to be implemented in transferFunds()
             double price = game.getPriceWithDiscount(saleToggle);
             if (!this.canTransferFunds(price)) { //buyer does not have enough money
                 System.out.println("ERROR: \\ < Failed Constraint: "+ this.username + " does not have enough funds " +
-                        "to buy " + game.getName() + ". ");
+                        "to buy " + game.getName() + ".");
             }  // Needs to be implemented in transferFunds()
             else if (!seller.canAcceptFunds(price)) { //seller's account maxed out
                 this.payAndAddGame(seller, price, game);
                 seller.accountBalance = MAXFUNDS;
-                System.out.println("Warning: "+ this.username +
-                        "'s balance was maxed out upon sale of game.");
+                System.out.println("Warning: "+ this.username + "'s balance was maxed out upon sale of game.");
             }
             else { // make normal add and print message
                 this.payAndAddGame(seller, price, game);

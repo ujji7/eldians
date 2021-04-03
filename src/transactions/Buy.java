@@ -44,9 +44,7 @@ public class Buy implements Transaction {
         AbstractUser buyer = find.findUser(this.buyer, users);
         if (buyer == null) {
             System.out.println("ERROR: < Buyer not found in database. >");
-        }
-        // Make sure the buyer is the person who is logged in
-        else if (buyer != login) {
+        } else if (buyer != login) { // Make sure the buyer is the person who is logged in
             System.out.println("ERROR: < User making the buy transaction is not the logged in user. >");
         } else {
 

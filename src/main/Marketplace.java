@@ -68,12 +68,34 @@ public class Marketplace {
     }
 
 
+    /** Returns all the unique IDs of the games being sold on the marketplace.
+     * 
+     * @return Arraylist of all unique ids of games being sold
+     */
+    private ArrayList<Integer> listUniqueIds() {
+        ArrayList<Game> listOfGames = new ArrayList<Game>();
+        for (String s : gamesOnSale.keySet()) {
+            listOfGames.addAll(gamesOnSale.get(s));
+        }
+        
+        ArrayList<Integer> listIds = new ArrayList<Integer>();
+        for (Game g : listOfGames) {
+            listIds.add(g.getUniqueID());
+        }
+        return listIds;
+    }
+    
     /**
      * Helper to increment the unique ID for the Game
      *
      */
     public void incrementUID(){
+        
+        ArrayList<Integer> listAllIds = listUniqueIds();
         this.uid ++;
+        while (listAllIds.contains(this.uid)) {
+            this.uid ++;
+        }
     }
 
     /**

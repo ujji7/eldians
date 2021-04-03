@@ -88,7 +88,7 @@ Must be in the given format, where the file begins with a '[' and ends with a ']
 "accountBalance": 112.0,
 "inventory": [
 {
-"id": 3
+"uniqueID": 3
 }
 ],
 "newFunds": 0.0,
@@ -106,8 +106,8 @@ Where:
 * "inventory" is the games that the user has bought (list)
   * If the user is a sell type user, the inventory must be empty (as sell type users cannot buy games), or the user 
     will not be created
-  * Each game object in the inventory must be in the format: {"id": 3 }, where 3 is the unique id of the game
-  * an inventory with more than one game would look like: [{"id": 3 }, {"id": 4 }]
+  * Each game object in the inventory must be in the format: {"uniqueID": 3 }, where 3 is the unique id of the game
+  * an inventory with more than one game would look like: [{"uniqueID": 3 }, {"uniqueID": 4 }]
 * "newFunds" is the new funds added this day
   * by default, this would be 0 (and if not, it would be set to 0) as a new day has begun
   * this is an optional parameter that does not need to be in the file
@@ -130,19 +130,18 @@ This is a list of each seller, and the games they are selling
 Must be in the given format, where the file begins with a '{' and ends with a '}':
 
 {"auctionSale": false,
-"Uid": 0,
+"uid": 0,
 "gamesOnSale": {
-"Alice": [{"id": 1 }, {"id": 3 }],
-"admin1": [{"id": 2 }, {"id": 101 }
+"Alice": [{"uniqueID": 1 }, {"uniqueID": 3 }],
+"admin1": [{"uniqueID": 2 }, {"uniqueID": 101 }
 ]}}
 
 Where:
 * "auctionSale" is a boolean telling whether the auction sale is on (true) or off (false)
   * if no "auctionSale" attribute exists in the file, or it is not a boolean, it will be defaulted to false
-* "Uid" is a integer telling the correct unique id in the database
+* "uid" is an integer telling the correct unique id in the database
     * As more games are added, this Uid increases to allow for new games with unique ids to be created.
-    * If there is no Uid, or it is not an integer, or it is <0, it will be default set to 0
-    
+    * If there is no uid, or it is not an integer, or it is <0, it will be default set to 0
 * "gamesOnSale" is the actual marketplace, consisting of usernames which correspond to a list of 
 game unique ids
   * if "gamesOnSale" does not exist or does not follow the specified format, an empty marketplace will be created
@@ -150,9 +149,9 @@ game unique ids
  that user and their list of games will not be added to the market
   * Each id in the user's list will be checked for its existence from the games file - only if 
  it exists and that game is being sold by this seller will it be added to the marketplace
-  * If any game object does not match the given format (1 instead of {"id": 1}), that game will not be
+  * If any game object does not match the given format (1 instead of {"uniqueID": 1}), that game will not be
     added to the seller's list of games.
-  * duplicate unique ids will be ignored.  
+  * duplicate unique ids and duplicate sellers will be ignored - only the first occurring seller would be added.  
 
-If the entire market file does not follow the specified format, aka an empty file, a file with just "aknda"
-would lead to the creation of a new, empty Marketplace with auction sale set as false.
+If the entire market file does not follow the specified format, aka an empty file, a file with random words such as 
+just "agenda" would lead to the creation of a new, empty Marketplace with auction sale set as false, and uid set to 0.
