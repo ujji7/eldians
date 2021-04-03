@@ -13,22 +13,8 @@ public class SellUser extends AbstractUser {
         this.accountBalance = builder.accountBalance;
         this.type = "SS";
     }
-
-    public String getUsername(){
-        return this.username;
-    }
-
-    public String getType(){
-        return this.type;
-    }
-
-    public double getAccountBalance(){
-        return this.accountBalance;
-    }
-
-    public ArrayList<String> getTransactionHistory(){
-        return this.transactionHistory;
-    }
+    
+    
 
     /** Prints that this user cannot buy a game.
      *
@@ -70,8 +56,8 @@ public class SellUser extends AbstractUser {
                     // updating the transaction history for the users
                     String senderTran = this.getUsername() + " has gifted: " + gameName + " to " + reciever.getUsername();
                     String recTran = reciever.getUsername() + " has received " + gameName + " from " + this.getUsername();
-                    this.getTransactionHistory().add(senderTran);
-                    reciever.getTransactionHistory().add(recTran);
+                    this.addTranHis(senderTran);
+                    reciever.addTranHis(recTran);
                 }
                 // Sender doesn't have the game
                 else{

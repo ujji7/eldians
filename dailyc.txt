@@ -1,4 +1,4 @@
-00 Bob             SS 000124.00
+00 admin1          SS 000124.00
 01 bob'sfriend     BS 000300.00
 01 alice's fr      SS 000000.00
 01 fullStanU1      FS 300000.00
@@ -7,4 +7,4 @@
 06 bob'sfriend     BS 000456.00
 06 bob'sfriend     BS 000456.00
 06 bob'sfriend     BS 999999.00
-10 Bob             SS 000100.00
+10 admin1          SS 000100.00

@@ -22,10 +22,10 @@ import java.util.HashMap;
 //        For fatal errors, <msg> should contain the type and description and the file
 //        that caused the error.
 /**
- * Abstract class for User objects.
- *                                      ------NEED TO MAKE IT INTO AN ABS CLASS
- *                                      ------Need to have multiple constructor VS Builder
- *                                      -----As we will be requiring a constructors with given inventories
+ * Abstract class for User objects. There are 4 types of users: Admin, Buy, Sell, Full Standard. Each user has a 
+ * username, a type, an account balance, a transaction history, and all users but the sell type have an inventory of 
+ * games they have bought.
+ *                                     
  */
 public abstract class AbstractUser {
 
@@ -41,42 +41,7 @@ public abstract class AbstractUser {
     protected static final float DAILYLIMIT = 1000f;
     private static final float NEWFUNDSTODAY = 0f;
 
-//    public AbstractUser(String username){
-//        this.username = username;
-//        // why is this 0? should we change the constructor
-//        this.accountBalance = 0;
-//        this.inventory = new ArrayList<Game>();
-//        this.newFunds = 0;
-//        if (this.transactionHistory.size() == 0) { this.transactionHistory = new ArrayList<>(); }
-//    }
 
-   /* public AbstractUser(String username, double balance){
-        this(username);
-        this.accountBalance = balance;
-    }
-
-    public AbstractUser(String username, double balance, ArrayList<Game> inventory){
-        this(username, balance);
-        this.inventory = inventory;
-    }
-
-    public AbstractUser(String username, double balance, ArrayList<Game> inventory, TransactionHistory transHist){
-        this(username, balance, inventory);
-        this.transactionHistory = transHist;
-    }*/
-
-
-
-    /**
-     * Sets the account balance for our User
-     *
-     * @param balance the amount to balance to-be in the user's account
-     */
-    public void setAccountBalance(double balance){
-
-        this.accountBalance = balance;
-        this.transactionHistory.add("User: " + this.username + " added $" + balance + " to their account");
-    }
 
     /**
      * Get the current User's unique username
@@ -96,6 +61,74 @@ public abstract class AbstractUser {
     }
 
 
+    /** Get the user's type
+     * 
+     * @return the user's type
+     */
+    public String getType(){
+        return this.type;
+    }
+
+
+    public ArrayList<String> getTransactionHistory(){
+        
+        return this.transactionHistory;
+    }
+
+    
+    /**
+     * Sets the account balance for our User
+     *
+     * @param balance the amount to balance to-be in the user's account
+     */
+    public void setAccountBalance(double balance){
+
+        this.accountBalance = balance;
+        this.transactionHistory.add("User: " + this.username + "'s balance is now $" + balance + ".");
+    }
+
+    
+    /**
+     * Helper to add the transaction history to the User's history
+     *
+     * @param message the message to be added to the User's history
+     */
+    public void addTranHis(String message){
+        this.transactionHistory.add(message);
+    }
+
+    /**
+     * Sets a transaction history line for our User
+     *
+     * @param trans the transaction to add to the user
+     */
+    public void setTransactionHistory(ArrayList<String> trans){
+        this.transactionHistory = trans;
+    }
+
+    /**
+     * Returns True if the amount of funds are avalible for the current User
+     * @param amount the value of funds to check are present for our user
+     * @return true if the amount is avalible false otherwise
+     */
+    protected boolean canTransferFunds(double amount){
+        return this.accountBalance - amount >= MINFUNDS;
+    }
+
+    /**
+     * Checks if the person's account will not maxout after addition of funds
+     * @param amount the amount of funds to be added
+     * @return true if the funds can be added false otherwise
+     */
+    protected boolean canAcceptFunds(double amount){
+        return this.accountBalance + amount <= MAXFUNDS;
+    }
+
+
+    private boolean dailyLimitCheck(double amount){
+        return this.NEWFUNDSTODAY + amount <= DAILYLIMIT;
+    }
+    
     /**
      * Transfer the requested funds to the user's account
      * Max out the funds if the addition of funds results in an overflow of funds
@@ -362,71 +395,6 @@ public abstract class AbstractUser {
         return null;
     }
 
-
-//    /**
-//     * creates a new user of given type and adds them to the Application userList
-//     * @param username a string with a length: 1-15
-//     * @param type a string representing the User type of the newly created user
-//     *             where AA=admin, FS=full-standard, BS=buy-standard, SS=sell-standard
-//     * @param credit a float representing the amount of credits to add to the newly
-//     *               created user's account balance
-//     */
-//    public void create(String username, String type, double credit){
-//        if(MINFUNDS <= credit || credit <= MAXFUNDS){
-//            AbstractUser newUser;
-//            switch (type) {
-//                case "AA":
-//                    AdminUser.UserBuilder AAbuilder = new AdminUser.UserBuilder(username);
-//                    AAbuilder.balance(credit);
-//                    newUser = AAbuilder.build();
-//                    break;
-//                case "FS":
-//                    FullStandardUser.UserBuilder FSbuilder = new FullStandardUser.UserBuilder(username);
-//                    FSbuilder.balance(credit);
-//                    newUser = FSbuilder.build();
-//                    break;
-//                case "BS":
-//                    BuyUser.UserBuilder BSbuilder = new BuyUser.UserBuilder(username);
-//                    BSbuilder.balance(credit);
-//                    newUser = BSbuilder.build();
-//                    break;
-//                case "SS":
-//                    SellUser.UserBuilder SSbuilder = new SellUser.UserBuilder(username);
-//                    SSbuilder.balance(credit);
-//                    newUser = SSbuilder.build();
-//                    break;
-//                default:
-//                    // if user isn't initialized we stop the create function
-//                    System.out.println("ERROR: \\< Failed Constraint: New User could not be created since user type " +
-//                            "does not exist. > //");
-//                    return;
-//            }
-//            if(!Application.userList.contains(newUser)) {
-//                Application.addUser(newUser);
-//                this.transactionHistory.add("User: " + this.username + " has created user " +
-//                    newUser.getUsername());
-//                System.out.println("A new user was created: \n" + username); //+ newUser.toString()
-////                System.out.println("new user name is: " + username);
-//                return;
-//            }
-//            System.out.println("ERROR: \\< Failed Constraint: New User could not be created since" +
-//                    " a User already exists with given name. >//");
-//            System.out.println("baby is alive: " + username);
-//        }
-//        System.out.println("ERROR: \\< Failed Constraint: New User could not be created since "
-//                + Double.toString(credit) + " amount is invalid. >//");
-//
-//    }
-
-    /**
-     * get the inventory for the user
-     *
-     * @return all the games in their inventory
-     */
-    public ArrayList<Game> getInventory(){
-        return this.inventory;
-    }
-
     /**
      * Helper to add the Gift being recieved, to the User's inventory
      *
@@ -435,7 +403,7 @@ public abstract class AbstractUser {
     protected void addGame(Game gift){
 
         // get the inventory and add the game
-        this.getInventory().add(gift);
+        this.inventory.add(gift);
 
     }
 
@@ -492,23 +460,6 @@ public abstract class AbstractUser {
         }
     }
 
-    /**
-     * Helper to get the transaction History for the User
-     *
-     * @return the ArrayList og the Tran History
-     */
-    public ArrayList<String> getTransactionHistory() {
-        return transactionHistory;
-    }
-
-    /**
-     * Helper to add the transaction history to the User's history
-     *
-     * @param message the thing to be added to the User's history
-     */
-    public void addTranHis(String message){
-        this.getTransactionHistory().add(message);
-    }
 
     /**
      * Helper to remove the game from the User's inventory
@@ -525,7 +476,7 @@ public abstract class AbstractUser {
             }
         }
         //  removing the game
-        this.getInventory().remove(currGame);
+        this.inventory.remove(currGame);
     }
 
 
@@ -575,32 +526,7 @@ public abstract class AbstractUser {
     public void auctionSale(double amount) {
         System.out.println("ERROR: \\< Failed Constraint: Current User: " + this.getUsername() +
                 "is not allowed to toggle an auction sale. >//");
+
+
     }
-    /**
-     * Returns True if the amount of funds are avalible for the current User
-     * @param amount the value of funds to check are present for our user
-     * @return true if the amount is avalible false otherwise
-     */
-    protected boolean canTransferFunds(double amount){
-        return this.accountBalance - amount >= MINFUNDS;
-    }
-
-    /**
-     * Checks if the person's account will not maxout after addition of funds
-     * @param amount the amount of funds to be added
-     * @return true if the funds can be added false otherwise
-     */
-    protected boolean canAcceptFunds(double amount){
-        return this.accountBalance + amount <= MAXFUNDS;
-    }
-
-
-    private boolean dailyLimitCheck(double amount){
-        return this.NEWFUNDSTODAY + amount <= DAILYLIMIT;
-    }
-
-
-
-
-
 }
