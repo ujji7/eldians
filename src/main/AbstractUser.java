@@ -417,7 +417,7 @@ public abstract class AbstractUser {
      * @param market the current Market
      */
     public void gift(Game INgame, AbstractUser reciever, Marketplace market){
-        // Reciever is a Sell user
+        // Receiver is a Sell user
         if (reciever instanceof SellUser){
             System.out.println("ERROR: \\< Failed Constraint: Sell User can not accept any gifts. >");
         }
@@ -446,7 +446,8 @@ public abstract class AbstractUser {
                     String recTran = reciever.getUsername() + " has received " + gameName + " from " + this.getUsername();
                     this.addTranHis(senderTran);
                     reciever.addTranHis(recTran);
-
+                    System.out.println(senderTran);
+                    System.out.println(recTran);
                 }
                 // Sender doesn't have the game
                 else{
@@ -536,8 +537,8 @@ public abstract class AbstractUser {
      * @param game Game name
      * @return a deep copied Game
      */
-    private Game gameCopy(Game game){
-        Game gameCopy = new Game(game.getName(), game.getPrice(), game.getSupplierID(), game.getUniqueID(), game.getDiscount())
+    protected Game gameCopy(Game game){
+        Game gameCopy = new Game(game.getName(), game.getPrice(), game.getSupplierID(), game.getUniqueID(), game.getDiscount());
         return gameCopy;
     }
 
