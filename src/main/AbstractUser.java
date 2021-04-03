@@ -480,7 +480,7 @@ public abstract class AbstractUser {
      * @param game The game being removed
      * @param market The current market
      */
-    public void removegame(Game game, Marketplace market){
+    public void removeGame(Game game, Marketplace market){
         String currGame = game.getName();
         // check if the User is Selling the Game on the Market
         boolean iAmOffering = market.checkSellerSellingGame(this.getUsername(), currGame);

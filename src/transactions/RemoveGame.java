@@ -50,9 +50,9 @@ public class RemoveGame implements Transaction {
         } else if (game == null) {
             System.out.println("ERROR: < Game: " + this.gameName + " does not exist in database. >");
         } else if (owner instanceof AdminUser) {
-            ((AdminUser) login).removegame(game, owner, market);
+            ((AdminUser) login).removeGame(game, owner, market);
         } else {
-            login.removegame(game, market);
+            login.removeGame(game, market);
         }
 
         return login;

@@ -117,9 +117,9 @@ public class AdminUser extends AbstractUser {
      * @param owner Owner of the Game
      * @param market The current Market
      */
-    public void removegame(Game game, AbstractUser owner, Marketplace market){
+    public void removeGame(Game game, AbstractUser owner, Marketplace market){
         // Attempting the remove transaction for the User
-        owner.removegame(game, market);
+        owner.removeGame(game, market);
     }
 
 

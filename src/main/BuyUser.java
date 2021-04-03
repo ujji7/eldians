@@ -86,7 +86,7 @@ public class BuyUser extends AbstractUser {
      * @param market The current market
      */
     @Override
-    public void removegame(Game game, Marketplace market){
+    public void removeGame(Game game, Marketplace market){
         String currGame = game.getName();
         // check if the User has the game
         boolean inMyInv = this.gameInInventory(game);

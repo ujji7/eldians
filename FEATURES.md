@@ -1,6 +1,7 @@
 # Features
 
-**TODO: Add features of the program**\
+## Setup for the system:
+###GSON Repository
 Our system requires the GSON Maven Repository.\
 To load GSON package:\
 Go to this website: \
@@ -9,7 +10,8 @@ https://mvnrepository.com/artifact/com.google.code.gson/gson/2.8.6
 It should have categories such as: License, Categories, Date, Files, etc.\
 On the right of Files, click on the file (it should say jar 234kb).
 
-You may get an error saying the file is harmful, just ignore it and continue to download the file.\
+You may get an error saying the file is harmful, just ignore it and continue to download the file. Remember where you 
+stored it.\
 Now, go back to intellij and open up the a2-eldians folder. \
 Click File from the toolbar\
  Go to Project Structure (CTRL + SHIFT + ALT + S on Windows/Linux, ⌘ + ; on Mac OS X)\
@@ -19,8 +21,9 @@ Click File from the toolbar\
  Go to where you stored the downloaded jar file and select it. \
  Click apply\
  Click ok.\
-It should work now.\
+Now any errors with Json files (such as ReadingJSON) should disappear.
 
+### Remove Trailing spaces on Intellij
 File > Settings > Editor > General > Scroll down to On Save \
 Ensure that "Remove trailing spaces on" is unchecked.
 
@@ -155,3 +158,7 @@ game unique ids
 
 If the entire market file does not follow the specified format, aka an empty file, a file with random words such as 
 just "agenda" would lead to the creation of a new, empty Marketplace with auction sale set as false, and uid set to 0.
+
+## Running the program
+Ensure that all 4 files (daily.txt, games.json, users.json, and market.json) are in the a2-eldians directory\
+Run client.main file. 
