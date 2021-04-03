@@ -34,12 +34,13 @@ public class RemoveGameTest {
         F1 = new FullStandardUser.UserBuilder("F1").balance(32.40).build();
         G1 = new Game("G1", 23.5, "S1", 1, 00.0);
         G2 = new Game("G2", 20.0, "F1", 2, 10.0);
-        G2.changeHold(); //G2 is allowed to be bought
+//        G2.changeHold(); //G2 is allowed to be bought
         G3 = new Game("G3", 22.0, "F1", 3, 0);
         G3.changeHold(); //
         market = new Marketplace();
         boolean sale = market.getAuctionSale();
         F1.sell(G2, market);
+        G2.changeHold();
         B1.buy(F1, G2, sale, market); //now cannot remove it from inv
     }
 
@@ -71,6 +72,12 @@ public class RemoveGameTest {
 //    }
     
     //remove from game sold exists
+    @Test
+    public void testRemoveSaleToday() {
+        S1.removeGame(G2, market);
+        String result1 = "G2 was removed from the User's offering on the Market.\r\n";
+        assertEquals(result + result1, outContent.toString());
+    }
     
     //remove game from inventory on hold should not go thru
     @Test
@@ -81,6 +88,14 @@ public class RemoveGameTest {
     }
     
     //remove game from on sale on hold should not go through
+    @Test
+    public void testRemoveSaleNotToday() {
+        S1.sell(G1, market);
+        S1.removeGame(G1, market);
+        String result1 = "G1 cannot be removed as it is on hold.\r\n\r\n";
+        assertEquals(result + result1, outContent.toString());
+    }
+    
     
     // remove game doesn't exist anywhere
     
@@ -91,6 +106,14 @@ public class RemoveGameTest {
     //remove game for buy type - only checks their inventory
     
     // remove game for sell - only checks on market
+
+    @Test
+    public void testRemoveSaleTodayFull() {
+        F1.removeGame(G2, market);
+        String result1 = "G2 was removed from the User's offering on the Market.\r\n";
+        assertEquals(result + result1, outContent.toString());
+    }
+    
     
     //remove game for full - checks first market, then inv
     

@@ -474,8 +474,6 @@ public abstract class AbstractUser {
                 }
             }
         }
-        
-        
     }
 
 
@@ -496,19 +494,17 @@ public abstract class AbstractUser {
             market.removeGame(this.getUsername(), currGame);
             String tran = currGame+ " was removed from the User's offering on the Market.";
             this.addTranHis(tran);
-            System.out.println("hi " + tran);
+            System.out.println(tran);
         }
         // remove from inventory
         else if (inMyInv){
             this.removeFromInventory(currGame);
             String tran = currGame+ " was removed from the User's inventory.";
             this.addTranHis(tran);
-            System.out.println("hi " + tran);
+            System.out.println(tran);
         }
         else if (!inMyInv){
             System.out.println(currGame+ " was not found in the User's inventory.");
-        } else {
-            System.out.println("yoy");
         }
         // else printing out the error from Market for Game not being currently offered
     }
