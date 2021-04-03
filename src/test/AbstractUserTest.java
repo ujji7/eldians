@@ -36,8 +36,8 @@ public class AbstractUserTest {
         fullStandardUser1 = new FullStandardUser.UserBuilder("swiper").balance(32.40).build();
         monopoly = new Game("Monopoly", 23.5, "boots", 1, 00.0);
         pacman = new Game("Pacman", 20.0, "swiper", 2 , 10.0);
-        pacman1 = new Game("Pacman", 22.0, "swiper", 2 , 0 );
-        sonic = new Game("Sonic", 22.0, "swiper", 2 , 0 );
+        pacman1 = new Game("Pacman", 22.0, "swiper", 3 , 0 );
+        sonic = new Game("Sonic", 22.0, "swiper", 4 , 0 );
         market = new Marketplace();
     }
 

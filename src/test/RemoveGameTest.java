@@ -13,27 +13,34 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class RemoveGameTest {
     
-    AdminUser adminUser1;
-    BuyUser buyUser1;
-    SellUser sellUser1;
-    FullStandardUser fullStandardUser1;
-    Game monopoly, pacman, pacman1, sonic;
+    AdminUser A1;
+    BuyUser B1;
+    SellUser S1;
+    FullStandardUser F1;
+    Game G1, G2, G3, G4;
     Marketplace market;
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final PrintStream originalOut = System.out;
+    String result = "Seller: F1 added to the market\n" +
+            "Game: G2 is now being sold by F1 for $20.0 at a 10.0% discount, will be available for purchase tomorrow.\n" +
+            "B1 has bought G2 from F1 for $20.0.";
 
     @BeforeEach
     public void setUpStreams() {
         System.setOut(new PrintStream(outContent));
-        adminUser1 = new AdminUser.UserBuilder("diego").balance(42).build();
-        buyUser1 = new BuyUser.UserBuilder("dora").balance(41.58).build();
-        sellUser1 = new SellUser.UserBuilder("boots").balance(34.13).build();
-        fullStandardUser1 = new FullStandardUser.UserBuilder("swiper").balance(32.40).build();
-        monopoly = new Game("Monopoly", 23.5, "boots", 1, 00.0);
-        pacman = new Game("Pacman", 20.0, "swiper", 2, 10.0);
-        pacman1 = new Game("Pacman", 22.0, "swiper", 2, 0);
-        sonic = new Game("Sonic", 22.0, "swiper", 2, 0);
+        A1 = new AdminUser.UserBuilder("A1").balance(42).build();
+        B1 = new BuyUser.UserBuilder("B1").balance(41.58).build();
+        S1 = new SellUser.UserBuilder("S1").balance(34.13).build();
+        F1 = new FullStandardUser.UserBuilder("F1").balance(32.40).build();
+        G1 = new Game("G1", 23.5, "S1", 1, 00.0);
+        G2 = new Game("G2", 20.0, "F1", 2, 10.0);
+        G2.changeHold(); //G2 is allowed to be bought
+        G3 = new Game("G3", 22.0, "F1", 3, 0);
+        G3.changeHold(); //
         market = new Marketplace();
+        boolean sale = market.getAuctionSale();
+        F1.sell(G2, market);
+        B1.buy(F1, G2, sale, market); //now cannot remove it from inv
     }
 
     @AfterEach
@@ -41,16 +48,7 @@ public class RemoveGameTest {
         System.setOut(originalOut);
     }
 
-    @Test
-    public void testSellEasy() {
-        sellUser1.sell(monopoly, market);
-        String result1 = "Seller: boots added to the market\r\n";
-        String result = "Game: Monopoly" + " is now being sold by " + "boots" + " for $" +
-                "23.5" + " at a " + "0" + "% discount, will be available for purchase tomorrow.\r\n";
-        assertEquals(result1 + result, outContent.toString());
-        assertEquals(monopoly, market.getGamesOnSale().get(sellUser1.getUsername()).get(0));
-    }
-
+    
 //    removegame - remove a game from a user's inventory or from being sold
 //    The front end will prompt for the game name and if necessary, the game's owner.
 //    This information is saved to the daily transaction file
@@ -61,13 +59,43 @@ public class RemoveGameTest {
 
     
  
-    //remove from inventory
+    //remove from inventory exists and hold is good
+//    @Test
+//    public void testRemoveInv() {
+//        B1.getInventory();
+//        
+//        B1.removeGame(G2, market);
+//        String result1 = "B1 cannot remove the game";
+//        assertEquals(result1, outContent.toString());
+//    }
     
-    //remove from game sold
+    //remove from game sold exists
     
-    //remove game on hold should not go thru
+    //remove game from inventory on hold should not go thru
+    @Test
+    public void testRemoveInvNotToday() {
+        B1.removeGame(G2, market);
+        String result = "Seller: F1 added to the market\n" +
+                "Game: G2 is now being sold by F1 for $20.0 at a 10.0% discount, will be available for purchase " +
+                "tomorrow.\n" +
+                "B1 has bought G2 from F1 for $20.0.\n";
+        String result1 = "B1 cannot remove the game";
+        assertEquals(result + result1, outContent.toString());
+    }
     
-    //HOW TO CHECK IF I BOUGHT THIS GAME TODAY??? - NEW GAME ATTRIBUTE
+    //remove game from on sale on hold should not go through
+    
+    // remove game doesnt exist anywhere
+    
+    // remove game for admin - check first mkt, then inv
+    
+    //remove game for admin other - check first mkt, then inv
+    
+    //remove game for buy type - only checks their inventory
+    
+    // remove game for sell - only checks on market
+    
+    //remove game for full - checks first market, then inv
     
     
 }
