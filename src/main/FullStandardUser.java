@@ -9,11 +9,6 @@ import java.util.ArrayList;
 public class FullStandardUser extends AbstractUser {
 
 
-//    public FullStandardUser(String username, double credit) {
-//        super(username);
-//        this.accountBalance = credit;
-//        this.type = "FS";
-//    }
 
     public FullStandardUser(UserBuilder builder) {
         this.username = builder.username;
@@ -23,27 +18,11 @@ public class FullStandardUser extends AbstractUser {
         this.transactionHistory = builder.transactionHistory;
 
     }
-
-    public String getUsername(){
-        return this.username;
-    }
-
-    public String getType(){
-        return this.type;
-    }
-
+    
     public ArrayList<Game> getInventory(){
         return this.inventory;
     }
-
-    public double getAccountBalance(){
-        return this.accountBalance;
-    }
-
-    public ArrayList<String> getTransactionHistory(){
-        return this.transactionHistory;
-    }
-
+    
 
     public static class UserBuilder {
 

@@ -6,17 +6,7 @@ import java.util.ArrayList;
  *
  */
 public class BuyUser extends AbstractUser {
-
-//    public BuyUser(String username) {
-//        super(username);
-//    }
-
-
-//    public BuyUser(String username, Double credit) {
-//        super(username);
-//        this.accountBalance = credit;
-//        this.type = "BS";
-//    }
+    
 
     private BuyUser(UserBuilder builder) {
         this.username = builder.username;
@@ -25,25 +15,10 @@ public class BuyUser extends AbstractUser {
         this.inventory = builder.inventory;
 
     }
-
-    public String getUsername(){
-        return this.username;
-    }
-
-    public String getType(){
-        return this.type;
-    }
+    
 
     public ArrayList<Game> getInventory(){
         return this.inventory;
-    }
-
-    public double getAccountBalance(){
-        return this.accountBalance;
-    }
-
-    public ArrayList<String> getTransactionHistory(){
-        return this.transactionHistory;
     }
 
 
@@ -90,8 +65,8 @@ public class BuyUser extends AbstractUser {
                     // updating the transaction history for the users
                     String senderTran = this.getUsername() + " has gifted: " + gameName + " to " + reciever.getUsername();
                     String recTran = reciever.getUsername() + " has received " + gameName + " from " + this.getUsername();
-                    this.getTransactionHistory().add(senderTran);
-                    reciever.getTransactionHistory().add(recTran);
+                    this.addTranHis(senderTran);
+                    reciever.addTranHis(recTran);
                 }
                 // Sender doesn't have the game
                 else{
