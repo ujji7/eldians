@@ -28,6 +28,7 @@
 
 ##AuctionSale:
 -applies a discount to the price
+- 07 is the daily
 
 ### Users:
 #### Requirements:
