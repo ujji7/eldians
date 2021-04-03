@@ -39,11 +39,27 @@ public class DatabaseController {
 
     public void writeUser(ArrayList<AbstractUser> userList) throws IOException {
         try {
-            GsonBuilder invBuilder = new GsonBuilder();
-            invBuilder.registerTypeAdapter(Game.class, new userSerializer()).setPrettyPrinting();
-            Gson user = invBuilder.create();
-            writeData(fileUser, user.toJson(userList));
+            flush(fileUser);
+            for(AbstractUser user: userList) {
+                if (user instanceof SellUser) {
+                    writeSellStandard(user);
+                } else {
+                    GsonBuilder invBuilder = new GsonBuilder();
+                    invBuilder.registerTypeAdapter(Game.class, new userSerializer()).setPrettyPrinting();
+                    Gson userSer = invBuilder.create();
+                    writeData(fileUser, userSer.toJson(user));
+                }
+            }
+            close(fileUser);
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void writeSellStandard(AbstractUser user) throws IOException{
+        try{
+            writeData(fileUser, gson.toJson(user));
+        } catch (IOException e){
             e.printStackTrace();
         }
     }
@@ -56,12 +72,17 @@ public class DatabaseController {
         }
     }
 
+    private void flush(FileWriter file) throws IOException {
+        file.flush();
+    }
+
+    private void close(FileWriter file) throws IOException {
+        file.close();
+    }
     private void writeData(FileWriter filename, String data) throws IOException {
         //https://www.journaldev.com/921/java-randomaccessfile-example
 //        filename.seek(filename.length());
-        filename.flush();
         filename.write(data);
-        filename.close();
     }
 
 

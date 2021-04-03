@@ -1,43 +1,39 @@
-[
-  {
-    "username": "Bob",
-    "type": "BS",
-    "accountBalance": 1017.56,
-    "inventory": [
-      {
-        "uniqueID": 1
-      }
-    ],
-    "newFunds": 912.0,
-    "transactionHistory": [
-      "User: Bob added $561.56 to their account",
-      "$456.0 were added to the user\u0027s account",
-      "User: Bob added $1017.56 to their account",
-      "$456.0 were added to the user\u0027s account"
-    ]
-  },
-  {
-    "username": "Alice",
-    "type": "SS",
-    "accountBalance": 105.56,
-    "inventory": [],
-    "newFunds": 0.0,
-    "transactionHistory": []
-  },
-  {
-    "username": "admin1",
-    "type": "AA",
-    "accountBalance": 124.0,
-    "inventory": [
-      {
-        "uniqueID": 1
-      }
-    ],
-    "newFunds": 0.0,
-    "transactionHistory": [
-      "Created Alice user",
-      "Created Bob user",
-      "Bought Clue from Alice"
-    ]
-  }
-]
+{
+  "username": "Bob",
+  "type": "BS",
+  "accountBalance": 1017.56,
+  "inventory": [
+    {
+      "uniqueID": 1
+    }
+  ],
+  "newFunds": 912.0,
+  "transactionHistory": [
+    "User: Bob added $561.56 to their account",
+    "$456.0 were added to the user\u0027s account",
+    "User: Bob added $1017.56 to their account",
+    "$456.0 were added to the user\u0027s account"
+  ]
+}{
+  "username": "Alice",
+  "type": "SS",
+  "accountBalance": 105.56,
+  "inventory": [],
+  "newFunds": 0.0,
+  "transactionHistory": []
+}{
+  "username": "admin1",
+  "type": "AA",
+  "accountBalance": 124.0,
+  "inventory": [
+    {
+      "uniqueID": 1
+    }
+  ],
+  "newFunds": 0.0,
+  "transactionHistory": [
+    "Created Alice user",
+    "Created Bob user",
+    "Bought Clue from Alice"
+  ]
+}
