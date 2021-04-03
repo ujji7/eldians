@@ -31,18 +31,20 @@ public class BuyUser extends AbstractUser {
     /**
      * Sends Games to a User if they can accept this Game
      *
-     * @param game a Game to be gifted
+     * @param INgame a Game to be gifted
      * @param reciever person who will be recieving the Gift
      * @param market the current Market
      */
     @Override
-    public void gift(Game game, AbstractUser reciever, Marketplace market){
+    public void gift(Game INgame, AbstractUser reciever, Marketplace market){
 
         // Reciever is a Sell user
         if (reciever instanceof SellUser){
             System.out.println("ERROR: \\< Failed Constraint: Sell User can not accept any gifts. >//");
         }
         else{
+            // deep-copying the Game to work with
+            Game game = this.gameCopy(INgame);
             String gameName = game.getName();
             // check if the Receiver has the game in their inventory
             boolean inRecInv = !reciever.gameInInventory(game);
@@ -61,6 +63,8 @@ public class BuyUser extends AbstractUser {
                     String recTran = reciever.getUsername() + " has received " + gameName + " from " + this.getUsername();
                     this.addTranHis(senderTran);
                     reciever.addTranHis(recTran);
+                    System.out.println(senderTran);
+                    System.out.println(recTran);
                 }
                 // Sender doesn't have the game
                 else{
@@ -82,11 +86,13 @@ public class BuyUser extends AbstractUser {
     /**
      * Checks and removes the game for the User
      *
-     * @param game The game being removed
+     * @param INgame The game being removed
      * @param market The current market
      */
     @Override
-    public void removegame(Game game, Marketplace market){
+    public void removegame(Game INgame, Marketplace market){
+        // deep-copying the Game to work with
+        Game game = this.gameCopy(INgame);
         String currGame = game.getName();
         // check if the User has the game
         boolean inMyInv = this.gameInInventory(game);
@@ -95,6 +101,7 @@ public class BuyUser extends AbstractUser {
             this.removeFromInventory(currGame);
             String tran = game.getName()+ " was removed from the User's inventory.";
             this.addTranHis(tran);
+            System.out.println(tran);
         }
         else{
             System.out.println(game.getName()+ " was not found in the User's inventory.");
