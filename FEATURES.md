@@ -159,6 +159,10 @@ game unique ids
 If the entire market file does not follow the specified format, aka an empty file, a file with random words such as
 just "agenda" would lead to the creation of a new, empty Marketplace with auction sale set as false, and uid set to 0.
 
+### Eldians Front End Application:
+Follow the youtube link to access the screen recording information for the front end
+https://youtu.be/x2FILnn0dcw
+
 
 ## Transaction Creation / TransactionFactory.java and Transaction.java
 
