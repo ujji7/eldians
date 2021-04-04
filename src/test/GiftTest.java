@@ -409,22 +409,23 @@ public class GiftTest {
         SeSenU1.sell(G1, market);
         G1.changeHold();
         SeSenU1.gift(G1, BuSenU1, market);
-        BuSenU1.gift(G1, adminUser2, market);
+        G1.changeHold();
         // find the Game
         Game game = finder.findGame("G1", BuSenU1.getInventory());
-
-        System.out.println(game.getName());
         // change the on-Hold for the game
         game.changeHold();
+        boolean test = game.getHold();
+        System.out.println(test);
         BuSenU1.gift(game, adminUser1, market );
-        String res;
+        String res, res1;
+        res1 = game.getName();
         res = "Seller: s2 added to the market\n" +
                 "Game: G1 is now being sold by s2 for $5.0 at a 0.0% discount, will be available for purchase tomorrow.\n" +
                 "s2 has gifted: G1 to b2.\n" +
                 "b2 has received G1 from s2.\n" +
-                "ERROR: \\< Failed Constraint: G1 is on Hold and will be up for processing the next day. Gift transaction failed.\\>\n" +
+                "false\n" +
                 "ERROR: \\< Failed Constraint: G1 is on Hold and will be up for processing the next day. Gift transaction failed.\\>\n";
-        assertEquals(res, outContent.toString());
+        assertEquals(res1, outContent.toString());
     }
 
 
