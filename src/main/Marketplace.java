@@ -163,7 +163,7 @@ public class Marketplace {
         }
     }
 
-    /**
+    /*
      * Checks if the game title will be up for sale tomorrow
      * Can be used for Future improvements and extra features
      *

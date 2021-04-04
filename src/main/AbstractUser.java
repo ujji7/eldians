@@ -177,7 +177,9 @@ public abstract class AbstractUser {
                         "You can only add $" + newFunds + " to the account for the rest of today.\\>");
             }
         }
+        else{
         System.out.println("ERROR: \\<Failed Constraint: Amount should be greater than $0.\\>");
+        }
     }
 
     
