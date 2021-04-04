@@ -9,7 +9,18 @@ import java.util.Set;
 
 import com.google.gson.*;
 
+//https://futurestud.io/tutorials/gson-advanced-custom-serialization-part-1
+//https://attacomsian.com/blog/gson-write-json-file
+//https://howtodoinjava.com/java/library/json-simple-read-write-json-examples/
+//https://stackabuse.com/reading-and-writing-json-in-java/
+//https://www.tutorialspoint.com/gson/gson_quick_guide.htm
+//https://www.tutorialspoint.com/gson/gson_inner_classes.htm
 
+
+/**
+ * A Database Serializer that serializes Application's Gamelist,
+ * Userlist and marketplace into JSON
+ */
 public class DatabaseController {
     private static final String FILENAMEGAME = "games.json";
     private FileWriter fileGame, fileUser, fileMarketplace;
@@ -17,6 +28,10 @@ public class DatabaseController {
     private static final String FILENAMEMARKETPLACE = "market.json";
     private Gson gson;
 
+    /**
+     * Database Controller constructor
+     * creates new files with appropriate filenames
+     */
     public DatabaseController() {
         try {
             fileGame = new FileWriter(FILENAMEGAME);
@@ -29,6 +44,11 @@ public class DatabaseController {
         }
     }
 
+    /**
+     * Serializes the marketplace into JSON and writes to marketplace file
+     * @param market Application'c current marketplace with sellers, games, and auctionsale toggle
+     * @throws IOException
+     */
     public void writeMarket(Marketplace market) throws IOException {
         flush(fileMarketplace);
         GsonBuilder invBuilder = new GsonBuilder();
@@ -38,6 +58,11 @@ public class DatabaseController {
         close(fileMarketplace);
     }
 
+    /**
+     * Serializes the Userlist into JSON then writes to the users file
+     * @param userList a list of Application's users
+     * @throws IOException
+     */
     public void writeUser(ArrayList<AbstractUser> userList) throws IOException {
         try {
             ArrayList<String> data = new ArrayList<String>();
@@ -63,7 +88,11 @@ public class DatabaseController {
         }
     }
 
-    
+    /**
+     * Serializaes the Gamelist into JSON then writes to games file
+     * @param gameList Application's list of Games
+     * @throws IOException
+     */
     public void writeGame(ArrayList<Game> gameList) throws IOException {
         try {
             flush(fileGame);
@@ -74,13 +103,30 @@ public class DatabaseController {
         }
     }
 
+    /**
+     * Flushes the contents of the given file
+     * @param file a file to be emptied
+     * @throws IOException
+     */
     private void flush(FileWriter file) throws IOException {
         file.flush();
     }
 
+    /**
+     * Closes the given file
+     * @param file a file to be closed
+     * @throws IOException
+     */
     private void close(FileWriter file) throws IOException {
         file.close();
     }
+
+    /**
+     * Writes the given data to the given file
+     * @param filename a file to be written to
+     * @param data a string of JSON to be written to the file
+     * @throws IOException
+     */
     private void writeData(FileWriter filename, String data) throws IOException {
         //https://www.journaldev.com/921/java-randomaccessfile-example
 //        filename.seek(filename.length());
@@ -90,25 +136,23 @@ public class DatabaseController {
 
 }
 
+/**
+ * A serializer that extends the JSON Serializer to serializes game objects into their
+ * Unique IDs
+ */
 class gameSerializer implements JsonSerializer<Game> {
     @Override
     public JsonElement serialize(Game game, Type type, JsonSerializationContext context) {
         JsonObject object = new JsonObject();
         object.addProperty("uniqueID", game.getUniqueID());
-//        object.addProperty("username", usr.username);
-//        object.addProperty("type", usr.type);
-//        object.addProperty("accountBalance", usr.accountBalance);
-//        ArrayList<Integer> inv = new ArrayList<Integer>();
-//        for (Game game: usr.inventory
-//        ) {
-//            inv.add(game.getUniqueID());
-//        }
-//        object.addProperty("inventory", String.valueOf(inv));
-//        object.addProperty("transactionHistory", String.valueOf(usr.transactionHistory));
         return object;
     }
 }
 
+/**
+ * A Serializer that extends the JSON Serializer to serialize sell users without an
+ * Inventory
+ */
 class sellerSerializer implements JsonSerializer<SellUser> {
     @Override
     public JsonElement serialize(SellUser seller, Type type, JsonSerializationContext context) {
