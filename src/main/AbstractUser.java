@@ -98,9 +98,9 @@ public abstract class AbstractUser {
     }
 
     /**
-     * Returns True if the amount of funds are avalible for the current User
+     * Returns True if the amount of funds are available for the current User
      * @param amount the value of funds to check are present for our user
-     * @return true if the amount is avalible false otherwise
+     * @return true if the amount is available false otherwise
      */
     protected boolean canTransferFunds(double amount){
         return this.accountBalance - amount >= MIN_FUNDS;
@@ -341,10 +341,10 @@ public abstract class AbstractUser {
     }
 
     /**
-     * Issues a refund and transfers the funds between the two user if the funds are avalible in the supplier's account
+     * Issues a refund and transfers the funds between the two user if the funds are available in the supplier's account
      * @param buyer the customer asking for the refund
-     * @param seller the supplier of the games issueing the refund
-     * @param amount the value of credits to be transfered among them
+     * @param seller the supplier of the games issuing the refund
+     * @param amount the value of credits to be transferred among them
      * @return true if the refund was made false otherwise
      */
     public boolean refund(AbstractUser buyer, AbstractUser seller, double amount){
@@ -367,7 +367,7 @@ public abstract class AbstractUser {
     }
 
     /**
-     * Helper to add the Gift being recieved, to the User's inventory
+     * Helper to add the Gift being received, to the User's inventory
      *
      * @param gift Game to be added to the inventory
      */
@@ -383,17 +383,17 @@ public abstract class AbstractUser {
      * Sends Games to a User if they can accept this Game
      * This method is used by Admin and Full-Standard User
      *
-     * @param INgame a Game to be gifted
-     * @param receiver person who will be recieving the Gift
+     * @param InGame a Game to be gifted
+     * @param receiver person who will be receiving the Gift
      * @param market the current Market
      */
-    public void gift(Game INgame, AbstractUser receiver, Marketplace market){
+    public void gift(Game InGame, AbstractUser receiver, Marketplace market){
         if (receiver instanceof SellUser){
             System.out.println("ERROR: \\<Failed Constraint: Sell User can not accept any gifts.\\>");
             return;
         }
         // deep-copying the Game to work with
-        Game game = this.gameCopy(INgame);
+        Game game = this.gameCopy(InGame);
         // if the User can accept the game then check if the sender can send the game
         if (receiver.canAccept(game, market)) {
             // User can send the gift, game is added to the Receiver's inventory
