@@ -398,7 +398,7 @@ public abstract class AbstractUser {
             }
             // Sender doesn't have the game
             else {
-                System.out.println(FAIL_BEGIN + this.username + " does not have the " +
+                System.out.println(FAIL_BEGIN + this.username + " is currently not offering " +
                         game.getName() + ". Gift transaction failed" + FAIL_END);
             }
         }
@@ -416,7 +416,7 @@ public abstract class AbstractUser {
      * @param market marketplace where user could be selling games.
      * @return true if game not in inventory or market, false otherwise.
      */
-    private boolean canAccept(Game gift, Marketplace market) {
+    protected boolean canAccept(Game gift, Marketplace market) {
 
         // check if the Receiver has the game in their inventory
         boolean inRecInv = this.gameInInventory(gift);
@@ -434,7 +434,7 @@ public abstract class AbstractUser {
      * @param market marketplace where user could be selling games.
      * @return true if game in inventory or game on sale, false otherwise.
      */
-    private boolean canSendGame(Game gift, Marketplace market) {
+    protected boolean canSendGame(Game gift, Marketplace market) {
         boolean inSenInv = this.gameInInventory(gift);
         boolean inSenMar = market.checkSellerSellingGame(this.getUsername(), gift.getName());
         boolean notOnHold = market.checkNotOnHold(this.getUsername(), gift.getName());
