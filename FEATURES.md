@@ -157,4 +157,20 @@ game unique ids
 If the entire market file does not follow the specified format, aka an empty file, a file with just "aknda"
 would lead to the creation of a new, empty Marketplace with auction sale set as false.
 
+## Transaction Creation / TransactionFactory.java and Transaction.java
+
+The TransactionFactory uses the factory design pattern to create Transaction objects.
+
+* The method TransactionFactory.buildTransaction takes in an ArrayList of strings where:
+    * The ArrayList is a single line from the daily.txt broken up into attributes.
+    * each string represents anattribute required for the transaction being created (transaction type, username, user type, etc).
+* The first string in the ArrayList is always the type of transaction, which tells the factory what transaction
+to create and what attributes the rest of the strings in theArrayList represent.
+
+We chose to use the factory design pattern here to simplify the creation of Transaction objects and allow each
+Transaction to handle itself through its Transaction.execute method depending on its type. This simplified our
+code aswell and made it much easier to implement good unit tests since we could test each Transaction object
+in isolation.
+
+
 
