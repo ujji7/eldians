@@ -8,8 +8,7 @@ import java.util.ArrayList;
  */
 public class FullStandardUser extends AbstractUser {
 
-
-
+    
     /** Construct a buy user using the builder attributes
      * @param builder User builder that builds the buy user
      */
@@ -31,7 +30,6 @@ public class FullStandardUser extends AbstractUser {
         private String username; // required
         public double accountBalance;
         public ArrayList<Game> inventory = new ArrayList<Game>();
-        public double newFunds;
         public ArrayList<String> transactionHistory;
         
         /** Initialize a user builder with the given name.
@@ -64,16 +62,6 @@ public class FullStandardUser extends AbstractUser {
             return this;
         }
 
-        /** Set the builder's new funds with the given new funds
-         *
-         * @param newFunds the newFunds to set the builder at
-         * @return the user builder
-         */
-        public UserBuilder newFunds(double newFunds){
-            this.newFunds = newFunds;
-            return this;
-        }
-
         /** Set the builder's transactionHistory with the given transactionHistory
          *
          * @param transactions the transactionHistory to set the builder at
@@ -89,8 +77,7 @@ public class FullStandardUser extends AbstractUser {
          * @return FullStandardUser object with the builder's attributes
          */
         public FullStandardUser build(){
-            FullStandardUser user = new FullStandardUser(this);
-            return user;
+            return new FullStandardUser(this);
         }
     }
 }

@@ -1,18 +1,13 @@
 {
   "auctionSale": false,
-  "uid": 1,
+  "uid": 3,
   "gamesOnSale": {
-    "Alice": [
-      {
-        "uniqueID": 1
-      },
-      {
-        "uniqueID": 3
-      }
-    ],
     "admin1": [
       {
         "uniqueID": 2
+      },
+      {
+        "uniqueID": 0
       },
       {
         "uniqueID": 0

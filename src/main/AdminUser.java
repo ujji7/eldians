@@ -46,42 +46,30 @@ public class AdminUser extends AbstractUser {
             AbstractUser newUser;
             switch (type) {
                 case "AA":
-                    AdminUser.UserBuilder AAbuilder = new AdminUser.UserBuilder(username);
-                    AAbuilder.balance(credit);
-                    newUser = AAbuilder.build();
+                    newUser = new AdminUser.UserBuilder(username).balance(credit).build();
                     break;
                 case "FS":
-                    FullStandardUser.UserBuilder FSbuilder = new FullStandardUser.UserBuilder(username);
-                    FSbuilder.balance(credit);
-                    newUser = FSbuilder.build();
+                    newUser = new FullStandardUser.UserBuilder(username).balance(credit).build();
                     break;
                 case "BS":
-                    BuyUser.UserBuilder BSbuilder = new BuyUser.UserBuilder(username);
-                    BSbuilder.balance(credit);
-                    newUser = BSbuilder.build();
+                    newUser = new BuyUser.UserBuilder(username).balance(credit).build();
                     break;
                 case "SS":
-                    SellUser.UserBuilder SSbuilder = new SellUser.UserBuilder(username);
-                    SSbuilder.balance(credit);
-                    newUser = SSbuilder.build();
+                    newUser = new SellUser.UserBuilder(username).balance(credit).build();
                     break;
-                default:
-                    // if user isn't initialized we stop the create function
-                    System.out.println("ERROR: \\< Failed Constraint: New User could not be created since user type " +
-                            "does not exist. > //");
+                default: // if user isn't initialized we stop the create function
+                    System.out.println("ERROR: \\< Failed Constraint: " + this.username + " could not be created since " +
+                            "user type does not exist. \\>");
                     return null;
             }
             if(!newUser.getUsername().equals("")) {
-                this.transactionHistory.add("User: " + this.username + " has created user " +
-                        newUser.getUsername());
-                System.out.println("A new user was created: \n" + username); //+ newUser.toString()
-//                System.out.println("new user name is: " + username);
+                this.transactionHistory.add("User: " + this.username + " has created user " + newUser.getUsername());
+                System.out.println("A new user was created: \n" + username);
                 return newUser;
             }
         }
-        System.out.println("ERROR: \\< Failed Constraint: New User could not be created since "
-                + Double.toString(credit) + " amount is invalid. >//");
-
+        System.out.println("ERROR: \\< Failed Constraint: user " + username + " could not be created since "
+                + Double.toString(credit) + " amount is invalid. \\>");
         return null;
     }
 
@@ -101,8 +89,8 @@ public class AdminUser extends AbstractUser {
      */
     @Override
     public void auctionSale(){
-        this.transactionHistory.add(this.username + "toggled an Auction Sale in the Eldians Markeplace");
-        System.out.println(this.username + "toggled an Auction Sale in the Eldians Markeplace successfully.");
+        this.transactionHistory.add(this.username + "toggled an Auction Sale in the Eldians Marketplace.");
+        System.out.println(this.username + "toggled an Auction Sale in the Eldians Marketplace successfully.");
     }
 
     /**
@@ -153,25 +141,24 @@ public class AdminUser extends AbstractUser {
             buyer.transferFunds(amount);
             result = true;
             transactionHistory.add(seller.getUsername() + " made a refund to "
-                    + buyer.getUsername() + " for $" + amount);
+                    + buyer.getUsername() + " for $" + amount + ".");
             System.out.println(seller.getUsername() + " made a refund to "
-                    + buyer.getUsername() + " for $" + amount);
+                    + buyer.getUsername() + " for $" + amount + ".");
         }
         // failed to issue refund
         else{
             // Seller unable to transfer the funds
             if(!canSendMoney){
-                System.out.println("ERROR: \\ < Failed Constraint: " + seller.getUsername() + " could not make a refund to " +
-                        buyer.getUsername() + " for $" + amount + " due to insufficient funds. > //");
+                System.out.println("ERROR: \\ < Failed Constraint: " + seller.getUsername() + " could not make a " +
+                        "refund to " + buyer.getUsername() + " for $" + amount + " due to insufficient funds. \\>");
             }
-            // Buyer unable to accept the funds
-            else {
-                System.out.println("ERROR: \\ < Failed Constraint: " + buyer.getUsername() + " could not accept a refund from " +
-                        seller.getUsername() + " for $" + amount + " due to account maxing out upon addition of funds. > //");
+            else { // Buyer unable to accept the funds
+                System.out.println("ERROR: \\< Failed Constraint: " + buyer.getUsername() + " could not accept a " +
+                        "refund from " + seller.getUsername() + " for $" + amount + " due to account maxing out " +
+                        "upon addition of funds. \\>");
             }
         }
         return result;
-
     }
 
 
@@ -183,9 +170,7 @@ public class AdminUser extends AbstractUser {
         public String username; //mandatory
         public double accountBalance; // optional
         public ArrayList<Game> inventory = new ArrayList<Game>(); //optional
-        public double newFunds; //optional
         public ArrayList<String> transactionHistory; //optional
-
 
         /** Initialize a user builder with the given name.
          * 
