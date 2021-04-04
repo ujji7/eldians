@@ -28,9 +28,9 @@ public abstract class AbstractUser {
     // can change minFunds to allow overdrafts for future improvements
     protected static final double MIN_FUNDS = 0d;
     protected static final double DAILY_LIMIT = 1000d;
-    private final double NEW_FUNDS_TODAY = 0d;
-    protected final String FAIL_BEGIN = "ERROR: \\< Failed Constraint: ";
-    protected final String FAIL_END = ".\\>";
+    private final double newFundsToday = 0d;
+    protected static final String FAIL_BEGIN = "ERROR: \\< Failed Constraint: ";
+    protected static final String FAIL_END = ".\\>";
 
     
     /** Get the current User's unique username
@@ -120,7 +120,7 @@ public abstract class AbstractUser {
      * @return true if amount can be added without exceeding the daily limit
      */
     private boolean dailyLimitCheck(double amount){
-        return this.NEW_FUNDS_TODAY + amount <= DAILY_LIMIT;
+        return this.newFundsToday + amount <= DAILY_LIMIT;
     }
     
     /**
