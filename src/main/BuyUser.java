@@ -1,13 +1,16 @@
 package main;
 
 import java.util.ArrayList;
+
 /** This is a buy type user that extends the Abstract User class. A Buy type user cannot sell games, only buy. And
  * it cannot create or delete users.
  *
  */
 public class BuyUser extends AbstractUser {
-    
 
+    /** Construct a buy user using the builder attributes
+     * @param builder User builder that builds the buy user
+     */
     private BuyUser(UserBuilder builder) {
         this.username = builder.username;
         this.accountBalance = builder.accountBalance;
@@ -21,7 +24,6 @@ public class BuyUser extends AbstractUser {
      * @param game game to be sold
      * @param market Marketplace game will be sold on
      */
-    //THIS DOES NOT FOLLOW THE RIGHT FORMAT
     @Override
     public boolean sell(Game game, Marketplace market){
         System.out.println("ERROR: \\ < Failed Constraint: "+ this.username + " does not have the ability to sell games.");
@@ -32,52 +34,42 @@ public class BuyUser extends AbstractUser {
     /**
      * Sends Games to a User if they can accept this Game
      *
-     * @param INgame a Game to be gifted
-     * @param reciever person who will be recieving the Gift
+     * @param inGame a Game to be gifted
+     * @param receiver person who will be recieving the Gift
      * @param market the current Market
      */
     @Override
-    public void gift(Game INgame, AbstractUser reciever, Marketplace market){
-
-        // Reciever is a Sell user
-        if (reciever instanceof SellUser){
+    public void gift(Game inGame, AbstractUser receiver, Marketplace market){
+        if (receiver instanceof SellUser){ // Receiver is a Sell user
             System.out.println("ERROR: \\< Failed Constraint: Sell User can not accept any gifts. >//");
         }
         else{
-            // deep-copying the Game to work with
-            Game game = this.gameCopy(INgame);
+            Game game = this.gameCopy(inGame); // deep-copying the Game to work with
             String gameName = game.getName();
-            // check if the Receiver has the game in their inventory
-            boolean inRecInv = !reciever.gameInInventory(game);
+            boolean inRecInv = !receiver.gameInInventory(game); // check if receiver has the game in their inventory
             // Check if the Receiver has the game up for Sale on the Market
-            boolean inRecMar = !market.checkSellerSellingGame(reciever.getUsername(), gameName);
+            boolean inRecMar = !market.checkSellerSellingGame(receiver.getUsername(), gameName);
             // if the User can accept the game then check if the sender can send the game
             if(inRecInv && inRecMar){
-                boolean inSenInv = this.gameInInventory(game);
-                // User can send the gift, game is added to the Receiver's inventory
-                if (inSenInv){
-                    // Game needs to be removed from the sender's inventory and added to the reciever's
+                boolean inSenInv = this.gameInInventory(game); // user can send gift, game is added to Receiver's inventory
+                if (inSenInv){ // Game needs to be removed from the sender's inventory and added to the receiver's
                     this.removeFromInventory(gameName);
-                    reciever.addGame(game);
-                    // updating the transaction history for the users
-                    String senderTran = this.getUsername() + " has gifted: " + gameName + " to " + reciever.getUsername();
-                    String recTran = reciever.getUsername() + " has received " + gameName + " from " + this.getUsername();
-                    this.addTranHis(senderTran);
-                    reciever.addTranHis(recTran);
+                    receiver.addGame(game);
+                    String senderTran = this.getUsername() + " has gifted: " + gameName + " to " + receiver.getUsername();
+                    String recTran = receiver.getUsername() + " has received " + gameName + " from " + this.getUsername();
+                    this.addTranHis(senderTran); // updating the transaction history for the users
+                    receiver.addTranHis(recTran);
                     System.out.println(senderTran);
                     System.out.println(recTran);
                 }
-                // Sender doesn't have the game
-                else{
+                else{ // Sender doesn't have the game
                     System.out.println("ERROR: \\" + this.username + " does not have the " + gameName +
                             ".\n Gift transaction failed.");
                 }
             }
-            // Reciever already has the game
-            else{
-                System.out.println("ERROR: \\" + reciever.getUsername() + " already has " +gameName+
+            else{ // Receiver already has the game
+                System.out.println("ERROR: \\" + receiver.getUsername() + " already has " +gameName+
                         ".\n Gift transaction failed.");
-
             }
         }
     }
@@ -100,58 +92,87 @@ public class BuyUser extends AbstractUser {
         boolean inMyInv = this.gameInInventory(game);
         // remove from inventory
         if (inMyInv){
-            this.removeFromInventory(currGame);
-            String tran = game.getName()+ " was removed from the user's inventory.";
-            this.addTranHis(tran);
-            System.out.println(tran);
-
+            boolean removed = this.removeFromInventory(currGame);
+            if (removed) {
+                String tran = game.getName()+ " was removed from the user's inventory.";
+                this.addTranHis(tran);
+                System.out.println(tran);
+            }
         }
         else{
             System.out.println(game.getName()+ " was not found in the user's inventory.");
         }
     }
 
+    /** User Builder class to build a Buy type user. Mandatory attribute is the name.
+     *
+     */
     public static class UserBuilder {
 
         private String username; // required
-        //        public String type;
         public double accountBalance;
         public ArrayList<Game> inventory = new ArrayList<Game>();
         public double newFunds;
         public ArrayList<String> transactionHistory;
-
+        
+        /** Initialize a user builder with the given name.
+         *
+         * @param name of the user
+         */
         public UserBuilder(String name) {
             this.username = name;
             this.accountBalance = 0.00;
             this.transactionHistory = new ArrayList<>();
         }
 
+        /** Set the builder's account balance to account balance
+         *
+         * @param accountBalance the balance to set the builder at
+         * @return the user builder
+         */
         public UserBuilder balance(double accountBalance){
             this.accountBalance = accountBalance;
             return this;
         }
 
+        /** Set the builder's inventory with the given inventory
+         *
+         * @param inventory the inventory to set the builder at
+         * @return the user builder
+         */
         public UserBuilder inventoryGames(ArrayList<Game> inventory){
             this.inventory.addAll(inventory);
-
             return this;
         }
 
+        /** Set the builder's new funds with the given new funds
+         *
+         * @param newFunds the newFunds to set the builder at
+         * @return the user builder
+         */
         public UserBuilder newFunds(double newFunds){
             this.newFunds = newFunds;
             return this;
         }
 
+        /** Set the builder's transactionHistory with the given transactionHistory
+         *
+         * @param transactions the transactionHistory to set the builder at
+         * @return the user builder
+         */
         public UserBuilder transactionHistory(ArrayList<String> transactions){
             this.transactionHistory.addAll(transactions);
             return this;
         }
 
+        /** Build and return the Buy User
+         *
+         * @return BuyUser object with the builder's attributes
+         */
         public BuyUser build() {
             BuyUser user = new BuyUser(this);
             return new BuyUser(this);
         }
 
     }
-
 }
