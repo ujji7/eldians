@@ -34,7 +34,7 @@ public abstract class AbstractUser {
     protected String username;
     protected String type;
     protected double accountBalance = 0;
-    protected ArrayList<Game> inventory;
+    protected ArrayList<Game> inventory = new ArrayList<Game>();
     protected double newFunds = 0;
     public ArrayList<String> transactionHistory = new ArrayList<String>();
     protected static final double MAXFUNDS = 999999.99f;
@@ -256,7 +256,7 @@ public abstract class AbstractUser {
     private void payAndAddGame(AbstractUser seller, double price, Game game) {
         this.accountBalance -= price;
         this.inventory.add(game);
-        System.out.println(this.username + " has bought " + game.getName() + " from " + seller.getUsername() + " for "
+        System.out.println(this.username + " has bought " + game.getName() + " from " + seller.getUsername() + " for $"
                 + price + ".");
     }
 
@@ -315,14 +315,26 @@ public abstract class AbstractUser {
      * @param game Game object being sold to the market
      * @param market Marketplace that will sell this game
      */
-    public void sell(Game game, Marketplace market){
+    public boolean sell(Game game, Marketplace market){
 
         // if game doesn't follow constraints end here
-        if (!this.sellConstraints(game)) return;
+        if (!this.sellConstraints(game)) return false;
         
         if (this.gameInInventory(game)) {
             System.out.println("ERROR: \\ < Failed Constraint: " + this.getUsername() + " could not sell " +
-                    game.getName() + " as they have bought this exact game. >");
+                    game.getName() + " as they have bought this exact game. > //");
+            return false;
+        }
+
+        // Check if user is already selling this game
+        if (market.getGamesOnSale().containsKey(this.username)) {
+            for (Game g : market.getGamesOnSale().get(this.username)) {
+                if (g.getName().equals(game.getName())) {
+                    System.out.println("ERROR: \\ < Failed Constraint: " + this.username + " could not sell " +
+                            game.getName() + " as User is already selling this exact game > //");
+                    return false;
+                }
+            }
         }
 
         HashMap<String, ArrayList<Game>> map = market.getGamesOnSale(); // var for less typing
@@ -337,13 +349,14 @@ public abstract class AbstractUser {
 
         } else {
             market.addNewSeller(this.username);
-
+            map.get(this.username).add(game);
             // Report to console and transactionHistory
             this.transactionHistory.add("User: " + this.username + " is now selling " + game.getName() +
                     " for " + game.getPrice());
             System.out.println("Game: " + game.getName() + " is now being sold by " + this.getUsername() + " for $" +
                     game.getPrice() + " at a " + game.getDiscount()+"% discount, will be available for purchase tomorrow.");
         }
+        return true;
     }
 
     /**
@@ -427,16 +440,18 @@ public abstract class AbstractUser {
      * Sends Games to a User if they can accept this Game
      * This method is used by Admin and Full-Standard User
      *
-     * @param game a Game to be gifted
+     * @param INgame a Game to be gifted
      * @param reciever person who will be recieving the Gift
      * @param market the current Market
      */
-    public void gift(Game game, AbstractUser reciever, Marketplace market){
-        // Reciever is a Sell user
+    public void gift(Game INgame, AbstractUser reciever, Marketplace market){
+        // Receiver is a Sell user
         if (reciever instanceof SellUser){
             System.out.println("ERROR: \\< Failed Constraint: Sell User can not accept any gifts. >");
         }
         else{
+            // deep-copying the Game to work with
+            Game game = this.gameCopy(INgame);
             String gameName = game.getName();
             // check if the Receiver has the game in their inventory
             boolean inRecInv = !reciever.gameInInventory(game);
@@ -459,7 +474,8 @@ public abstract class AbstractUser {
                     String recTran = reciever.getUsername() + " has received " + gameName + " from " + this.getUsername();
                     this.addTranHis(senderTran);
                     reciever.addTranHis(recTran);
-
+                    System.out.println(senderTran);
+                    System.out.println(recTran);
                 }
                 // Sender doesn't have the game
                 else{
@@ -499,10 +515,12 @@ public abstract class AbstractUser {
      * Checks and removes the game for the User
      * Method is used by Admin and Full-Standard
      *
-     * @param game The game being removed
+     * @param INgame The game being removed
      * @param market The current market
      */
-    public void removegame(Game game, Marketplace market){
+    public void removegame(Game INgame, Marketplace market){
+        // deep-copying the Game to work with
+        Game game = this.gameCopy(INgame);
         String currGame = game.getName();
         // check if the User is Selling the Game on the Market
         boolean iAmOffering = market.checkSellerSellingGame(this.getUsername(), currGame);
@@ -536,12 +554,20 @@ public abstract class AbstractUser {
     }
     
     /** Prints that the user cannot implement an auction sale.
-     * @param amount amount by which to reduce prices of games by.
      */
-    public void auctionSale(double amount) {
+    public void auctionSale() {
         System.out.println("ERROR: \\< Failed Constraint: Current User: " + this.getUsername() +
                 "is not allowed to toggle an auction sale. >//");
+    }
 
-
+    /**
+     * For a valid existing game object create and return a deep copy of the Game
+     *
+     * @param game Game name
+     * @return a deep copied Game
+     */
+    protected Game gameCopy(Game game) {
+        Game gameCopy = new Game(game.getName(), game.getPrice(), game.getSupplierID(), game.getUniqueID(), game.getDiscount());
+        return gameCopy;
     }
 }

@@ -9,8 +9,8 @@ import java.util.ArrayList;
 public class Buy implements Transaction {
 
     private final String game;
-    private final String buyer;
     private final String seller;
+    private final String buyer;
 
     /**
      * Creates a new Buy transaction.
@@ -21,8 +21,8 @@ public class Buy implements Transaction {
      */
     public Buy(String g, String s, String b) {
         this.game = g;
-        this.buyer = b;
         this.seller = s;
+        this.buyer = b;
     }
 
     /**

@@ -40,7 +40,7 @@ public class AuctionSale implements Transaction {
                                 AbstractUser login) {
         if (login instanceof AdminUser) {
             market.toggleSale();
-            login.auctionSale(this.funds);
+            login.auctionSale();
         }
         else { System.out.println("ERROR: < User " + login.getUsername() + " does not have the authority to toggle an " +
                     "auction sale"); }
