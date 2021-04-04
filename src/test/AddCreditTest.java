@@ -98,11 +98,21 @@ public class AddCreditTest {
     }
 
     @Test
-    //negative credit
-    public void negativeCredit(){
+    //negative credit standard
+    public void negativeCreditStandard(){
         buyUser2.addCredit(-5.00);
-//        String result =
+        String result = "ERROR: \\ < Failed Constraint: Amount should be greater than $0\n";
+        assertEquals(result, outContent.toString());
     }
+
+    @Test
+    //negative credit add credit to
+    public void negativeCreditAddCreditTo(){
+        adminUser1.addCreditTo(-5.00, buyUser1);
+        String result = "ERROR: \\ < Failed Constraint: Amount should be greater than $0\n";
+        assertEquals(result, outContent.toString());
+    }
+
 
     // add credit to user doesn't exist
 

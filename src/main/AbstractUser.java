@@ -150,36 +150,39 @@ public abstract class AbstractUser {
      * @param amount The amount of funds to be added to the User's account
      */
     public void addCredit(double amount) {
-        if (this.dailyLimitCheck(amount)) { // check the constraints of daily limit
-            double fundsAdded;
-            // check if the account will be maxed upon addition of funds
-            if(this.canAcceptFunds(amount)){
-                this.transferFunds(amount);
-                this.newFunds += amount;
-                fundsAdded = amount;
-            }
-            // Max out their account with the difference            @666 Piazza
-            else{
-                double newFunds = (double) Math.round((MAX_FUNDS - this.getAccountBalance())*100)/100;
-                this.setAccountBalance(MAX_FUNDS);
-                System.out.println("ERROR: \\ < Failed Constraint: "+ this.username +
-                        "'s balance was Maxed out!\n$" + newFunds+ " was added to the account");
-                this.newFunds += newFunds;
-                fundsAdded = newFunds;
-            }
+        if (!(amount <= MIN_FUNDS)) {
+            if (this.dailyLimitCheck(amount)) { // check the constraints of daily limit
+                double fundsAdded;
+                // check if the account will be maxed upon addition of funds
+                if (this.canAcceptFunds(amount)) {
+                    this.transferFunds(amount);
+                    this.newFunds += amount;
+                    fundsAdded = amount;
+                }
+                // Max out their account with the difference            @666 Piazza
+                else {
+                    double newFunds = (double) Math.round((MAX_FUNDS - this.getAccountBalance()) * 100) / 100;
+                    this.setAccountBalance(MAX_FUNDS);
+                    System.out.println("ERROR: \\ < Failed Constraint: " + this.username +
+                            "'s balance was Maxed out!\n$" + newFunds + " was added to the account");
+                    this.newFunds += newFunds;
+                    fundsAdded = newFunds;
+                }
 
-            String tran  = "$"+ fundsAdded + " was added to the user's account";
-            this.addTranHis(tran);
-        }
-        // Reject the transaction               @701 Piazza
-        else {
-            // get the amount that can be added
-            double newFunds = (double) Math.round((DAILY_LIMIT - this.newFunds)*100)/100;
+                String tran = "$" + fundsAdded + " was added to the user's account";
+                this.addTranHis(tran);
+            }
+            // Reject the transaction               @701 Piazza
+            else {
+                // get the amount that can be added
+                double newFunds = (double) Math.round((DAILY_LIMIT - this.newFunds) * 100) / 100;
 
-            System.out.println("ERROR: \\ < Failed Constraint: "+ this.username +
-                    "'s daily limit would be reached upon addition of funds!\n" +
-                    "You can only add $" + newFunds+ " to the account for the rest of today.");
+                System.out.println("ERROR: \\ < Failed Constraint: " + this.username +
+                        "'s daily limit would be reached upon addition of funds!\n" +
+                        "You can only add $" + newFunds + " to the account for the rest of today.");
+            }
         }
+        System.out.println("ERROR: \\ < Failed Constraint: Amount should be greater than $0");
     }
 
     

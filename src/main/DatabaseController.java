@@ -65,23 +65,11 @@ public class DatabaseController {
      */
     public void writeUser(ArrayList<AbstractUser> userList) throws IOException {
         try {
-            ArrayList<String> data = new ArrayList<String>();
             flush(fileUser);
-            for(AbstractUser user: userList) {
-                if (user instanceof SellUser) {
-                    GsonBuilder sellBuilder = new GsonBuilder();
-                    sellBuilder.registerTypeAdapter(SellUser.class, new sellerSerializer()).setPrettyPrinting();
-                    Gson sellSer = sellBuilder.create();
-                    data.add(sellSer.toJson(user));
-                } else {
-                    GsonBuilder invBuilder = new GsonBuilder();
-                    invBuilder.registerTypeAdapter(Game.class, new gameSerializer()).setPrettyPrinting();
-                    Gson userSer = invBuilder.create();
-                    data.add(userSer.toJson(user));
-
-                }
-            }
-            writeData(fileUser, gson.toJson(data));
+            GsonBuilder invBuilder = new GsonBuilder();
+            invBuilder.registerTypeAdapter(Game.class, new gameSerializer()).setPrettyPrinting();
+            Gson userSer = invBuilder.create();
+            writeData(fileUser, userSer.toJson(userList));
             close(fileUser);
         } catch (IOException e) {
             e.printStackTrace();
@@ -147,19 +135,5 @@ class gameSerializer implements JsonSerializer<Game> {
         object.addProperty("uniqueID", game.getUniqueID());
         return object;
     }
-}
 
-/**
- * A Serializer that extends the JSON Serializer to serialize sell users without an
- * Inventory
- */
-class sellerSerializer implements JsonSerializer<SellUser> {
-    @Override
-    public JsonElement serialize(SellUser seller, Type type, JsonSerializationContext context) {
-        JsonObject object = new JsonObject();
-        object.addProperty("username", seller.getUsername());
-        object.addProperty("accountBalance", seller.getAccountBalance());
-        object.addProperty("type", seller.getType());
-        return object;
-    }
 }
