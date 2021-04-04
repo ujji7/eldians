@@ -406,18 +406,18 @@ public abstract class AbstractUser {
             Game game = this.gameCopy(INgame);
             String gameName = game.getName();
             // check if the Receiver has the game in their inventory
-            boolean inRecInv = !reciever.gameInInventory(game);
+            boolean inRecInv = reciever.gameInInventory(game);
             // Check if the Receiver has the game up for Sale on the Market
-            boolean inRecMar = !market.checkSellerSellingGame(reciever.getUsername(), gameName);
+            boolean inRecMar = market.checkSellerSellingGame(reciever.getUsername(), gameName);
 
             // if the User can accept the game then check if the sender can send the game
-            if(inRecInv && inRecMar){
+            if(!inRecInv && !inRecMar){
                 boolean inSenInv = this.gameInInventory(game);
                 boolean inSenMar = market.checkSellerSellingGame(this.getUsername(), gameName);
                 // User can send the gift, game is added to the Receiver's inventory
                 if (inSenInv || inSenMar){
                     // Game needs to be removed from the sender's inventory
-                    if(inSenInv){
+                    if(inSenInv) {
                         this.removeFromInventory(gameName);
                     }
                     reciever.addGame(game);
