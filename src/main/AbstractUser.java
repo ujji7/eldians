@@ -1,7 +1,8 @@
 package main;
+import transactions.Finder;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-import transactions.Finder;
 //line 401
 //REMOVE ANY UNNECESSARY PRINT STATEMENTS IN CREATE AND BUY
 
@@ -159,7 +160,6 @@ public abstract class AbstractUser {
                     this.newFunds += newFunds;
                     fundsAdded = newFunds;
                 }
-
                 String tran = "$" + fundsAdded + " was added to the user's account.";
                 this.addTranHis(tran);
             }
@@ -172,9 +172,8 @@ public abstract class AbstractUser {
                         "'s daily limit would be reached upon addition of funds!\n" +
                         "You can only add $" + newFunds + " to the account for the rest of today" + FAIL_END);
             }
-        }
-        else{
-        System.out.println(FAIL_BEGIN +  "Amount should be greater than $0" + FAIL_END);
+        } else {
+            System.out.println(FAIL_BEGIN +  "Amount should be greater than $0" + FAIL_END);
         }
     }
 
@@ -294,7 +293,8 @@ public abstract class AbstractUser {
             this.transactionHistory.add("User: " + this.username + " is now selling " + game.getName() +
                     " for " + game.getPrice());
             System.out.println("Game: " + game.getName() + " is now being sold by " + this.getUsername() + " for $" +
-                    game.getPrice() + " at a " + game.getDiscount()+"% discount, will be available for purchase tomorrow.");
+                    game.getPrice() + " at a " + game.getDiscount()+"% discount, will be available for " +
+                    "purchase tomorrow.");
         }
         return true;
     }
@@ -389,7 +389,7 @@ public abstract class AbstractUser {
      */
     public void gift(Game INgame, AbstractUser receiver, Marketplace market){
         if (receiver instanceof SellUser){
-            System.out.println("ERROR: \\<Failed Constraint: Sell User can not accept any gifts.\\>");
+            System.out.println(FAIL_BEGIN + " Sell User can not accept any gifts" + FAIL_END);
             return;
         }
         // deep-copying the Game to work with
@@ -406,14 +406,14 @@ public abstract class AbstractUser {
             }
             // Sender doesn't have the game
             else {
-                System.out.println("ERROR: \\<Failed Constraint: " + this.username + " does not have the " +
-                        game.getName() + ". Gift transaction failed.\\>");
+                System.out.println(FAIL_BEGIN + this.username + " does not have the " +
+                        game.getName() + ". Gift transaction failed" + FAIL_END);
             }
         }
         // Receiver already has the game
         else {
-            System.out.println("ERROR: \\<Failed Constraint:" + receiver.getUsername() + " already has " +
-                    game.getName() + ". Gift transaction failed.\\>");
+            System.out.println(FAIL_BEGIN + receiver.getUsername() + " already has " +
+                    game.getName() + ". Gift transaction failed" + FAIL_END);
         }
     }
 
@@ -448,8 +448,8 @@ public abstract class AbstractUser {
         boolean notOnHold = market.checkNotOnHold(this.getUsername(), gift.getName());
         if (inSenInv || inSenMar) {
             if (!notOnHold) {
-                System.out.println("ERROR: \\<Failed Constraint: " + gift.getName() + " cannot be gifted as " +
-                        "it is still on hold.\\>");
+                System.out.println(FAIL_BEGIN + gift.getName() + " cannot be gifted as " +
+                        "it is still on hold" + FAIL_END);
             } else {
                 return true;
             }
