@@ -2,14 +2,17 @@ package main;
 
 import java.util.ArrayList;
 
-//CREATE METHOD DOES NOT PROPERYL CHECK FOR ALREADY USER WITH THE GIVEN USERNAME EXISTS
-/** Admin type user that extends the Abstract User class. An admin has the highest privileges.
+/** Admin type user that extends the Abstract User class. An admin has the highest privileges. Admin can create, delete 
+ * users and issue refunds to accounts. They can also add credit to any account and gift games between users. They can 
+ * also remove games from other user's inventories.
  *
  */
 public class AdminUser extends AbstractUser {
 
 
-
+    /** Construct an admin user using the builder attributes
+     * @param builder User builder that builds the admin user
+     */
     public AdminUser(UserBuilder builder) {
         this.username = builder.username;
         this.type = "AA";
@@ -39,7 +42,7 @@ public class AdminUser extends AbstractUser {
      */
     @Override
     public AbstractUser create(String username, String type, double credit){
-        if(MINFUNDS <= credit || credit <= MAXFUNDS){
+        if(MIN_FUNDS <= credit || credit <= MAX_FUNDS){
             AbstractUser newUser;
             switch (type) {
                 case "AA":
@@ -82,12 +85,20 @@ public class AdminUser extends AbstractUser {
         return null;
     }
 
+    /** Delete the user from the system and print to the console stating that
+     * 
+     * @param user to be deleted
+     * @param credit account balance of the user to be deleted
+     */
     @Override
     public void delete(AbstractUser user, double credit){
         this.transactionHistory.add(this.username + "deleted: " + user.getUsername() + "from the Eldians Application");
         System.out.println("User: " + user.getUsername() + ", deleted successfully.");
     }
 
+    /** Implement an auction sale. If the sale was off before, turn it on and vice versa
+     * 
+     */
     @Override
     public void auctionSale(){
         this.transactionHistory.add(this.username + "toggled an Auction Sale in the Eldians Markeplace");
@@ -164,8 +175,9 @@ public class AdminUser extends AbstractUser {
     }
 
 
-
-
+    /** User Builder class to build an admin type user. Mandatory attribute is the name.
+     * 
+     */
     public static class UserBuilder {
 
         public String username; //mandatory
@@ -175,28 +187,50 @@ public class AdminUser extends AbstractUser {
         public ArrayList<String> transactionHistory; //optional
 
 
+        /** Initialize a user builder with the given name.
+         * 
+         * @param name of the user
+         */
         public UserBuilder(String name) {
             this.username = name;
             this.accountBalance = 0.00;
             this.transactionHistory = new ArrayList<>();
         }
 
+        /** Set the builder's account balance to account balance
+         * 
+         * @param accountBalance the balance to set the builder at
+         * @return the user builder
+         */
         public UserBuilder balance(double accountBalance){
             this.accountBalance = accountBalance;
             return this;
         }
 
+        /** Set the builder's inventory with the given inventory
+         *
+         * @param inventory the inventory to set the builder at
+         * @return the user builder
+         */
         public UserBuilder inventoryGames(ArrayList<Game> inventory){
             this.inventory.addAll(inventory);
             return this;
         }
 
-
+        /** Set the builder's transactionHistory with the given transactionHistory
+         *
+         * @param transactions the transactionHistory to set the builder at
+         * @return the user builder
+         */
         public UserBuilder transactionHistory(ArrayList<String> transactions){
             this.transactionHistory.addAll(transactions);
             return this;
         }
 
+        /** Build and return the Admin User
+         * 
+         * @return Admin user object with the builder's attributes
+         */
         public AdminUser build(){
             return new AdminUser(this);
         }

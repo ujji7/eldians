@@ -172,7 +172,7 @@ to create and what attributes the rest of the strings in theArrayList represent.
 
 We chose to use the factory design pattern here to simplify the creation of Transaction objects and allow each
 Transaction to handle itself through its Transaction.execute method depending on its type. This simplified our
-code aswell and made it much easier to implement good unit tests since we could test each Transaction object
+code as well and made it much easier to implement good unit tests since we could test each Transaction object
 in isolation.
 
 
@@ -180,3 +180,32 @@ in isolation.
 Ensure that all 4 files (daily.txt, games.json, users.json, and market.json) are in the a2-eldians directory\
 Run client.main file. 
 
+## User (Builder)
+
+We chose to use the builder design pattern to create our 4 users as having multiple constructors for if an account 
+balance is given, if a transaction history and inventory exist were very disorganized. To create users in the daily.txt 
+vs database files used different constructors.
+
+
+
+### Abstract User
+
+
+
+## Game
+Each game object has a name, price, seller id (seller name) and discount. 
+
+In addition, they also have an onHold attribute which signifies whether they can be bought/sold/gifted/removed.
+
+- When a game is first sold on the marketplace, this on hold attribute is set to true as the game cannot
+be used that day. 
+- When a new day begins (ie. the database is read), the on hold attributes of all the games are set to 
+false as a new day has occurred.
+- When a game is bought, in the buyer's inventory, the game on hold attribute is set to true as right after
+a game is bought, it cannot be removed or gifted. 
+
+
+
+### Additional Features
+Every user has a transaction history that lists all the transactions they have done (ex. Buying, selling games, 
+creating/deleting users, etc)

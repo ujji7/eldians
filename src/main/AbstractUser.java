@@ -25,8 +25,7 @@ import java.util.HashMap;
 //        that caused the error.
 /**
  * Abstract class for User objects. There are 4 types of users: Admin, Buy, Sell, Full Standard. Each user has a 
- * username, a type, an account balance, a transaction history, and all users but the sell type have an inventory of 
- * games they have bought.
+ * username, a type, an account balance, a transaction history, and an inventory of games they have bought.
  *                                     
  */
 public abstract class AbstractUser {
@@ -37,25 +36,21 @@ public abstract class AbstractUser {
     protected ArrayList<Game> inventory = new ArrayList<Game>();
     protected double newFunds = 0;
     public ArrayList<String> transactionHistory = new ArrayList<String>();
-    protected static final double MAXFUNDS = 999999.99d;
+    protected static final double MAX_FUNDS = 999999.99d;
     // can change minFunds to allow overdrafts for future improvements
-    protected static final double MINFUNDS = 0d;
-    protected static final double DAILYLIMIT = 1000d;
-    private static final double NEWFUNDSTODAY = 0d;
+    protected static final double MIN_FUNDS = 0d;
+    protected static final double DAILY_LIMIT = 1000d;
+    private static final double NEW_FUNDS_TODAY = 0d;
 
-
-
-    /**
-     * Get the current User's unique username
-     *
+    
+    /** Get the current User's unique username
      * @return username String
      */
     public String getUsername(){
         return this.username;
     }
 
-    /**
-     * get the account balance for the user
+    /** Get the account balance for the user
      * @return the current account balance of the user
      */
     public double getAccountBalance(){
@@ -64,27 +59,30 @@ public abstract class AbstractUser {
 
 
     /** Get the user's type
-     * 
      * @return the user's type
      */
     public String getType(){
         return this.type;
     }
 
+    /** Get the user's inventory - games they have bought
+     * @return the user's inventory of games
+     */
     public ArrayList<Game> getInventory(){
         return this.inventory;
     }
 
 
+    /** Get the user's transaction history of all the transactions they have completed.
+     * @return the user's transaction history
+     */
     public ArrayList<String> getTransactionHistory(){
         
         return this.transactionHistory;
     }
 
     
-    /**
-     * Sets the account balance for our User
-     *
+    /** Sets the account balance for our User.
      * @param balance the amount to balance to-be in the user's account
      */
     public void setAccountBalance(double balance){
@@ -94,18 +92,14 @@ public abstract class AbstractUser {
     }
 
     
-    /**
-     * Helper to add the transaction history to the User's history
-     *
+    /** Helper to add the transaction history to the User's history
      * @param message the message to be added to the User's history
      */
     public void addTranHis(String message){
         this.transactionHistory.add(message);
     }
 
-    /**
-     * Sets a transaction history line for our User
-     *
+    /** Sets a transaction history line for our User
      * @param trans the transaction to add to the user
      */
     public void setTransactionHistory(ArrayList<String> trans){
@@ -118,7 +112,7 @@ public abstract class AbstractUser {
      * @return true if the amount is avalible false otherwise
      */
     protected boolean canTransferFunds(double amount){
-        return this.accountBalance - amount >= MINFUNDS;
+        return this.accountBalance - amount >= MIN_FUNDS;
     }
 
     /**
@@ -127,12 +121,16 @@ public abstract class AbstractUser {
      * @return true if the funds can be added false otherwise
      */
     protected boolean canAcceptFunds(double amount){
-        return this.accountBalance + amount <= MAXFUNDS;
+        return this.accountBalance + amount <= MAX_FUNDS;
     }
 
 
+    /** Return true if adding amount to our funds does not exceed the daily limit
+     * @param amount to add to our account balance
+     * @return true if amount can be added without exceeding the daily limit
+     */
     private boolean dailyLimitCheck(double amount){
-        return this.NEWFUNDSTODAY + amount <= DAILYLIMIT;
+        return this.NEW_FUNDS_TODAY + amount <= DAILY_LIMIT;
     }
     
     /**
@@ -149,13 +147,10 @@ public abstract class AbstractUser {
 
     /**
      * Adds the amount of funds to be added to the User's account and prints out the Status
-     *
-     *
      * @param amount The amount of funds to be added to the User's account
      */
     public void addCredit(double amount) {
-        // check the constraints of daily limit
-        if (this.dailyLimitCheck(amount)) {
+        if (this.dailyLimitCheck(amount)) { // check the constraints of daily limit
             double fundsAdded;
             // check if the account will be maxed upon addition of funds
             if(this.canAcceptFunds(amount)){
@@ -165,8 +160,8 @@ public abstract class AbstractUser {
             }
             // Max out their account with the difference            @666 Piazza
             else{
-                double newFunds = (double) Math.round((MAXFUNDS - this.getAccountBalance())*100)/100;
-                this.setAccountBalance(MAXFUNDS);
+                double newFunds = (double) Math.round((MAX_FUNDS - this.getAccountBalance())*100)/100;
+                this.setAccountBalance(MAX_FUNDS);
                 System.out.println("ERROR: \\ < Failed Constraint: "+ this.username +
                         "'s balance was Maxed out!\n$" + newFunds+ " was added to the account");
                 this.newFunds += newFunds;
@@ -179,29 +174,15 @@ public abstract class AbstractUser {
         // Reject the transaction               @701 Piazza
         else {
             // get the amount that can be added
-            double newFunds = (double) Math.round((DAILYLIMIT - this.newFunds)*100)/100;
+            double newFunds = (double) Math.round((DAILY_LIMIT - this.newFunds)*100)/100;
 
             System.out.println("ERROR: \\ < Failed Constraint: "+ this.username +
                     "'s daily limit would be reached upon addition of funds!\n" +
                     "You can only add $" + newFunds+ " to the account for the rest of today.");
-
-            // Add the difference to the account            For future improvements
-            /*this.newFunds = DAILYLIMIT;
-            // If the user's account will not be maxed out to add the funds
-            if(this.canAcceptFunds(newFunds)){
-                this.transferFunds(newFunds);
-            }
-            // Max out their account
-            else{
-                this.setAccountBalance(MAXFUNDS);
-                System.out.println("ERROR: \\ < Failed Constraint: "+ this.username +
-                        "'s balance is Maxed out!\n$" + newFunds+ " were added to the account");
-            }*/
         }
     }
 
-
-
+    
     /** Return true if the user is selling this game in the market.
      *
      * @param game Game to check for if user is selling in market
@@ -209,7 +190,6 @@ public abstract class AbstractUser {
      */
     private boolean sellingGame(Game game, Marketplace market) {
         if (market.checkSellerExist(this.username)) { //user is selling a game in the mkt place
-//            System.out.println( this.username + " in market");
             for (Game g : market.getGamesOnSale().get(this.username)) {
                 if (g.getName() == game.getName()) {
                     return true;
@@ -242,10 +222,8 @@ public abstract class AbstractUser {
      */
     private String payAndAddGame(AbstractUser seller, double price, Game game) {
         this.accountBalance -= price;
-
-        Game gameCopy = new Game(game.getName(), game.getPrice(), game.getSupplierID(), game.getUniqueID(), 
-                game.getDiscount());
-        this.inventory.add(gameCopy);
+        Game copy = gameCopy(game);
+        this.inventory.add(copy);
         String trans = this.username + " has bought " + game.getName() + " from " + seller.getUsername() + " for $"
                 + price + ".";
         this.addTranHis(trans);
@@ -281,10 +259,10 @@ public abstract class AbstractUser {
             }  
             System.out.println(this.payAndAddGame(seller, price, game));
             if (!seller.canAcceptFunds(price)) { //seller's account maxed out
-                seller.accountBalance = MAXFUNDS;
+                seller.accountBalance = MAX_FUNDS;
                 System.out.println("Warning: "+ this.username + "'s balance was maxed out upon sale of game.");
             }
-            else { // make normal add and print message
+            else { 
                 seller.accountBalance += price;
             }
         }
@@ -331,7 +309,7 @@ public abstract class AbstractUser {
         } else {
             market.addNewSeller(this.username);
             map.get(this.username).add(game);
-
+            
             // Report to console and transactionHistory
             this.transactionHistory.add("User: " + this.username + " is now selling " + game.getName() +
                     " for " + game.getPrice());
@@ -399,6 +377,13 @@ public abstract class AbstractUser {
         return false;
     }
 
+    /** Prints to the console that this user does not have the ability to create another user.
+     * 
+     * @param username name of the user to be created
+     * @param type type of the user to be created
+     * @param credit account balance to open 
+     * @return null
+     */
     public AbstractUser create(String username, String type, double credit){
         System.out.println("ERROR: \\ < Failed Constraint: "+ this.username + " does not have the ability to create " +
                 "another user");
@@ -479,7 +464,7 @@ public abstract class AbstractUser {
      *
      * @param game remove the valid game title from the User's inventory
      */
-    protected void removeFromInventory(String game){
+    protected boolean removeFromInventory(String game){
         ArrayList<Game> currInv = this.inventory;
         // finding and setting the game to be removed
         Game currGame = null;
@@ -487,7 +472,6 @@ public abstract class AbstractUser {
             if(curr.getName().equals(game)){
                 if (!curr.getHold()) {
                     currGame = curr;
-                     
                 } 
                 else {
                     System.out.println(game + " cannot be removed as it is on hold.");
@@ -496,9 +480,10 @@ public abstract class AbstractUser {
         }
         if (currGame != null) {
             this.inventory.remove(currGame); //  removing the game
-            System.out.println(game + " has been removed from the user's inventory.");
+            return true;
+//            System.out.println(game + " has been removed from the user's inventory.");
         }
-        
+        return false;
     }
 
 
@@ -540,7 +525,7 @@ public abstract class AbstractUser {
         // else printing out the error from Market for Game not being currently offered
     }
 
-    /**
+    /** Prints that this user cannot delete another user
      * Given the UserID and account balance delete the user's account
      *
      *
