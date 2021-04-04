@@ -37,28 +37,24 @@ public class Buy implements Transaction {
     @Override
     public AbstractUser execute(ArrayList<AbstractUser> users, ArrayList<Game> games, Marketplace market,
                                 AbstractUser login) {
-
-        Finder find = new Finder();
-
         // Find the buyer
+        Finder find = new Finder();
         AbstractUser buyer = find.findUser(this.buyer, users);
         if (buyer == null) {
-            System.out.println("ERROR: < Buyer not found in database. >");
+            System.out.println("ERROR: \\<Fatal: Buyer not found in system.>\\");
         } else if (buyer != login) { // Make sure the buyer is the person who is logged in
-            System.out.println("ERROR: < User making the buy transaction is not the logged in user. >");
+            System.out.println("ERROR: \\<Fatal: User making the buy transaction is not the logged in user.>\\");
         } else {
-
             // Find the seller
             AbstractUser seller = find.findUser(this.seller, users);
-
             if (seller == null) {
-                System.out.println("ERROR: < Seller not found in database. >");
+                System.out.println("ERROR: \\<Fatal: Seller not found in database.\\>");
             } else {
 
                 // Find the game
                 Game gameOnSale = find.findGame(this.game, games);
                 if (gameOnSale == null) {
-                    System.out.println("ERROR: < Game not found in database. >");
+                    System.out.println("ERROR: \\<Fatal: Game not found in database.\\>");
                 } else {
 
                     // Make the purchase
@@ -66,7 +62,6 @@ public class Buy implements Transaction {
                 }
             }
         }
-
         return login;
     }
 }

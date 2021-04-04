@@ -52,11 +52,11 @@ public class Gift implements Transaction {
 
         // If game, owner, and receiver all exist, execute AbstractUser.gift, raise error otherwise
         if (game == null) {
-            System.out.println("ERROR: < Cannot find " + this.gameName + " in the system. > ");
+            System.out.println("ERROR: \\<Fatal: Cannot find " + this.gameName + " in the system.\\>");
         } else if (owner == null) {
-            System.out.println("ERROR: < Cannot find " + this.ownerName + " in the system. > ");
+            System.out.println("ERROR: \\<Fatal: Cannot find " + this.ownerName + " in the system.\\>");
         } else if (receiver == null) {
-            System.out.println("ERROR: < Cannot find " + this.receiverName + " in the system. > ");
+            System.out.println("ERROR: \\<Fatal: Cannot find " + this.receiverName + " in the system.\\>");
         } else if (login instanceof AdminUser){
 
             // Admin user may be trying to gift someone else's game.
@@ -69,5 +69,4 @@ public class Gift implements Transaction {
 
         return login;
     }
-
 }

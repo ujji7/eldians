@@ -41,9 +41,10 @@ public class AuctionSale implements Transaction {
         if (login instanceof AdminUser) {
             market.toggleSale();
             login.auctionSale();
+        } else {
+            System.out.println("ERROR: \\<Failed Constraint: User " + login.getUsername() + " does not have " +
+                "the authority to toggle an auction sale.\\>");
         }
-        else { System.out.println("ERROR: < User " + login.getUsername() + " does not have the authority to toggle an " +
-                    "auction sale"); }
         return login;
     }
 }

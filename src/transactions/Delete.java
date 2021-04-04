@@ -37,39 +37,29 @@ public class Delete implements Transaction {
                                 AbstractUser login) {
 
         Finder find = new Finder();
-
         // Find the user being deleted
         AbstractUser delete = find.findUser(this.username, users);
-
         // Delete if they exist, raise error otherwise, raise warnings if they exits but attributes are not corrects
         if (delete == null) {
-            System.out.println("ERROR: < Cannot delete " + this.username + " as the user does not exist in the " +
-                    "system >");
+            System.out.println("ERROR: \\<Failed Constraint: Cannot delete " + this.username + " as the user does " +
+                    "not exist in the system.\\>");
             return login;
         }
-
         // If deleted user exists but has wrong details, proceed but raise errors.
         if (delete.getAccountBalance() != this.funds) {
-            System.out.println("WARNING: < User being deleted does not have matching funds, " +
-                    "proceeding with deletion. >");
+            System.out.println("WARNING: \\<User being deleted does not have matching funds, " +
+                    "proceeding with deletion.\\>");
         }
-
         if((delete instanceof main.SellUser && !this.type.equals("SS")) ||
                 (delete instanceof main.BuyUser && !this.type.equals("BS")) ||
                 (delete instanceof main.FullStandardUser && !this.type.equals("FS"))) {
-            System.out.println("WARNING: < User being deleted is not of correct type, proceeding with deletion. >");
+            System.out.println("WARNING: \\<User being deleted is not of correct type, proceeding with deletion.\\>");
         }
-
         if(!(login instanceof AdminUser)){
-            System.out.println("ERROR: < Cannot delete " + this.username + " as the user logged in does not" +
-                    "have permissions");
+            System.out.println("ERROR: \\<Failed Constraint: Cannot delete " + this.username + " as the user " +
+                    "logged in does not have permissions.\\>");
             return login;
         }
-//        if(!(delete instanceof SellUser)) {
-//            for (Game game : (delete.getInventory())) {
-//                games.remove(game);
-//            }
-//        }
         if(!(delete instanceof BuyUser)) {
             market.getGamesOnSale().remove(this.username);
         }

@@ -35,22 +35,21 @@ public class Create implements Transaction {
     @Override
     public AbstractUser execute(ArrayList<AbstractUser> users, ArrayList<Game> games, Marketplace market,
                                 AbstractUser login) {
+
         Finder finder = new Finder();
-        // Create user, AbstractUser.create handles errors.
         if (login instanceof AdminUser) {
             if(finder.findUser(this.username, users) == null) {
-
                 AbstractUser newUser = login.create(this.username, this.type, this.funds);
                 users.add(newUser);
                 return login;
             }
-            System.out.println("ERROR: \\< Failed Constraint: New User could not be created since" +
-                    " a User already exists with given name. >//");
+            System.out.println("ERROR: \\<Failed Constraint: New User could not be created since" +
+                    " a User already exists with given name.\\>");
             return login;
         }
 
-        System.out.println("ERROR: \\< Failed Constraint: New User could not be created since" +
-                " a logged in user does not have permissions. >//");
+        System.out.println("ERROR: \\<Failed Constraint: New User could not be created since" +
+                " a logged in user does not have permissions.\\>");
         return login;
     }
 }

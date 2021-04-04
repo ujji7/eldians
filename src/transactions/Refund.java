@@ -45,9 +45,9 @@ public class Refund implements Transaction {
         AbstractUser sellerUser = find.findUser(this.seller, users);
 
         if (buyerUser == null) {
-            System.out.println("ERROR: < User " + this.buyer + " cannot be found in system. >");
+            System.out.println("ERROR: \\<Fatal: User " + this.buyer + " cannot be found in system.\\>");
         } else if (sellerUser == null) {
-            System.out.println("ERROR: < User " + this.seller + " cannot be found in system. >");
+            System.out.println("ERROR: \\<Fatal: User " + this.seller + " cannot be found in system.\\>");
         } else {
             login.refund(buyerUser, sellerUser, this.credit);
         }
