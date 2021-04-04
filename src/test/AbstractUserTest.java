@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 public class AbstractUserTest {
     AdminUser adminUser1;
     BuyUser buyUser1;
+    BuyUser buyUserOOF;
     SellUser sellUser1;
     FullStandardUser fullStandardUser1;
     Game monopoly, pacman, pacman1, sonic;
@@ -29,6 +30,7 @@ public class AbstractUserTest {
         System.setOut(new PrintStream(outContent));
         adminUser1 = new AdminUser.UserBuilder("diego").balance(42).build();
         buyUser1 = new BuyUser.UserBuilder("dora").balance(41.58).build();
+        buyUserOOF = new BuyUser.UserBuilder("map").balance(20.0).build();
         sellUser1 = new SellUser.UserBuilder("boots").balance(34.13).build();
         fullStandardUser1 = new FullStandardUser.UserBuilder("swiper").balance(32.40).build();
         monopoly = new Game("Monopoly", 23.5, "boots", 1, 00.0);
@@ -48,7 +50,7 @@ public class AbstractUserTest {
         sellUser1.sell(monopoly, market);
         String result1 = "Seller: boots added to the market\r\n";
         String result = "Game: Monopoly" + " is now being sold by " + "boots" + " for $" +
-                "23.5" + " at a " + "0" +"% discount, will be available for purchase tomorrow.\r\n";
+                "23.5" + " at a " + "0.0" +"% discount, will be available for purchase tomorrow.\r\n";
         assertEquals(result1 + result, outContent.toString());
         assertEquals(monopoly ,market.getGamesOnSale().get(sellUser1.getUsername()).get(0));
     }
@@ -69,8 +71,8 @@ public class AbstractUserTest {
         fullStandardUser1.sell(pacman, market);
         String result1 = "Seller: swiper added to the market\r\n";
         String result = "Game: Pacman" + " is now being sold by " + "swiper" + " for $" +
-                "20.0" + " at a " + "0" +"% discount, will be available for purchase tomorrow.\r\n";
-        assertEquals(result, outContent.toString());
+                "20.0" + " at a " + "10.0" +"% discount, will be available for purchase tomorrow.\r\n";
+        assertEquals(result1 + result, outContent.toString());
         assertEquals(pacman ,market.getGamesOnSale().get(fullStandardUser1.getUsername()).get(0));
     }
 
@@ -99,8 +101,8 @@ public class AbstractUserTest {
         String result = "Game: Monopoly" + " is now being sold by " + "boots" + " for $" +
                 "23.5" + " at a " + "0.0" +"% discount, will be available for purchase tomorrow.\r\n";
         String result2 = "swiper" + " has bought " + "Monopoly" + " from " + "boots" + " for "
-                + "$23.50" + ".\r\n";
-        String result3 = "ERROR: \\ < Failed Constraint: " + "boots" + " could not sell " +
+                + "$23.5" + ".\r\n" + "User: swiper bought Monopoly from boots\r\n";
+        String result3 = "ERROR: \\ < Failed Constraint: " + "swiper" + " could not sell " +
                 "Monopoly" + " as they have bought this exact game. > //\r\n";
         assertEquals(result1 + result+result2+result3, outContent.toString());
     }
@@ -170,7 +172,7 @@ public class AbstractUserTest {
         sellUser1.sell(monopolyHigh, market);
         String result1 = "Seller: boots added to the market\r\n";
         String result = "Game: Monopoly2.0" + " is now being sold by " + "boots" + " for $" +
-                "12.0" + " at a " + "90" +"% discount, will be available for purchase tomorrow.\r\n";
+                "12.0" + " at a " + "90.0" +"% discount, will be available for purchase tomorrow.\r\n";
         assertEquals(result1 + result, outContent.toString());
     }
 
@@ -210,13 +212,13 @@ public class AbstractUserTest {
         sellUser1.sell(monopolyHigh, market);
         String result1 = "Seller: boots added to the market\r\n";
         String result = "Game: Monopoly" + " is now being sold by " + "boots" + " for $" +
-                "23.5" + " at a " + "0" +"% discount, will be available for purchase tomorrow.";
+                "23.5" + " at a " + "0.0" +"% discount, will be available for purchase tomorrow.\r\n";
 
         String result2 = "Game: Monopoly2.0" + " is now being sold by " + "boots" + " for $" +
-                "22.0" + " at a " + "50" +"% discount, will be available for purchase tomorrow.";
-        assertEquals(result1 + result+result2, outContent.toString());
-        assertEquals(monopoly ,market.getGamesOnSale().get(sellUser1).get(0));
-        assertEquals(monopolyHigh, market.getGamesOnSale().get(sellUser1).get(1));
+                "22.0" + " at a " + "50.0" +"% discount, will be available for purchase tomorrow.\r\n";
+        assertEquals(result1 + result + result2, outContent.toString());
+        assertEquals(monopoly ,market.getGamesOnSale().get(sellUser1.getUsername()).get(0));
+        assertEquals(monopolyHigh, market.getGamesOnSale().get(sellUser1.getUsername()).get(1));
     }
 
 
@@ -224,10 +226,13 @@ public class AbstractUserTest {
     @Test
     // Test when right type of User to buy a game
     public void testSimpleBuy(){
+        sellUser1.sell(monopoly, market);
+        String sell = "Seller: boots added to the market\r\nGame: Monopoly is now being sold by boots for $23.5 at a " +
+                "0.0% discount, will be available for purchase tomorrow.\r\n";
         buyUser1.buy(sellUser1, monopoly, market.getAuctionSale(), market);
-        String result = "dora" + " has bought Monopoly from boots for 23.50.";
-                                                                // check about multiple print statemetns check!!
-        assertEquals(result, outContent.toString());
+        String result = "dora" + " has bought Monopoly from boots for $23.5.\r\n";
+        String after = "User: dora bought Monopoly from boots\r\n";
+        assertEquals(sell + result + after, outContent.toString());
     }
 
     // Test for buying a game with AuctionSale on
@@ -238,47 +243,49 @@ public class AbstractUserTest {
         String result1 = "Seller: swiper added to the market\r\n" +
                 "Game: Pacman is now being sold by swiper for $20.0 at a 10.0% discount, will be available for " +
                 "purchase tomorrow.\r\n";
-        String result = "dora" + " has bought Monopoly from swiper for 18.00.";
-        assertEquals(result1 + result, outContent.toString());
+        String result = "dora" + " has bought Pacman from swiper for $18.0.\r\n";
+        String after = "User: dora bought Pacman from swiper\r\n";
+        assertEquals(result1 + result + after, outContent.toString());
     }
 
     // Test for right type of user to buy a game already in their inventory
     @Test
     public void buyAgainCheck(){
+        fullStandardUser1.sell(pacman, market);
         buyUser1.buy(fullStandardUser1, pacman, market.getAuctionSale(), market);
-        String result = "ERROR: \\ < Failed Constraint:  " + "dora already owns Monopoly. Cannot buy it again.";
-        assertEquals(result, outContent.toString());
-    }
-
-    // Test for right type of user to buy a game already in their inventory from a different seller
-    public void buyAgainFromDiffSeller(){
-        sellUser1.sell(pacman1, market);
-                                                            // check about multiple print statemetns check!!
-        buyUser1.buy(sellUser1, pacman1, market.getAuctionSale(), market);
-        String result = "ERROR: \\ < Failed Constraint:  " + "dora already owns Monopoly. Cannot buy it again.";
-        assertEquals(result, outContent.toString());
+        String before = "Seller: swiper added to the market\r\n" +
+                "Game: Pacman is now being sold by swiper for $20.0 at a 10.0% discount, will be available for " +
+                "purchase tomorrow.\r\n" +
+                "dora has bought Pacman from swiper for $20.0.\r\n" +
+                "User: dora bought Pacman from swiper\r\n";
+        buyUser1.buy(fullStandardUser1, pacman, market.getAuctionSale(), market);
+        String result = "ERROR: \\ < Failed Constraint: " + "dora already owns Pacman. Cannot buy it again.\r\n";
+        assertEquals(before + result, outContent.toString());
     }
 
     // Test for user with insuffcient funds trying to buy a game
     @Test
     public void outOfFundsCheck(){
         sellUser1.sell(sonic, market);
-        buyUser1.buy(sellUser1, sonic, market.getAuctionSale(), market);
+        buyUserOOF.buy(sellUser1, sonic, market.getAuctionSale(), market);
         String result1 = "Seller: boots added to the market\r\n" +
                 "Game: Sonic is now being sold by boots for $22.0 at a 0.0% discount, will be available for purchase" +
                 " tomorrow.";
-        String result = "ERROR: \\ < Failed Constraint:  " + "dora does not have enough funds to buy Sonic.";
+        String result = "ERROR: \\ < Failed Constraint: map does not have enough funds to buy Sonic. \r\n";
         assertEquals(result1 + "\r\n" + result, outContent.toString());
     }
 
     // Test for Full-Standard to buy a game they have up for sale
     @Test
-    public void fullStanBuyGameFromTheirItemList(){
-                                                                            // Missing from current Buy()
+    public void fullStanBuyGameFromTheirItemList() {
+        fullStandardUser1.getInventory().add(pacman1);
+        sellUser1.sell(pacman1, market);
+        String before = "Seller: boots added to the market\r\n" +
+                "Game: Pacman is now being sold by boots for $22.0 at a 0.0% discount, will be available for " +
+                "purchase tomorrow.\r\n";
         fullStandardUser1.buy(sellUser1, pacman1, true, market);
-        String result = "ERROR: \\ < Failed Constraint: " + "swiper" + "is selling " + "Pacman"
-                + " on the market.\r\n";
-        assertEquals(result, outContent.toString());
+        String result = "ERROR: \\ < Failed Constraint: swiper already owns Pacman. Cannot buy it again.\r\n";
+        assertEquals(before + result, outContent.toString());
     }
     // Test for Seller's account maxing out upon the purchase
     @Test
@@ -289,9 +296,9 @@ public class AbstractUserTest {
         adminUser1.buy(bezoz, amazon, market.getAuctionSale(), market);
         String result1 = "Seller: Jeff added to the market\r\n" +
                 "Game: Alexa is now being sold by Jeff for $22.0 at a 0.0% discount, will be available for " +
-                "purchase tomorrow.\r\n";
-        String result =  "Warning: "+ "Jeff" +
-                "'s balance was Maxed up upon addition of more funds!";
+                "purchase tomorrow.\r\n" +
+                "diego has bought Alexa from Jeff for $22.0.\r\n";
+        String result =  "Warning: diego's balance was maxed out upon sale of game.\r\n";
         assertEquals(result1 + result, outContent.toString());
 
     }
@@ -299,9 +306,14 @@ public class AbstractUserTest {
     // Test for standard-Sell to buy a game[Maybe implement it in application?]
     @Test
     public void fullStanBuy(){
+        sellUser1.sell(sonic, market);
+        String before = "Seller: boots added to the market\r\n" +
+                "Game: Sonic is now being sold by boots for $22.0 at a 0.0% discount, will be available for " +
+                "purchase tomorrow.\r\n";
         fullStandardUser1.buy(sellUser1, sonic, market.getAuctionSale(), market);
-        String result = "swiper " + "has bought Sonic from boots for 22.00.";
-        assertEquals(result, outContent.toString());
+        String result = "swiper " + "has bought Sonic from boots for $22.0.\r\n";
+        String after = "User: swiper bought Sonic from boots\r\n";
+        assertEquals(before + result + after, outContent.toString());
     }
 
     // Test for Admin to buy a game

@@ -256,7 +256,7 @@ public abstract class AbstractUser {
     private void payAndAddGame(AbstractUser seller, double price, Game game) {
         this.accountBalance -= price;
         this.inventory.add(game);
-        System.out.println(this.username + " has bought " + game.getName() + " from " + seller.getUsername() + " for "
+        System.out.println(this.username + " has bought " + game.getName() + " from " + seller.getUsername() + " for $"
                 + price + ".");
     }
 
@@ -322,8 +322,19 @@ public abstract class AbstractUser {
         
         if (this.gameInInventory(game)) {
             System.out.println("ERROR: \\ < Failed Constraint: " + this.getUsername() + " could not sell " +
-                    game.getName() + " as they have bought this exact game. >");
+                    game.getName() + " as they have bought this exact game. > //");
             return false;
+        }
+
+        // Check if user is already selling this game
+        if (market.getGamesOnSale().containsKey(this.username)) {
+            for (Game g : market.getGamesOnSale().get(this.username)) {
+                if (g.getName().equals(game.getName())) {
+                    System.out.println("ERROR: \\ < Failed Constraint: " + this.username + " could not sell " +
+                            game.getName() + " as User is already selling this exact game > //");
+                    return false;
+                }
+            }
         }
 
         HashMap<String, ArrayList<Game>> map = market.getGamesOnSale(); // var for less typing
@@ -545,8 +556,9 @@ public abstract class AbstractUser {
     /** Prints that the user cannot implement an auction sale.
      */
     public void auctionSale() {
-       System.out.println("ERROR: \\< Failed Constraint: Current User: " + this.getUsername() +
+        System.out.println("ERROR: \\< Failed Constraint: Current User: " + this.getUsername() +
                 "is not allowed to toggle an auction sale. >//");
+    }
 
     /**
      * For a valid existing game object create and return a deep copy of the Game
@@ -554,11 +566,8 @@ public abstract class AbstractUser {
      * @param game Game name
      * @return a deep copied Game
      */
-    protected Game gameCopy(Game game){
+    protected Game gameCopy(Game game) {
         Game gameCopy = new Game(game.getName(), game.getPrice(), game.getSupplierID(), game.getUniqueID(), game.getDiscount());
         return gameCopy;
-    }
-
-
     }
 }
