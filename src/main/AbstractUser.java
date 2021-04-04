@@ -168,12 +168,12 @@ public abstract class AbstractUser {
                 double newFunds = MAXFUNDS - this.getAccountBalance();
                 this.setAccountBalance(MAXFUNDS);
                 System.out.println("ERROR: \\ < Failed Constraint: "+ this.username +
-                        "'s balance was Maxed out!\n$" + newFunds+ " were added to the account");
+                        "'s balance was Maxed out!\n$" + newFunds+ " was added to the account");
                 this.newFunds += newFunds;
                 fundsAdded = newFunds;
             }
 
-            String tran  = "$"+ fundsAdded + " were added to the user's account";
+            String tran  = "$"+ fundsAdded + " was added to the user's account";
             this.addTranHis(tran);
         }
         // Reject the transaction               @701 Piazza
