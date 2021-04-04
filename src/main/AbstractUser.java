@@ -207,12 +207,11 @@ public abstract class AbstractUser {
      * @param game Game to check for if user is selling in market
      * @return true if user selling game, else false
      */
-    //helper for buy
     private boolean sellingGame(Game game, Marketplace market) {
-        if (market.getGamesOnSale().containsKey(this.username)) { //user is selling a game in the mkt place
+        if (market.checkSellerExist(this.username)) { //user is selling a game in the mkt place
 //            System.out.println( this.username + " in market");
             for (Game g : market.getGamesOnSale().get(this.username)) {
-                if (g.getUniqueID() == game.getUniqueID()) {
+                if (g.getName() == game.getName()) {
                     return true;
                 }
             }
@@ -220,24 +219,11 @@ public abstract class AbstractUser {
         return false;
     }
 
-    /** Remove the amount from the user's account, if it does not reduce the user's balance to below the minimum amount.
-     *
-     * @param amount funds to be removed
-     */
-    //HELPER FOR BUY - I DON'T ACTUALLY USE THIS HELPER ANYMORE AND NOW THIS SEEMS A BIT REDUNDANT WE CAN
-    // DELETE THIS HELPER LATER ON UNLESS SOMEONE ELSE USES IT
-//    private void removeFunds(Float amount) {
-//        if (this.canTransferFunds(amount)) {
-//            this.accountBalance = this.accountBalance - (double) amount; //should this be a double? what happens here?
-//        }
-//    }
-
     /** Return true if the game is already in the user's inventory.
      *
      * @param game game to check for in inventory
      * @return true if game in inventory, else false
      */
-    //HELPER FOR BUY
     protected boolean gameInInventory(Game game) {
         for (Game g : this.inventory) {
             if (g.getName().equals(game.getName())) {
@@ -247,17 +233,23 @@ public abstract class AbstractUser {
         return false;
     }
 
-    /** Remove the amount price from account balance and add the game to inventory. Print out message with details.
-     *
-     * @param seller that game is bought from
+    /** Remove the amount price from account balance, add the game to inventory, add transaction to history and return 
+     * the transaction.
+     *  @param seller that game is bought from
      * @param price amount to be removed from account balance
      * @param game to be added to inventory
+     * @return username + " has bought " + gameName + " from " + sellerName + " for $" + price + "."
      */
-    private void payAndAddGame(AbstractUser seller, double price, Game game) {
+    private String payAndAddGame(AbstractUser seller, double price, Game game) {
         this.accountBalance -= price;
-        this.inventory.add(game);
-        System.out.println(this.username + " has bought " + game.getName() + " from " + seller.getUsername() + " for $"
-                + price + ".");
+
+        Game gameCopy = new Game(game.getName(), game.getPrice(), game.getSupplierID(), game.getUniqueID(), 
+                game.getDiscount());
+        this.inventory.add(gameCopy);
+        String trans = this.username + " has bought " + game.getName() + " from " + seller.getUsername() + " for $"
+                + price + ".";
+        this.addTranHis(trans);
+        return trans;
     }
 
     /** Buy a game from a seller and add it to user's inventory, if the game is not already in the user's inventory.
@@ -265,50 +257,39 @@ public abstract class AbstractUser {
      * @param seller the supplier of the game
      * @param game the name of the game
      * @param saleToggle the status of Sale being on the market
+     * @param market the market the user is buying the game from
      */
-
-
     public void buy(AbstractUser seller, Game game, boolean saleToggle, Marketplace market){
         if (!seller.sellingGame(game, market)) {
-            System.out.println("ERROR: \\ < Failed Constraint: " + seller.getUsername() + " is not selling " +
+            System.out.println("ERROR: \\ < Failed Constraint: " + seller.getUsername() + " is not selling " + 
                     game.getName() + " on the market.");
-            return;
-        }
-        if (this.sellingGame(game, market)) {
+        } else if (game.getHold()) {
+            System.out.println("ERROR: \\ < Failed Constraint: " + game.getName() + "is currently on hold. Cannot be " +
+                    "purchased today.");
+        } else if (this.sellingGame(game, market)) {
             System.out.println("ERROR: \\ < Failed Constraint: " + this.getUsername() + "is selling " + game.getName()
-                    + " on the market.");
-            return;
-        }
-        if (gameInInventory(game)) { //check that game isn't already in inventory
+                    + " on the market, cannot buy it as well.");
+        } else if (gameInInventory(game)) { //check that game isn't already in inventory
             System.out.println("ERROR: \\ < Failed Constraint: "+ this.username + " already owns " + game.getName() +
                     ". Cannot buy it again.");
-        }
-
-        else {                                                  // Needs to be implemented in transferFunds()
+        } else {                                                  
             double price = game.getPriceWithDiscount(saleToggle);
-            if (!this.canTransferFunds(price)) { //buyer does not have enough money
+            if (!this.canTransferFunds(price)) { 
                 System.out.println("ERROR: \\ < Failed Constraint: "+ this.username + " does not have enough funds " +
-                        "to buy " + game.getName() + ". ");
-            }  // Needs to be implemented in transferFunds()
-            else if (!seller.canAcceptFunds(price)) { //seller's account maxed out
-                this.payAndAddGame(seller, price, game);
+                        "to buy " + game.getName() + ".");
+                return;
+            }  
+            System.out.println(this.payAndAddGame(seller, price, game));
+            if (!seller.canAcceptFunds(price)) { //seller's account maxed out
                 seller.accountBalance = MAXFUNDS;
-                System.out.println("Warning: "+ this.username +
-                        "'s balance was maxed out upon sale of game.");
+                System.out.println("Warning: "+ this.username + "'s balance was maxed out upon sale of game.");
             }
             else { // make normal add and print message
-                this.payAndAddGame(seller, price, game);
                 seller.accountBalance += price;
-                String transaction = "User: " + this.username + " bought " + game.getName() + " from "
-                        + seller.getUsername();
-                this.transactionHistory.add(transaction);
-                System.out.println(transaction);
             }
         }
     }
-
-    // I JUST PUT THIS TYPE SIGNATURE TO MAKE ANOTHER FUNCTION WORK YOU CAN EDIT IT LATER - bharathi
-
+    
     /**
      * add game to market being sold by this AbstractUser if AbstractUser doesn't already have the game on market.
      *
@@ -350,6 +331,7 @@ public abstract class AbstractUser {
         } else {
             market.addNewSeller(this.username);
             map.get(this.username).add(game);
+
             // Report to console and transactionHistory
             this.transactionHistory.add("User: " + this.username + " is now selling " + game.getName() +
                     " for " + game.getPrice());
@@ -503,11 +485,20 @@ public abstract class AbstractUser {
         Game currGame = null;
         for(Game curr : currInv){
             if(curr.getName().equals(game)){
-                currGame = curr;
+                if (!curr.getHold()) {
+                    currGame = curr;
+                     
+                } 
+                else {
+                    System.out.println(game + " cannot be removed as it is on hold.");
+                }
             }
         }
-        //  removing the game
-        this.inventory.remove(currGame);
+        if (currGame != null) {
+            this.inventory.remove(currGame); //  removing the game
+            System.out.println(game + " has been removed from the user's inventory.");
+        }
+        
     }
 
 
@@ -518,7 +509,8 @@ public abstract class AbstractUser {
      * @param INgame The game being removed
      * @param market The current market
      */
-    public void removegame(Game INgame, Marketplace market){
+
+    public void removeGame(Game INgame, Marketplace market){
         // deep-copying the Game to work with
         Game game = this.gameCopy(INgame);
         String currGame = game.getName();
@@ -530,15 +522,20 @@ public abstract class AbstractUser {
             market.removeGame(this.getUsername(), currGame);
             String tran = currGame+ " was removed from the User's offering on the Market.";
             this.addTranHis(tran);
+            System.out.println(tran);
         }
         // remove from inventory
         else if (inMyInv){
             this.removeFromInventory(currGame);
-            String tran = currGame+ " was removed from the User's inventory.";
+            String tran = currGame+ " was removed from the user's inventory.";
             this.addTranHis(tran);
+            System.out.println(tran);
         }
         else if (!inMyInv){
             System.out.println(currGame+ " was not found in the User's inventory.");
+        }
+        else {
+            System.out.println("Seller: "+ this.getUsername() +" is currently not offering "+ currGame + ".");
         }
         // else printing out the error from Market for Game not being currently offered
     }

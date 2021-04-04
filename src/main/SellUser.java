@@ -91,9 +91,10 @@ public class SellUser extends AbstractUser {
      * @param market The current market
      */
     @Override
-    public void removegame(Game INgame, Marketplace market){
+    public void removeGame(Game INgame, Marketplace market){
         // deep-copying the Game to work with
         Game game = this.gameCopy(INgame);
+
         String currGame = game.getName();
         // check if the User is Selling the Game on the Market
         boolean iAmOffering = market.checkSellerSellingGame(this.getUsername(), currGame);

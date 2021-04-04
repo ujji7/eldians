@@ -91,21 +91,23 @@ public class BuyUser extends AbstractUser {
      * @param market The current market
      */
     @Override
-    public void removegame(Game INgame, Marketplace market){
+    public void removeGame(Game INgame, Marketplace market){
         // deep-copying the Game to work with
         Game game = this.gameCopy(INgame);
+
         String currGame = game.getName();
         // check if the User has the game
         boolean inMyInv = this.gameInInventory(game);
         // remove from inventory
         if (inMyInv){
             this.removeFromInventory(currGame);
-            String tran = game.getName()+ " was removed from the User's inventory.";
+            String tran = game.getName()+ " was removed from the user's inventory.";
             this.addTranHis(tran);
             System.out.println(tran);
+
         }
         else{
-            System.out.println(game.getName()+ " was not found in the User's inventory.");
+            System.out.println(game.getName()+ " was not found in the user's inventory.");
         }
     }
 

@@ -122,7 +122,7 @@
 ####Clarifications:
 - Q) In admin mode if the transaction received does not have a valid user-name. Do we execute the transaction on behalf of the admin?
     - No, in admin mode you need valid username for the transaction to go through
-
+    
 
 ### Users:
 #### Requirements:

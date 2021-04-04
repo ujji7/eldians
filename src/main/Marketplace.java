@@ -68,12 +68,34 @@ public class Marketplace {
     }
 
 
+    /** Returns all the unique IDs of the games being sold on the marketplace.
+     * 
+     * @return Arraylist of all unique ids of games being sold
+     */
+    private ArrayList<Integer> listUniqueIds() {
+        ArrayList<Game> listOfGames = new ArrayList<Game>();
+        for (String s : gamesOnSale.keySet()) {
+            listOfGames.addAll(gamesOnSale.get(s));
+        }
+        
+        ArrayList<Integer> listIds = new ArrayList<Integer>();
+        for (Game g : listOfGames) {
+            listIds.add(g.getUniqueID());
+        }
+        return listIds;
+    }
+    
     /**
      * Helper to increment the unique ID for the Game
      *
      */
     public void incrementUID(){
+        
+        ArrayList<Integer> listAllIds = listUniqueIds();
         this.uid ++;
+        while (listAllIds.contains(this.uid)) {
+            this.uid ++;
+        }
     }
 
     /**
@@ -197,18 +219,18 @@ public class Marketplace {
                         result = true;
                     }
                     else{
-                        System.out.println("Seller: "+ seller+" will have the Game: "+ gameTitle
-                        + " up for Processing tomorrow. ");
+                        System.out.println("Game: "+ gameTitle + ", sold by " + seller + " is currently on hold, " +
+                                "cannot be exchanged today.");
                     }
                 }
             }
             if(!gameFound){
-                System.out.println("Seller: "+ seller+" is currently not offering "+ gameTitle);
+                System.out.println("Seller: " + seller+" is currently not offering "+ gameTitle + ".");
             }
         }
         // Seller currently does not exist in our market
         else{
-            System.out.println("Seller: "+ seller+" does not exist in the market");
+            System.out.println("Seller: "+ seller+" does not exist in the market.");
         }
         return result;
     }

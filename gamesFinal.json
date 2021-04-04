@@ -1,0 +1,62 @@
+[{
+  "name": "G1" ,
+  "price": 20.99,
+  "supplierID": "S1",
+  "uniqueID": 1,
+  "discount": 10.06,
+  "onHold": false
+},
+  {
+    "name": "G2" ,
+    "price": 20.99,
+    "supplierID": "A1",
+    "uniqueID": 2,
+    "discount": 9.85,
+    "onHold": true
+  },
+  {
+    "name": "G3" ,
+    "price": 12.0,
+    "supplierID": "S1",
+    "uniqueID": 3,
+    "discount": 9.85,
+    "onHold": true
+  },{
+  "name": "G4" ,
+  "price": 12.0,
+  "supplierID": "F1",
+  "uniqueID": 4,
+  "discount": 9.85,
+  "onHold": true
+}, {
+  "name": "G5" ,
+  "price": 20.99,
+  "supplierID": "A1",
+  "uniqueID": 5,
+  "discount": 10.06,
+  "onHold": false
+},
+  {
+    "name": "G6" ,
+    "price": 20.99,
+    "supplierID": "A1",
+    "uniqueID": 6,
+    "discount": 9.85,
+    "onHold": true
+  },
+  {
+    "name": "G7" ,
+    "price": 12.0,
+    "supplierID": "S1",
+    "uniqueID": 7,
+    "discount": 9.85,
+    "onHold": true
+  },{
+  "name": "G8" ,
+  "price": 12.0,
+  "supplierID": "S2",
+  "uniqueID": 8,
+  "discount": 9.85,
+  "onHold": true
+}
+]
