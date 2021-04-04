@@ -432,7 +432,7 @@ public abstract class AbstractUser {
         // Check if the Receiver has the game up for Sale on the Market
         boolean inRecMar = market.checkSellerSellingGame(this.getUsername(), gift.getName());
 
-        return inRecInv && inRecMar;
+        return !inRecInv && !inRecMar;
     }
 
     /**
@@ -446,10 +446,13 @@ public abstract class AbstractUser {
         boolean inSenInv = this.gameInInventory(gift);
         boolean inSenMar = market.checkSellerSellingGame(this.getUsername(), gift.getName());
         boolean notOnHold = market.checkNotOnHold(this.getUsername(), gift.getName());
-        if (inSenInv || inSenMar) {
+        if (inSenInv) {
+            return true;
+        } else if (inSenMar) {
             if (!notOnHold) {
                 System.out.println(FAIL_BEGIN + gift.getName() + " cannot be gifted as " +
                         "it is still on hold" + FAIL_END);
+                return false;
             } else {
                 return true;
             }
