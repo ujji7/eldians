@@ -103,12 +103,19 @@ public class SellUser extends AbstractUser {
         boolean iAmOffering = market.checkSellerSellingGame(this.getUsername(), currGame);
         // remove from Market
         if(iAmOffering){
-            market.removeGame(this.getUsername(), currGame);
-            String tran = game.getName()+ " was removed from the User's offering on the Market.";
-            this.addTranHis(tran);
-            System.out.println(tran);
+            boolean notHold = market.checkNotOnHold(this.username, currGame);
+            if (notHold) {
+                market.removeGame(this.getUsername(), currGame);
+                String tran = game.getName()+ " was removed from the user's offering on the market.";
+                this.addTranHis(tran);
+                System.out.println(tran);
+            }
+            System.out.println(FAIL_BEGIN + currGame + " cannot be removed as it is on hold in the market" + FAIL_END);
         }
-        // else printing out the error from Market
+        else {
+            System.out.println(FAIL_BEGIN + game.getName()+ " is not being sold by " + this.username +
+                    ", cannot be removed" + FAIL_END);
+        }
     }
 
 

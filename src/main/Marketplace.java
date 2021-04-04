@@ -234,4 +234,5 @@ public class Marketplace {
         // removing the game from the User's offering
         gamesOnSale.get(seller).remove(toRemove);
     }
+    
 }
