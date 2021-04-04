@@ -1,15 +1,9 @@
 package main;
 import java.util.ArrayList;
 import java.util.HashMap;
+import transactions.Finder;
 //line 401
 //REMOVE ANY UNNECESSARY PRINT STATEMENTS IN CREATE AND BUY
-
-
-//we need an auction sale method - i implemented it at botfitom check it out
-// also look at readme for add credit - there is another implementations for admin type
-
-//I made in game that returns the price with discount applied since we'll probs need it in many places.
-
 
 //Back End Error Recording:
 //        All recorded errors should be of the form: ERROR: \\<msg\\>
@@ -35,7 +29,7 @@ public abstract class AbstractUser {
     // can change minFunds to allow overdrafts for future improvements
     protected static final double MIN_FUNDS = 0d;
     protected static final double DAILY_LIMIT = 1000d;
-    private static final double NEW_FUNDS_TODAY = 0d;
+    private final double NEW_FUNDS_TODAY = 0d;
 
     
     /** Get the current User's unique username
@@ -136,8 +130,8 @@ public abstract class AbstractUser {
      */
     public void transferFunds(double amount){
         this.setAccountBalance(Math.round((this.getAccountBalance() + amount) * 100.00) / 100.00);
-        System.out.println("$" + amount + " added to " + this.username);
-        System.out.println("Most updated account balance is $" + this.getAccountBalance());
+        System.out.println("$" + amount + " added to " + this.username + ".");
+        System.out.println("Most updated account balance is $" + this.getAccountBalance() + ".");
     }
 
     /**
@@ -159,12 +153,12 @@ public abstract class AbstractUser {
                     double newFunds = (double) Math.round((MAX_FUNDS - this.getAccountBalance()) * 100) / 100;
                     this.setAccountBalance(MAX_FUNDS);
                     System.out.println("ERROR: \\<Failed Constraint: " + this.username +
-                            "'s balance was Maxed out!\n$" + newFunds + " was added to the account.\\>");
+                            "'s balance was Maxed out! $" + newFunds + " was added to their account.\\>");
                     this.newFunds += newFunds;
                     fundsAdded = newFunds;
                 }
 
-                String tran = "$" + fundsAdded + " was added to the user's account";
+                String tran = "$" + fundsAdded + " was added to the user's account.";
                 this.addTranHis(tran);
             }
             // Reject the transaction               @701 Piazza
@@ -205,10 +199,28 @@ public abstract class AbstractUser {
      * @return true if game in inventory, else false
      */
     protected boolean gameInInventory(Game game) {
+        
         for (Game g : this.inventory) {
             if (g.getName().equals(game.getName())) {
                 return true;
             }
+        }
+        return false;
+    }
+
+    /** Return true if the game is on hold in the user's inventory.
+     *
+     * @param game game to check for in inventory
+     * @return true if game in on hold in inventory, else false
+     */
+    protected boolean gameInventoryHold(Game game) {
+        Game g = null;
+        if (gameInInventory(game)) {
+            Finder find = new Finder();
+            g = find.findGame(game.getName(), this.inventory);
+        }
+        if (g != null) {
+            return game.getHold();
         }
         return false;
     }
@@ -229,7 +241,7 @@ public abstract class AbstractUser {
         this.addTranHis(trans);
         return trans;
     }
-
+    
     /** Buy a game from a seller and add it to user's inventory, if the game is not already in the user's inventory.
      *
      * @param seller the supplier of the game
@@ -240,8 +252,8 @@ public abstract class AbstractUser {
     public void buy(AbstractUser seller, Game game, boolean saleToggle, Marketplace market){
         if (!seller.sellingGame(game, market)) {
             System.out.println("ERROR: \\<Failed Constraint: " + seller.getUsername() + " is not selling " +
-                    game.getName() + " on the market.\\>");
-        } else if (game.getHold()) {
+                    game.getName() + " on the market. Cannot buy the game from them.\\>");
+        } else if (market.checkSellerSellingGame(seller.getUsername(), game.getName())) {
             System.out.println("ERROR: \\<Failed Constraint: " + game.getName() + "is currently on hold. Cannot be " +
                     "purchased today.\\>");
         } else if (this.sellingGame(game, market)) {
