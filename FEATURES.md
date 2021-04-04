@@ -1,5 +1,9 @@
 # Features
 
+### Planning
+
+To see a UML Diagram of how we built our system, look at EldiaTrade(5).pdf located in this repository.
+
 ## Setup for the system:
 ###GSON Repository
 Our system requires the GSON Maven Repository.\
