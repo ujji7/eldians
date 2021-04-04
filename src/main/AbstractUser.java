@@ -37,11 +37,11 @@ public abstract class AbstractUser {
     protected ArrayList<Game> inventory = new ArrayList<Game>();
     protected double newFunds = 0;
     public ArrayList<String> transactionHistory = new ArrayList<String>();
-    protected static final double MAXFUNDS = 999999.99f;
+    protected static final double MAXFUNDS = 999999.99d;
     // can change minFunds to allow overdrafts for future improvements
-    protected static final double MINFUNDS = 0f;
-    protected static final double DAILYLIMIT = 1000f;
-    private static final double NEWFUNDSTODAY = 0f;
+    protected static final double MINFUNDS = 0d;
+    protected static final double DAILYLIMIT = 1000d;
+    private static final double NEWFUNDSTODAY = 0d;
 
 
 
@@ -165,7 +165,7 @@ public abstract class AbstractUser {
             }
             // Max out their account with the difference            @666 Piazza
             else{
-                double newFunds = MAXFUNDS - this.getAccountBalance();
+                double newFunds = (double) Math.round((MAXFUNDS - this.getAccountBalance())*100)/100;
                 this.setAccountBalance(MAXFUNDS);
                 System.out.println("ERROR: \\ < Failed Constraint: "+ this.username +
                         "'s balance was Maxed out!\n$" + newFunds+ " was added to the account");
@@ -179,7 +179,7 @@ public abstract class AbstractUser {
         // Reject the transaction               @701 Piazza
         else {
             // get the amount that can be added
-            double newFunds = DAILYLIMIT - this.newFunds;
+            double newFunds = (double) Math.round((DAILYLIMIT - this.newFunds)*100)/100;
 
             System.out.println("ERROR: \\ < Failed Constraint: "+ this.username +
                     "'s daily limit would be reached upon addition of funds!\n" +
