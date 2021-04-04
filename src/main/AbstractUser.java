@@ -182,23 +182,6 @@ public abstract class AbstractUser {
         }
     }
 
-    
-    /** Return true if the user is selling this game in the market.
-     *
-     * @param game Game to check for if user is selling in market
-     * @return true if user selling game, else false
-     */
-    private boolean sellingGame(Game game, Marketplace market) {
-        if (market.checkSellerExist(this.username)) { //user is selling a game in the mkt place
-            for (Game g : market.getGamesOnSale().get(this.username)) {
-                if (g.getName() == game.getName()) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
     /** Return true if the game is already in the user's inventory.
      *
      * @param game game to check for in inventory
@@ -238,13 +221,13 @@ public abstract class AbstractUser {
      * @param market the market the user is buying the game from
      */
     public void buy(AbstractUser seller, Game game, boolean saleToggle, Marketplace market){
-        if (!seller.sellingGame(game, market)) {
+        if (!market.checkSellerSellingGame(this.getUsername(), game.getName())) {
             System.out.println("ERROR: \\<Failed Constraint: " + seller.getUsername() + " is not selling " +
                     game.getName() + " on the market.\\>");
         } else if (game.getHold()) {
             System.out.println("ERROR: \\<Failed Constraint: " + game.getName() + "is currently on hold. Cannot be " +
                     "purchased today.\\>");
-        } else if (this.sellingGame(game, market)) {
+        } else if (market.checkSellerSellingGame(this.getUsername(), game.getName())) {
             System.out.println("ERROR: \\<Failed Constraint: " + this.getUsername() + "is selling " + game.getName()
                     + " on the market, cannot buy it as well.\\>");
         } else if (gameInInventory(game)) { //check that game isn't already in inventory
@@ -275,18 +258,14 @@ public abstract class AbstractUser {
      * @param market Marketplace that will sell this game
      */
     public boolean sell(Game game, Marketplace market){
-
         // if game doesn't follow constraints end here
         if (!this.sellConstraints(game)) return false;
-        
         if (this.gameInInventory(game)) {
             System.out.println("ERROR: \\<Failed Constraint: " + this.getUsername() + " could not sell " +
                     game.getName() + " as they have bought this exact game.\\>");
             return false;
         }
-
         HashMap<String, ArrayList<Game>> map = market.getGamesOnSale(); // var for less typing
-
         // if user has previously put games on the market, add to list of games
         if (map.containsKey(this.username)) {
             map.get(this.username).add(game);
@@ -295,7 +274,6 @@ public abstract class AbstractUser {
             System.out.println("Game: " + game.getName() + " is now being sold by " + this.getUsername() + " for $" +
                     game.getPrice() + " at a " + game.getDiscount()+"% discount, will be available for purchase " +
                     "tomorrow.");
-
         } else {
             market.addNewSeller(this.username);
             map.get(this.username).add(game);
@@ -393,56 +371,96 @@ public abstract class AbstractUser {
      * This method is used by Admin and Full-Standard User
      *
      * @param INgame a Game to be gifted
-     * @param reciever person who will be recieving the Gift
+     * @param receiver person who will be recieving the Gift
      * @param market the current Market
      */
-    public void gift(Game INgame, AbstractUser reciever, Marketplace market){
-        // Receiver is a Sell user
-        if (reciever instanceof SellUser){
+    public void gift(Game INgame, AbstractUser receiver, Marketplace market){
+        if (receiver instanceof SellUser){
             System.out.println("ERROR: \\<Failed Constraint: Sell User can not accept any gifts.\\>");
+            return;
         }
-        else{
-            // deep-copying the Game to work with
-            Game game = this.gameCopy(INgame);
-            String gameName = game.getName();
-            // check if the Receiver has the game in their inventory
-            boolean inRecInv = reciever.gameInInventory(game);
-            // Check if the Receiver has the game up for Sale on the Market
-            boolean inRecMar = market.checkSellerSellingGame(reciever.getUsername(), gameName);
+        // deep-copying the Game to work with
+        Game game = this.gameCopy(INgame);
+        // if the User can accept the game then check if the sender can send the game
+        if (receiver.canAccept(game, market)) {
+            // User can send the gift, game is added to the Receiver's inventory
+            if (canSendGame(game, market)) {
+                // Game needs to be removed from the sender's inventory
+                if (this.gameInInventory(game)) {
+                    this.removeFromInventory(game.getName());
+                }
+                sendGame(receiver, game);
+            }
+            // Sender doesn't have the game
+            else {
+                System.out.println("ERROR: \\<Failed Constraint: " + this.username + " does not have the " +
+                        game.getName() + ". Gift transaction failed.\\>");
+            }
+        }
+        // Receiver already has the game
+        else {
+            System.out.println("ERROR: \\<Failed Constraint:" + receiver.getUsername() + " already has " +
+                    game.getName() + ". Gift transaction failed.\\>");
+        }
+    }
 
-            // if the User can accept the game then check if the sender can send the game
-            if(!inRecInv && !inRecMar){
-                boolean inSenInv = this.gameInInventory(game);
-                boolean inSenMar = market.checkSellerSellingGame(this.getUsername(), gameName);
-                // User can send the gift, game is added to the Receiver's inventory
-                if (inSenInv || inSenMar){
-                    // Game needs to be removed from the sender's inventory
-                    if(inSenInv) {
-                        this.removeFromInventory(gameName);
-                    }
-                    reciever.addGame(game);
-                    // updating the transaction history for the users
-                    String senderTran = this.getUsername() + " has gifted: " + gameName + " to " +
-                            reciever.getUsername();
-                    String recTran = reciever.getUsername() + " has received " + gameName + " from " +
-                            this.getUsername();
-                    this.addTranHis(senderTran);
-                    reciever.addTranHis(recTran);
-                    System.out.println(senderTran);
-                    System.out.println(recTran);
-                }
-                // Sender doesn't have the game
-                else{
-                    System.out.println("ERROR: \\<Failed Constraint: " + this.username + " does not have the " +
-                            gameName + ". Gift transaction failed.\\>");
-                }
-            }
-            // Receiver already has the game
-            else{
-                System.out.println("ERROR: \\<Failed Constraint" + reciever.getUsername() + " already has " +gameName+
-                        ". Gift transaction failed.\\>");
+    /**
+     * Return true if receiver can accept this gift.
+     *
+     * @param gift game being gifted to this user.
+     * @param market marketplace where user could be selling games.
+     * @return true if game not in inventory or market, false otherwise.
+     */
+    private boolean canAccept(Game gift, Marketplace market) {
+
+        // check if the Receiver has the game in their inventory
+        boolean inRecInv = this.gameInInventory(gift);
+
+        // Check if the Receiver has the game up for Sale on the Market
+        boolean inRecMar = market.checkSellerSellingGame(this.getUsername(), gift.getName());
+
+        return inRecInv && inRecMar;
+    }
+
+    /**
+     * Return true if user can send this gift.
+     *
+     * @param gift game being sent.
+     * @param market marketplace where user could be selling games.
+     * @return true if game in inventory or game on sale, false otherwise.
+     */
+    private boolean canSendGame(Game gift, Marketplace market) {
+        boolean inSenInv = this.gameInInventory(gift);
+        boolean inSenMar = market.checkSellerSellingGame(this.getUsername(), gift.getName());
+        boolean notOnHold = market.checkNotOnHold(this.getUsername(), gift.getName());
+        if (inSenInv || inSenMar) {
+            if (!notOnHold) {
+                System.out.println("ERROR: \\<Failed Constraint: " + gift.getName() + " cannot be gifted as " +
+                        "it is still on hold.\\>");
+            } else {
+                return true;
             }
         }
+        return false;
+    }
+
+    /**
+     * Helper for gift, sends a game to the receiver and executes the proper prints to console and transHistory.
+     *
+     * @param receiver the person receiving the game.
+     * @param gift the game being sent.
+     */
+    private void sendGame(AbstractUser receiver, Game gift) {
+        receiver.addGame(gift);
+        // updating the transaction history for the users
+        String senderTran = this.getUsername() + " has gifted: " + gift.getName() + " to " +
+                receiver.getUsername();
+        String recTran = receiver.getUsername() + " has received " + gift.getName() + " from " +
+                this.getUsername();
+        this.addTranHis(senderTran);
+        receiver.addTranHis(recTran);
+        System.out.println(senderTran);
+        System.out.println(recTran);
     }
 
 
@@ -468,7 +486,6 @@ public abstract class AbstractUser {
         if (currGame != null) {
             this.inventory.remove(currGame); //  removing the game
             return true;
-//            System.out.println(game + " has been removed from the user's inventory.");
         }
         return false;
     }
@@ -487,7 +504,7 @@ public abstract class AbstractUser {
         Game game = this.gameCopy(INgame);
         String currGame = game.getName();
         // check if the User is Selling the Game on the Market
-        boolean iAmOffering = market.checkSellerSellingGame(this.getUsername(), currGame);
+        boolean iAmOffering = market.checkNotOnHold(this.getUsername(), currGame);
         boolean inMyInv = this.gameInInventory(game);
         // remove from Market
         if(iAmOffering){

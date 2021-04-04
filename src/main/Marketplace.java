@@ -136,28 +136,6 @@ public class Marketplace {
         }
     }
 
-    /*
-     * Checks if the game title will be up for sale tomorrow
-     * Can be used for Future improvements and extra features
-     *
-     * @param seller User offerings the game
-     * @param gameTitle the game title to be checked
-     * @return true if the Game title will be up for sale tomorrow
-     */
-    public boolean gameToBeUpCheck(String seller, String gameTitle){
-        boolean result = false;
-        // get the game title and check if it is on a Hold for today
-        ArrayList<Game> myOffering = this.gamesOnSale.get(seller);
-        for(Game myGame : myOffering) {
-            String currGameName = myGame.getName();
-            if (currGameName.equals(gameTitle)) {
-                result = myGame.getHold();
-            }
-        }
-        return result;
-    }
-
-
     /**
      * Checks if a Seller exists in our Market
      *
