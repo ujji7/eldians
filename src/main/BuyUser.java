@@ -93,12 +93,12 @@ public class BuyUser extends AbstractUser {
         // remove from inventory
         if (inMyInv){
             this.removeFromInventory(currGame);
-            String tran = game.getName()+ " was removed from the User's inventory.";
+            String tran = game.getName()+ " was removed from the user's inventory.";
             this.addTranHis(tran);
             System.out.println("");
         }
         else{
-            System.out.println(game.getName()+ " was not found in the User's inventory.");
+            System.out.println(game.getName()+ " was not found in the user's inventory.");
         }
     }
 

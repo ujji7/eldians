@@ -219,18 +219,18 @@ public class Marketplace {
                         result = true;
                     }
                     else{
-                        System.out.println("Seller: "+ seller+" will have the Game: "+ gameTitle
-                        + " up for Processing tomorrow. ");
+                        System.out.println("Game: "+ gameTitle + ", sold by " + seller + " is currently on hold, " +
+                                "cannot be exchanged today.");
                     }
                 }
             }
             if(!gameFound){
-                System.out.println("Seller: "+ seller+" is currently not offering "+ gameTitle);
+                System.out.println("Seller: " + seller+" is currently not offering "+ gameTitle + ".");
             }
         }
         // Seller currently does not exist in our market
         else{
-            System.out.println("Seller: "+ seller+" does not exist in the market");
+            System.out.println("Seller: "+ seller+" does not exist in the market.");
         }
         return result;
     }
