@@ -1,6 +1,8 @@
 # Requirements and Clarifications
 
 **TODO: Add Requirements and clarifications as specified in the README.md**
+A workflowy where additional requirements and clraifications are stored:
+
 ## Part 1
 ### Daily Transaction Text Files (DTTF):
 ####Requirements:

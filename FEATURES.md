@@ -159,6 +159,10 @@ game unique ids
 If the entire market file does not follow the specified format, aka an empty file, a file with random words such as
 just "agenda" would lead to the creation of a new, empty Marketplace with auction sale set as false, and uid set to 0.
 
+### Eldians Front End Application:
+Follow the youtube link to access the screen recording information for the front end
+https://youtu.be/x2FILnn0dcw
+
 
 ## Transaction Creation / TransactionFactory.java and Transaction.java
 
@@ -205,6 +209,15 @@ false as a new day has occurred.
 a game is bought, it cannot be removed or gifted. 
 
 
+## Marketplace
+
+The Marketplace stores 
+- A hashmap called gamesOnSale which has the username of a seller as the key and an ArrayList of games they have on sale as the value
+- An integer called uid which stores the highest game unique id in the system, used for assigning new unique id's
+- A boolean called auctionsale which is true when an auctionsale is on and false when an auctionsale is off.
+
+The marketplace has built in methods which help simplify transactions executed by Transaction objects and AbstractUser methods. We decided
+to use an object to represent the marketplace for this reason.
 
 ### Additional Features
 Every user has a transaction history that lists all the transactions they have done (ex. Buying, selling games, 

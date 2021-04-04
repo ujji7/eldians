@@ -61,7 +61,7 @@ public class AbstractUserTest {
     public void testSellFromBuyUser() {
         Game pacmanR = new Game("Pacman returns", 20.0, "dora", 2 , 10.0);
         buyUser1.sell(pacmanR, market);
-        String result = "ERROR: \\ < Failed Constraint: "+ "dora" + " does not have the ability to sell games.";
+        String result = "ERROR: \\< Failed Constraint: dora does not have the ability to sell games.\\>";
         assertEquals(result + "\r\n", outContent.toString());
         assertNull(market.getGamesOnSale().get(sellUser1.getUsername()));
     }
@@ -103,8 +103,8 @@ public class AbstractUserTest {
                 "23.5" + " at a " + "0.0" +"% discount, will be available for purchase tomorrow.\r\n";
         String result2 = "swiper" + " has bought " + "Monopoly" + " from " + "boots" + " for "
                 + "$23.5" + ".\r\n";
-        String result3 = "ERROR: \\ < Failed Constraint: " + "swiper" + " could not sell " +
-                "Monopoly" + " as they have bought this exact game. > //\r\n";
+        String result3 = "ERROR: \\< Failed Constraint: swiper could not sell Monopoly as they have " +
+                "bought this exact game.\\>\r\n";
         assertEquals(result1 + result+result2+result3, outContent.toString());
     }
 
@@ -114,8 +114,8 @@ public class AbstractUserTest {
     public void testSellConstraintsTooHighPrice() {
         Game monopolyHigh = new Game("Monopoly2.0", 1000.0, "boots", 2, 00.0);
         sellUser1.sell(monopolyHigh, market);
-        String result = "ERROR: \\ < Failed Constraint: " + "boots" + " could not sell " +
-                "Monopoly2.0 " + "for $" + "1000.0" + " as it exceeds the maximum sale price. > //\r\n";
+        String result = "ERROR: \\< Failed Constraint: boots could not sell Monopoly2.0 for $1000.0 as it " +
+                "exceeds the maximum sale price.\\>\r\n";
         assertEquals(result, outContent.toString());
     }
 
@@ -133,8 +133,8 @@ public class AbstractUserTest {
     public void testSellConstraintsNegativePrice() {
         Game monopolyHigh = new Game("Monopoly2.0", -99.99, "boots", 2, 00.0);
         sellUser1.sell(monopolyHigh, market);
-        String result = "ERROR: \\ < Failed Constraint: " + "boots" + " could not sell " +
-                "Monopoly2.0 " + "for $" + "-99.99" + " as the price cannot be negative. > //\r\n";
+        String result = "ERROR: \\< Failed Constraint: boots could not sell Monopoly2.0 for $-99.99 as the price " +
+                "cannot be negative.\\>\r\n";
         assertEquals(result, outContent.toString());
     }
 
@@ -162,8 +162,8 @@ public class AbstractUserTest {
     public void testSellConstraintsNameTooLong() { //26 characters
         Game monopolyHigh = new Game("Monopoly2.0Monopoly2.0Mono", 12.0, "boots", 2, 00.0);
         sellUser1.sell(monopolyHigh, market);
-        String result = "ERROR: \\ < Failed Constraint: " + "boots" + " could not sell " +
-                "Monopoly2.0Monopoly2.0Mono" + " for $" + "12.0" + " as it exceeds the maximum name length. > //";
+        String result = "ERROR: \\< Failed Constraint: boots could not sell Monopoly2.0Monopoly2.0Mono " +
+                "for $12.0 as it exceeds the maximum name length.\\>";
         assertEquals(result + "\r\n", outContent.toString());
     }
 
@@ -182,26 +182,9 @@ public class AbstractUserTest {
     public void testSellConstraintsDiscountTooHigh() {
         Game monopolyHigh = new Game("Monopoly2.0", 12.0, "boots", 2, 90.1);
         sellUser1.sell(monopolyHigh, market);
-        String result = "ERROR: \\ < Failed Constraint: " + "boots" + " could not sell " +
-                "Monopoly2.0" + " with " + "90.1" + "% discount as it exceeds the maximum discount " +
-                "amount. > //\r\n";
+        String result = "ERROR: \\< Failed Constraint: boots could not sell Monopoly2.0 with 90.1% discount as " +
+                "it exceeds the maximum discount amount.\\>\r\n";
         assertEquals(result, outContent.toString());
-    }
-
-
-    //this tests for already selling the game and uses game name
-    // may have to edit result to include the first sell's print statement
-    @Test
-    public void testSellConstraintsAlreadySelling() {
-        sellUser1.sell(monopoly, market);
-        Game monopolyHigh = new Game("Monopoly", 12.0, "boots", 2, 90);
-        sellUser1.sell(monopolyHigh, market);
-        String result1 = "Seller: boots added to the market\r\n" +
-                "Game: Monopoly is now being sold by boots for $23.5 at a 0.0% discount, will be available for " +
-                "purchase tomorrow.\r\n";
-        String result = "ERROR: \\ < Failed Constraint: " + "boots" + " could not sell " +
-                "Monopoly" + " as User is already selling this exact game > //\r\n";
-        assertEquals(result1 + result, outContent.toString());
     }
 
     //tests for if seller is already in market
@@ -260,7 +243,7 @@ public class AbstractUserTest {
                 "purchase tomorrow.\r\n" +
                 "dora has bought Pacman from swiper for $20.0.\r\n";
         buyUser1.buy(fullStandardUser1, pacman, market.getAuctionSale(), market);
-        String result = "ERROR: \\ < Failed Constraint: " + "dora already owns Pacman. Cannot buy it again.\r\n";
+        String result = "ERROR: \\< Failed Constraint: dora already owns Pacman. Can't buy it again.\\>\r\n";
         assertEquals(before + result, outContent.toString());
     }
 
@@ -273,7 +256,7 @@ public class AbstractUserTest {
         String result1 = "Seller: boots added to the market\r\n" +
                 "Game: Sonic is now being sold by boots for $22.0 at a 0.0% discount, will be available for purchase" +
                 " tomorrow.";
-        String result = "ERROR: \\ < Failed Constraint: map does not have enough funds to buy Sonic.\r\n";
+        String result = "ERROR: \\< Failed Constraint: map doesn't have enough funds to buy Sonic.\\>\r\n";
         assertEquals(result1 + "\r\n" + result, outContent.toString());
     }
 
@@ -287,7 +270,7 @@ public class AbstractUserTest {
                 "Game: Pacman is now being sold by boots for $22.0 at a 0.0% discount, will be available for " +
                 "purchase tomorrow.\r\n";
         fullStandardUser1.buy(sellUser1, pacman1, true, market);
-        String result = "ERROR: \\ < Failed Constraint: swiper already owns Pacman. Cannot buy it again.\r\n";
+        String result = "ERROR: \\< Failed Constraint: swiper already owns Pacman. Can't buy it again.\\>\r\n";
         assertEquals(before + result, outContent.toString());
     }
     // Test for Seller's account maxing out upon the purchase

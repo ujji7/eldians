@@ -155,7 +155,7 @@ public class TransactionTests {
 
     @Test
     public void AddCreditTest6() {
-        String result = "ERROR: < User " + "fake" + "Not Found >\r\n";
+        String result = "ERROR: \\<Fatal: User fake Not Found.\\>\r\n";
         AddCredit transac = new AddCredit("fake", "AA", "15.00");
         AbstractUser login = transac.execute(userList, gameList, market, adminUser1);
         assertEquals(beforeResult + result, outContent.toString());
@@ -164,8 +164,8 @@ public class TransactionTests {
 
     @Test
     public void AddCreditTest7() {
-        String result = "WARNING: < Username field left empty, Adding funds to self. >\r\n";
-        String afterResult = "$15.0 added to a1\r\n" + "Most updated account balance is $30.0\r\n";
+        String result = "WARNING: \\<Username field left empty, Adding funds to self.\\>\r\n";
+        String afterResult = "$15.0 added to a1.\r\n" + "Most updated account balance is $30.0.\r\n";
         AddCredit transac = new AddCredit("", "AA", "15.00");
         AbstractUser login = transac.execute(userList, gameList, market, adminUser1);
         assertEquals(beforeResult + result + afterResult, outContent.toString());
@@ -191,8 +191,8 @@ public class TransactionTests {
 
     @Test
     public void AuctionSaleTest2() {
-        String result = "ERROR: < User " + buyName + " does not have the authority to toggle an " +
-                "auction sale\r\n";
+        String result = "ERROR: \\<Failed Constraint: User b1 does not have the authority to toggle an " +
+                "auction sale.\\>\r\n";
         AuctionSale transac = new AuctionSale(buyName, "BS", "15.00");
         AbstractUser login = transac.execute(userList, gameList, market, buyUser1);
         assertEquals(beforeResult + result, outContent.toString());
@@ -202,8 +202,8 @@ public class TransactionTests {
 
     @Test
     public void AuctionSaleTest3() {
-        String result = "ERROR: < User " + sellName + " does not have the authority to toggle an " +
-                "auction sale\r\n";
+        String result = "ERROR: \\<Failed Constraint: User s1 does not have the authority to toggle an " +
+                "auction sale.\\>\r\n";
         AuctionSale transac = new AuctionSale(sellName, "SS", "15.00");
         AbstractUser login = transac.execute(userList, gameList, market, sellUser1);
         assertEquals(beforeResult + result, outContent.toString());
@@ -213,8 +213,8 @@ public class TransactionTests {
 
     @Test
     public void AuctionSaleTest4() {
-        String result = "ERROR: < User " + fullName + " does not have the authority to toggle an " +
-                "auction sale\r\n";
+        String result = "ERROR: \\<Failed Constraint: User f1 does not have the authority to toggle an " +
+                "auction sale.\\>\r\n";
         AuctionSale transac = new AuctionSale(fullName, "FS", "15.00");
         AbstractUser login = transac.execute(userList, gameList, market, fullStandardUser1);
         assertEquals(beforeResult + result, outContent.toString());
@@ -281,7 +281,7 @@ public class TransactionTests {
 
     @Test
     public void BuyTest5() {
-        String result = "ERROR: < Buyer not found in database. >\r\n";
+        String result = "ERROR: \\<Fatal: Buyer not found in system.\\>\r\n";
         Buy transac = new Buy(csgo.getName(), sellUser1.getUsername(), "fake");
         AbstractUser login = transac.execute(userList, gameList, market, adminUser1);
         assertEquals(beforeResult + result, outContent.toString());
@@ -293,7 +293,7 @@ public class TransactionTests {
 
     @Test
     public void BuyTest6() {
-        String result = "ERROR: < Seller not found in database. >\r\n";
+        String result = "ERROR: \\<Fatal: Seller not found in database.\\>\r\n";
         Buy transac = new Buy(csgo.getName(), "fake", adminUser1.getUsername());
         AbstractUser login = transac.execute(userList, gameList, market, adminUser1);
         assertEquals(beforeResult + result, outContent.toString());
@@ -305,7 +305,7 @@ public class TransactionTests {
 
     @Test
     public void BuyTest7() {
-        String result = "ERROR: < Game not found in database. >\r\n";
+        String result = "ERROR: \\<Fatal: Game not found in database.\\>\r\n";
         Buy transac = new Buy("fake", sellUser1.getUsername(), adminUser1.getUsername());
         AbstractUser login = transac.execute(userList, gameList, market, adminUser1);
         assertEquals(beforeResult + result, outContent.toString());
@@ -317,7 +317,7 @@ public class TransactionTests {
 
     @Test
     public void BuyTest8() {
-        String result = "ERROR: < User making the buy transaction is not the logged in user. >\r\n";
+        String result = "ERROR: \\<Fatal: User making the buy transaction is not the logged in user.\\>\r\n";
         Buy transac = new Buy(csgo.getName(), sellUser1.getUsername(), buyUser1.getUsername());
         AbstractUser login = transac.execute(userList, gameList, market, adminUser1);
         assertEquals(beforeResult + result, outContent.toString());
@@ -430,8 +430,8 @@ public class TransactionTests {
 
     @Test
     public void DeleteTest5() {
-        String result = "ERROR: < Cannot delete " + "fake" + " as the user does not exist in the " +
-                "system >\r\n";
+        String result = "ERROR: \\<Failed Constraint: Cannot delete fake as the user does not exist in the " +
+                "system.\\>\r\n";
         Delete transac = new Delete("fake", "FS", "15.00");
         AbstractUser login = transac.execute(userList, gameList, market, adminUser1);
         assertEquals(beforeResult + result, outContent.toString());
@@ -440,8 +440,7 @@ public class TransactionTests {
 
     @Test
     public void DeleteTest6() {
-        String result = "WARNING: < User being deleted does not have matching funds, " +
-                "proceeding with deletion. >\r\n";
+        String result = "WARNING: \\<User being deleted does not have matching funds, proceeding with deletion.\\>\r\n";
         String afterResult = "User: temp, deleted successfully.\r\n";
         Delete transac = new Delete("temp", "FS", "0.00");
         AbstractUser login = transac.execute(userList, gameList, market, adminUser1);
@@ -454,7 +453,7 @@ public class TransactionTests {
 
     @Test
     public void DeleteTest7() {
-        String result = "WARNING: < User being deleted is not of correct type, proceeding with deletion. >\r\n";
+        String result = "WARNING: \\<User being deleted is not of correct type, proceeding with deletion.\\>\r\n";
         String afterResult = "User: temp, deleted successfully.\r\n";
         Delete transac = new Delete("temp", "SS", "15.00");
         AbstractUser login = transac.execute(userList, gameList, market, adminUser1);
@@ -535,7 +534,7 @@ public class TransactionTests {
 
     @Test
     public void GiftTest6() {
-        String result = "ERROR: < Cannot find " + "fakeGame" + " in the system. > \r\n";
+        String result = "ERROR: \\<Fatal: Cannot find fakeGame in the system.\\>\r\n";
         Gift transac = new Gift("fakeGame", adminUser1.getUsername(), fullStandardUser1.getUsername());
         AbstractUser login = transac.execute(userList, gameList, market, adminUser1);
         assertEquals(beforeResult + result, outContent.toString());
@@ -544,7 +543,7 @@ public class TransactionTests {
 
     @Test
     public void GiftTest7() {
-        String result = "ERROR: < Cannot find " + "fakeOwn" + " in the system. > \r\n";
+        String result = "ERROR: \\<Fatal: Cannot find fakeOwn in the system.\\>\r\n";
         Gift transac = new Gift(adminGame.getName(), "fakeOwn", fullStandardUser1.getUsername());
         AbstractUser login = transac.execute(userList, gameList, market, adminUser1);
         assertEquals(beforeResult + result, outContent.toString());
@@ -553,7 +552,7 @@ public class TransactionTests {
 
     @Test
     public void GiftTest8() {
-        String result = "ERROR: < Cannot find " + "fakeReceive" + " in the system. > \r\n";
+        String result = "ERROR: \\<Fatal: Cannot find fakeReceive in the system.\\>\r\n";
         Gift transac = new Gift(adminGame.getName(), adminUser1.getUsername(), "fakeReceive");
         AbstractUser login = transac.execute(userList, gameList, market, adminUser1);
         assertEquals(beforeResult + result, outContent.toString());
@@ -606,7 +605,7 @@ public class TransactionTests {
 
     @Test
     public void LoginTest5() {
-        String result = "ERROR: < There is already a User who is logged in. >\r\n";
+        String result = "ERROR: \\<Fatal: There is already a User who is logged in.\\>\r\n";
         Login transac = new Login(adminUser1.getUsername(), adminUser1.getType(),
                 Double.toString(adminUser1.getAccountBalance()));
         AbstractUser login = transac.execute(userList, gameList, market, adminUser1);
@@ -616,8 +615,7 @@ public class TransactionTests {
 
     @Test
     public void LoginTest6() {
-        String result = "WARNING: < User logging in does not have matching funds, " +
-                "proceeding with login. >\r\n";
+        String result = "WARNING: \\<User logging in does not have matching funds, proceeding with login.\\>\r\n";
         Login transac = new Login(adminUser1.getUsername(), adminUser1.getType(), "0.00");
         AbstractUser login = transac.execute(userList, gameList, market, null);
         assertEquals(beforeResult + result, outContent.toString());
@@ -626,7 +624,7 @@ public class TransactionTests {
 
     @Test
     public void LoginTest7() {
-        String result = "WARNING: < User logging in is not of correct type, proceeding with login. >\r\n";
+        String result = "WARNING: \\<User logging in is not of correct type, proceeding with login.\\>\r\n";
         Login transac = new Login(adminUser1.getUsername(), "BS",
                 Double.toString(adminUser1.getAccountBalance()));
         AbstractUser login = transac.execute(userList, gameList, market, null);
@@ -636,7 +634,7 @@ public class TransactionTests {
 
     @Test
     public void LoginTest8() {
-        String result = "ERROR: < User not found in database. >\r\n";
+        String result = "ERROR: \\<Fatal: User not found in database.\\>\r\n";
         Login transac = new Login("fake", adminUser1.getType(),
                 Double.toString(adminUser1.getAccountBalance()));
         AbstractUser login = transac.execute(userList, gameList, market, null);
@@ -658,8 +656,8 @@ public class TransactionTests {
 
     @Test
     public void LogoutTest1() {
-        String result = "WARNING: < User logging out does not match username of user currently logged in, " +
-                "proceeding by logging out user currently logged in. >\r\n";
+        String result = "WARNING: \\<User logging out does not match username of user currently logged in, " +
+                "proceeding by logging out user currently logged in.\\>\r\n";
         Logout transac = new Logout("fake", adminUser1.getType(),
                 Double.toString(adminUser1.getAccountBalance()));
         AbstractUser login = transac.execute(userList, gameList, market, adminUser1);
@@ -669,8 +667,7 @@ public class TransactionTests {
 
     @Test
     public void LogoutTest2() {
-        String result = "WARNING: < User logging out does not have matching funds, " +
-                "proceeding with logout. >\r\n";
+        String result = "WARNING: \\<User logging out does not have matching funds, proceeding with logout.\\>\r\n";
         Logout transac = new Logout(adminUser1.getUsername(), adminUser1.getType(), "0.00");
         AbstractUser login = transac.execute(userList, gameList, market, adminUser1);
         assertEquals(beforeResult + result, outContent.toString());
@@ -679,7 +676,7 @@ public class TransactionTests {
 
     @Test
     public void LogoutTest3() {
-        String result = "WARNING: < User logging out is not of correct type, proceeding with loggout. >\r\n";
+        String result = "WARNING: \\<User logging out is not of correct type, proceeding with loggout.\\>\r\n";
         Logout transac = new Logout(adminUser1.getUsername(), "BS",
                 Double.toString(adminUser1.getAccountBalance()));
         AbstractUser login = transac.execute(userList, gameList, market, adminUser1);
@@ -767,7 +764,7 @@ public class TransactionTests {
 
     @Test
     public void RefundTest5() {
-        String result = "ERROR: < User " + "fake" + " cannot be found in system. >\r\n";
+        String result = "ERROR: \\<Fatal: User fake cannot be found in system.\\>\r\n";
         Refund transac = new Refund("fake", sellUser1.getUsername(), "5.00");
         AbstractUser login = transac.execute(userList, gameList, market, adminUser1);
         assertEquals(beforeResult + result, outContent.toString());
@@ -776,7 +773,7 @@ public class TransactionTests {
 
     @Test
     public void RefundTest6() {
-        String result = "ERROR: < User " + "fake" + " cannot be found in system. >\r\n";
+        String result = "ERROR: \\<Fatal: User fake cannot be found in system.\\>\r\n";
         Refund transac = new Refund(buyUser1.getUsername(), "fake", "5.00");
         AbstractUser login = transac.execute(userList, gameList, market, adminUser1);
         assertEquals(beforeResult + result, outContent.toString());
@@ -837,7 +834,7 @@ public class TransactionTests {
 
     @Test
     public void RemoveTest6() {
-        String result = "ERROR: < User: " + "fake" + " does not exist in database. >\r\n";
+        String result = "ERROR: \\<Fatal: User: fake does not exist in database.\\>\r\n";
         RemoveGame transac = new RemoveGame(buyGame.getName(), "fake");
         AbstractUser login = transac.execute(userList, gameList, market, adminUser1);
         assertEquals(beforeResult + result, outContent.toString());
@@ -846,7 +843,7 @@ public class TransactionTests {
 
     @Test
     public void RemoveTest7() {
-        String result = "ERROR: < Game: " + "fake" + " does not exist in database. >\r\n";
+        String result = "ERROR: \\<Fatal: Game: fake does not exist in database.\\>\r\n";
         RemoveGame transac = new RemoveGame("fake", buyName);
         AbstractUser login = transac.execute(userList, gameList, market, adminUser1);
         assertEquals(beforeResult + result, outContent.toString());
@@ -909,10 +906,9 @@ public class TransactionTests {
 
     @Test
     public void SellTest5() {
-        String result = "WARNING: < Logged in user does not match username: " + "wrong" +
-                ", proceeding using logged in user as the seller. >\r\n";
-        String afterResult = "Seller: wrong does not exist in the market.\r\n" +
-                "Seller: a1 added to the market\r\n" +
+        String result = "WARNING: \\<Logged in user does not match username: wrong, " +
+                "proceeding using logged in user as the seller.\\>\r\n";
+        String afterResult = "Seller: a1 added to the market\r\n" +
                 "Game: newGame is now being sold by a1 for $10.0 at a 20.0% discount, " +
                 "will be available for purchase tomorrow.\r\n";
         Sell transac = new Sell("newGame", "wrong", "20.00", "10.00");
@@ -927,8 +923,8 @@ public class TransactionTests {
 
     @Test
     public void SellTest6() {
-        String result = "ERROR: \\ < Failed Constraint: " + sellName + " could not sell " +
-                csgo.getName() + " as User is already selling this exact game > //\r\n";
+        String result = "ERROR: \\<Failed Constraint: s1 could not sell CSGO as User is already selling this " +
+                "exact game.\\>\r\n";
         Sell transac = new Sell(csgo.getName(), sellUser1.getUsername(), "20.00", "10.00");
         AbstractUser login = transac.execute(userList, gameList, market, sellUser1);
         assertEquals(beforeResult + result, outContent.toString());
