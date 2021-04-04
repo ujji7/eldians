@@ -46,9 +46,9 @@ public class RemoveGame implements Transaction {
 
         // remove game if owner and game exist, call correct remove game if user is admin or not.
         if (owner == null) {
-            System.out.println("ERROR: < User: " + this.ownerName + " does not exist in database. >");
+            System.out.println("ERROR: \\<Fatal: User: " + this.ownerName + " does not exist in database.\\>");
         } else if (game == null) {
-            System.out.println("ERROR: < Game: " + this.gameName + " does not exist in database. >");
+            System.out.println("ERROR: \\<Fatal: Game: " + this.gameName + " does not exist in database.\\>");
 
         } else if (login instanceof AdminUser) {
             ((AdminUser) login).removeGame(game, owner, market);

@@ -11,12 +11,10 @@ public class Error implements Transaction{
     /**
      * Creates a new Error object that prints an Error to the console.
      */
-    public Error() { System.out.println("Fatal Error: This is not a valid transaction code"); }
+    public Error() { System.out.println("ERROR: \\<Fatal: This is not a valid transaction code.\\>"); }
 
     /**
      * Executes an Error transaction. Returns the person who is currently logged in.
-     *
-     * This method should *NEVER* be called.
      *
      * @param users ArrayList of Users in the system.
      * @param games ArrayList of Games in the system.
