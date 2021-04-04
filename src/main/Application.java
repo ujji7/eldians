@@ -64,7 +64,7 @@ public class Application {
             databaseController.writeUser(userList);
             databaseController.writeMarket(this.market);
         }catch (IOException e){
-            System.out.println("Cannot write files");
+            System.out.println("ERROR: \\<FATAL: Cannot write files. \\>");
         }
     }
 
@@ -79,7 +79,7 @@ public class Application {
             if (transac instanceof Login || login != null) {
                 login = transac.execute(userList, this.gamesList, this.market, this.login);
             } else {
-                System.out.println("FATAL ERROR: < There is no user logged in, cannot execute transaction. >");
+                System.out.println("ERROR: \\<FATAL: There is no user logged in, cannot execute transaction. \\>");
             }
         }
         EODWrite();

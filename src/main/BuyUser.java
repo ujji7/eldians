@@ -26,7 +26,8 @@ public class BuyUser extends AbstractUser {
      */
     @Override
     public boolean sell(Game game, Marketplace market){
-        System.out.println("ERROR: \\ < Failed Constraint: "+ this.username + " does not have the ability to sell games.");
+        System.out.println(FAIL_BEGIN+ this.username + " does not have the ability to sell " +
+                "games" + FAIL_END);
         return false;
     }
 
@@ -41,7 +42,8 @@ public class BuyUser extends AbstractUser {
     @Override
     public void gift(Game inGame, AbstractUser receiver, Marketplace market){
         if (receiver instanceof SellUser){ // Receiver is a Sell user
-            System.out.println("ERROR: \\< Failed Constraint: Sell User can not accept any gifts. >//");
+            System.out.println(FAIL_BEGIN + receiver.getUsername() + "is a sell user and cannot "+
+                    "accept gifts" + FAIL_END);
         }
         else{
             Game game = this.gameCopy(inGame); // deep-copying the Game to work with
@@ -63,13 +65,13 @@ public class BuyUser extends AbstractUser {
                     System.out.println(recTran);
                 }
                 else{ // Sender doesn't have the game
-                    System.out.println("ERROR: \\" + this.username + " does not have the " + gameName +
-                            ".\n Gift transaction failed.");
+                    System.out.println(FAIL_BEGIN + this.username + " does not have the " + 
+                            gameName + ". Gift transaction failed" + FAIL_END);
                 }
             }
             else{ // Receiver already has the game
-                System.out.println("ERROR: \\" + receiver.getUsername() + " already has " +gameName+
-                        ".\n Gift transaction failed.");
+                System.out.println(FAIL_BEGIN + receiver.getUsername() + " already has " +
+                        gameName+ ". Gift transaction failed" + FAIL_END);
             }
         }
     }
@@ -79,13 +81,13 @@ public class BuyUser extends AbstractUser {
     /**
      * Checks and removes the game for the User
      *
-     * @param INgame The game being removed
+     * @param InGame The game being removed
      * @param market The current market
      */
     @Override
-    public void removeGame(Game INgame, Marketplace market){
+    public void removeGame(Game InGame, Marketplace market){
         // deep-copying the Game to work with
-        Game game = this.gameCopy(INgame);
+        Game game = this.gameCopy(InGame);
 
         String currGame = game.getName();
         // check if the User has the game
@@ -100,7 +102,7 @@ public class BuyUser extends AbstractUser {
             }
         }
         else{
-            System.out.println(game.getName()+ " was not found in the user's inventory.");
+            System.out.println(FAIL_BEGIN + game.getName()+ " was not found in the user's inventory" + FAIL_END);
         }
     }
 
@@ -112,7 +114,6 @@ public class BuyUser extends AbstractUser {
         private String username; // required
         public double accountBalance;
         public ArrayList<Game> inventory = new ArrayList<Game>();
-        public double newFunds;
         public ArrayList<String> transactionHistory;
         
         /** Initialize a user builder with the given name.
@@ -145,16 +146,6 @@ public class BuyUser extends AbstractUser {
             return this;
         }
 
-        /** Set the builder's new funds with the given new funds
-         *
-         * @param newFunds the newFunds to set the builder at
-         * @return the user builder
-         */
-        public UserBuilder newFunds(double newFunds){
-            this.newFunds = newFunds;
-            return this;
-        }
-
         /** Set the builder's transactionHistory with the given transactionHistory
          *
          * @param transactions the transactionHistory to set the builder at
@@ -170,7 +161,6 @@ public class BuyUser extends AbstractUser {
          * @return BuyUser object with the builder's attributes
          */
         public BuyUser build() {
-            BuyUser user = new BuyUser(this);
             return new BuyUser(this);
         }
 

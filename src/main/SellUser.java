@@ -1,7 +1,6 @@
 package main;
 
 import java.util.ArrayList;
-//GET INVENTORY OVERRIDING IF OUR SELL USER DOES HAVE ONE- ITS JUST EMPTY
 /** Sell type user that extends the Abstract User class. A sell type user cannot buy games, only sell. And
  * it cannot create or delete users.
  *
@@ -17,8 +16,6 @@ public class SellUser extends AbstractUser {
         this.type = "SS";
     }
     
-    
-
     /** Prints that this user cannot buy a game.
      *
      * @param seller the supplier of the game
@@ -26,7 +23,7 @@ public class SellUser extends AbstractUser {
      */
     @Override
     public void buy(AbstractUser seller, Game game, boolean saleToggle, Marketplace market){
-        System.out.println("ERROR: \\< Failed Constraint: Sell User: "+ this.username + " cannot buy games.>//");
+        System.out.println(FAIL_BEGIN + "Sell user: "+ this.username + " cannot buy games" + FAIL_END);
     }
 
     /** Prints to the console that this user cannot get an inventory as theirs is empty. 
@@ -34,7 +31,7 @@ public class SellUser extends AbstractUser {
      */
     @Override
     public ArrayList<Game> getInventory(){
-        System.out.println("ERROR: \\< Failed Constraint: Sell User does not have inventory. >//");
+        System.out.println(FAIL_BEGIN + "A Sell user does not have inventory" + FAIL_END);
         return null;
     }
 
@@ -50,7 +47,8 @@ public class SellUser extends AbstractUser {
     public void gift(Game InGame, AbstractUser receiver, Marketplace market){
         // Receiver is a Sell user
         if (receiver instanceof SellUser){
-            System.out.println("ERROR: \\< Failed Constraint: Sell User can not accept any gifts. >//");
+            System.out.println(FAIL_BEGIN + receiver.getUsername() + "is a sell user and cannot "+
+                    "accept gifts" + FAIL_END);
         }
         else{
             // deep-copying the Game to work with
@@ -64,10 +62,11 @@ public class SellUser extends AbstractUser {
                 boolean inSenMar = market.checkSellerSellingGame(this.getUsername(), gameName);
                 // User can send the gift, game is added to the Receiver's inventory
                 if (inSenMar){
-                   // Game added to the receiver's inventory and
-                    // updating the transaction history for the users
-                    String senderTran = this.getUsername() + " has gifted: " + gameName + " to " + receiver.getUsername();
-                    String recTran = receiver.getUsername() + " has received " + gameName + " from " + this.getUsername();
+                   // Game added to the receiver's inventory and updating the transaction history for the users
+                    String senderTran = this.getUsername() + " has gifted: " + gameName + " to " + 
+                            receiver.getUsername() + ".";
+                    String recTran = receiver.getUsername() + " has received " + gameName + " from " + 
+                            this.getUsername() + ".";
                     this.addTranHis(senderTran);
                     receiver.addTranHis(recTran);
                     receiver.addGame(game);
@@ -76,14 +75,14 @@ public class SellUser extends AbstractUser {
                 }
                 // Sender doesn't have the game
                 else{
-                    System.out.println("ERROR: \\" + this.username + " does not have the " + gameName +
-                            ".\n Gift transaction failed.");
+                    System.out.println(FAIL_BEGIN + this.username + " does not have game: " + gameName +
+                            " to be gifted. Gift transaction failed" + FAIL_END);
                 }
             }
-            // Reciever already has the game
+            // Receiver already has the game
             else{
-                System.out.println("ERROR: \\" + receiver.getUsername() + " already has " +gameName+
-                        ".\n Gift transaction failed.");
+                System.out.println(FAIL_BEGIN + receiver.getUsername() + " already has " +gameName+
+                        ". Gift transaction failed" + FAIL_END);
             }
         }
     }
@@ -121,7 +120,6 @@ public class SellUser extends AbstractUser {
 
         private String username; // required
         public double accountBalance;
-        public double newFunds;
         public ArrayList<String> transactionHistory;
         
         /** Initialize a user builder with the given name.
@@ -144,16 +142,6 @@ public class SellUser extends AbstractUser {
             return this;
         }
 
-        /** Set the builder's new funds with the given new funds
-         *
-         * @param newFunds the newFunds to set the builder at
-         * @return the user builder
-         */
-        public UserBuilder newFunds(double newFunds){
-            this.newFunds = newFunds;
-            return this;
-        }
-
         /** Set the builder's transactionHistory with the given transactionHistory
          *
          * @param transactions the transactionHistory to set the builder at
@@ -169,7 +157,6 @@ public class SellUser extends AbstractUser {
          * @return SellUser object with the builder's attributes
          */
         public SellUser build() {
-            SellUser user = new SellUser(this);
             return new SellUser(this);
         }
 

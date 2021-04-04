@@ -43,7 +43,7 @@ public class AddCredit implements Transaction {
         if (login instanceof AdminUser && this.username.equals("")) {
 
             // When username field is empty, the admin wants to add to itself, but warn to console anyways.
-            System.out.println("WARNING: < Username field left empty, Adding funds to self. >");
+            System.out.println("WARNING: \\<Username field left empty, Adding funds to self.\\>");
             login.addCredit(this.credit);
 
         } else if (login instanceof AdminUser) {
@@ -53,7 +53,7 @@ public class AddCredit implements Transaction {
             AbstractUser foundUser = find.findUser(this.username, users);
 
             if (foundUser == null) {
-                System.out.println("ERROR: < User " + this.username + "Not Found >");
+                System.out.println("ERROR: \\<Fatal: User " + this.username + " Not Found.\\>");
             } else {
                 ((AdminUser) login).addCreditTo(this.credit, foundUser);
             }
@@ -61,7 +61,7 @@ public class AddCredit implements Transaction {
         }
             else {
                 if(!login.getUsername().equals(this.username)){
-                    System.out.println("ERROR: < Given User does not match logged in user. >");
+                    System.out.println("ERROR: \\<Fatal: Given User does not match logged in user.\\>");
                 }
             login.addCredit(this.credit);
         }

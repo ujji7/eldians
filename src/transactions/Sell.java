@@ -44,21 +44,21 @@ public class Sell implements Transaction {
                                 AbstractUser login) {
 
         if (!login.getUsername().equals(this.seller)) {
-            System.out.println("WARNING: < Logged in user does not match username: " + this.seller +
-                    ", proceeding using logged in user as the seller. >");
+            System.out.println("WARNING: \\<Logged in user does not match username: " + this.seller +
+                    ", proceeding using logged in user as the seller.\\>");
         }
-        // If game is already on market, do not put another on market (end here)
 
+        // If game is already on market, do not put another on market (end here)
         if (market.checkSellerSellingGame(this.seller, this.gameName)) {
-            System.out.println("ERROR: \\ < Failed Constraint: " + this.seller + " could not sell " +
-                    this.gameName + " as User is already selling this exact game > //");
+            System.out.println("ERROR: \\<Failed Constraint: " + this.seller + " could not sell " +
+                    this.gameName + " as User is already selling this exact game.\\>");
             return login;
         }
 
 
         // Generate UniqueID
         int uid = market.getUid();
-        market.incrementUID();// TEMPORARY! REMOVE WHEN WE HAVE A WAY TO GENERATE UNIQUEID'S
+        market.incrementUID();
 
         // Create the game
         Game newGame = new Game(this.gameName, this.salePrice, login.getUsername(), uid, this.discount);

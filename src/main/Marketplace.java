@@ -1,6 +1,8 @@
 package main;
-import java.util.HashMap;
+import transactions.Finder;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * This Class that keeps a record for what Games are being offered by what seller along with the functionality related
@@ -15,13 +17,11 @@ public class Marketplace {
     // Keeps a record for Seller against their offerings
     private HashMap<String, ArrayList<Game>> gamesOnSale;
 
-    /**
-     * Creates a brand new Market with no active Sellers
+    /** Creates a brand new Market with no active Sellers
      *
      */
     public Marketplace() {
         this.gamesOnSale = new HashMap<String, ArrayList<Game>>();
-
     }
 
     /**
@@ -38,7 +38,7 @@ public class Marketplace {
     /**
      * Gets the current auction sale Status for the Market
      *
-     * @return true if Sale is offered false otherwise
+     * @return true if Sale is offered, false otherwise
      */
     public boolean getAuctionSale(){
         return this.auctionSale;
@@ -59,7 +59,7 @@ public class Marketplace {
     }
 
     /**
-     * Helper to get all the games currently being Sold
+     * Get all the games currently being sold
      *
      * @return The Hashmap of the Market, key: UserName value: ArrayList<Game> they have up for sale
      */
@@ -99,7 +99,7 @@ public class Marketplace {
     }
 
     /**
-     * Helper to get the unique ID associated with the Game
+     * Helper to get the unique ID of the current marketplace's status
      * @return the integer value of the UniqueID
      */
     public int getUid(){
@@ -107,7 +107,7 @@ public class Marketplace {
     }
     
     
-    /** Helper to set the unique ID associated with the Game
+    /** Helper to set the unique ID for the current marketplace's status
      * @param id the unique ID
      */
     public void setUid(Integer id){
@@ -134,57 +134,6 @@ public class Marketplace {
         }
     }
 
-/*
-    //**
-     * Adds the Game for the Seller in the market
-     *
-     * @param seller User adding the Game to their offerings
-     * @param game The game to be added to the Seller's offering
-     *//*
-    public void addGameForSeller(String seller, Game game){
-        // Check if the Seller exists and add the Game to their list of offering
-        if(this.checkSellerExist(seller)){
-            String addGame = game.getName();
-
-            //ArrayList<Game> currOffering = this.getMyOfferings(seller);
-
-            // check if the user is Selling the game or has the game up for sale if not then add the game
-            if(!this.checkSellerSellingGame(seller, addGame) && !this.gameToBeUpCheck(seller, addGame)){
-                this.addForTomMar(seller, game);
-                System.out.println(game.getName() + " has now been added to the seller's offering");
-            }
-            else {
-                System.out.println("Seller: "+ seller+" is already selling " + game.getName());
-            }
-        }
-        // Seller currently does not exist in our market
-        else{
-            System.out.println("Seller: "+ seller+" does not exist in the market");
-        }
-    }
-
-    /**
-     * Checks if the game title will be up for sale tomorrow
-     * Can be used for Future improvements and extra features
-     *
-     * @param seller User offerings the game
-     * @param gameTitle the game title to be checked
-     * @return true if the Game title will be up for sale tomorrow
-     */
-    public boolean gameToBeUpCheck(String seller, String gameTitle){
-        boolean result = false;
-        // get the game title and check if it is on a Hold for today
-        ArrayList<Game> myOffering = this.gamesOnSale.get(seller);
-        for(Game myGame : myOffering) {
-            String currGameName = myGame.getName();
-            if (currGameName.equals(gameTitle)) {
-                result = myGame.getHold();
-            }
-        }
-        return result;
-    }
-
-
     /**
      * Checks if a Seller exists in our Market
      *
@@ -195,7 +144,6 @@ public class Marketplace {
         return this.gamesOnSale.containsKey(seller);
     }
 
-
     /**
      * Checks if the seller is currently offering the sale of the Game title
      *
@@ -203,36 +151,34 @@ public class Marketplace {
      * @param gameTitle The game title being checked
      * @return true if the seller is selling the Game title
      */
-    public boolean checkSellerSellingGame(String seller, String gameTitle){
-        boolean result = false;
-        // if the Seller exists and check if they are selling the Game
-        if(this.checkSellerExist(seller)) {
-            ArrayList<Game> currOffering = this.getMyOfferings(seller);
-            boolean gameFound = false;
-            // check if the seller is selling the game title
-            for(Game myGame : currOffering){
-                String currGameName = myGame.getName();
-                if(currGameName.equals(gameTitle)){
-                    gameFound = true;
-                    // Check if the Game is on hold or not
-                    if(!myGame.getHold()){
-                        result = true;
-                    }
-                    else{
-                        System.out.println("Game: "+ gameTitle + ", sold by " + seller + " is currently on hold, " +
-                                "cannot be exchanged today.");
-                    }
-                }
-            }
-            if(!gameFound){
-                System.out.println("Seller: " + seller+" is currently not offering "+ gameTitle + ".");
+    public boolean checkSellerSellingGame(String seller, String gameTitle) {
+        if(checkSellerExist(seller)) {
+            ArrayList<Game> gameList = this.gamesOnSale.get(seller);
+            for (Game g : gameList) {
+                if (g.getName().equals(gameTitle)) return true;
             }
         }
-        // Seller currently does not exist in our market
-        else{
-            System.out.println("Seller: "+ seller+" does not exist in the market.");
+        return false;
+    }
+
+    /**
+     * Return true if seller is selling game and its not on hold
+     *
+     * @param seller User selling the game.
+     * @param gameTitle game we are checking.
+     * @return true if seller selling game and not on hold, false otherwise.
+     */
+    public boolean checkNotOnHold(String seller, String gameTitle) {
+        if(checkSellerSellingGame(seller, gameTitle)) {
+            Finder finder = new Finder();
+            Game g = finder.findGame(gameTitle, this.gamesOnSale.get(seller));
+            if (g.getHold()) {
+                return false;
+            } else {
+                return true;
+            }
         }
-        return result;
+        return false;
     }
 
 
