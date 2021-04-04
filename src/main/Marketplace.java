@@ -15,13 +15,11 @@ public class Marketplace {
     // Keeps a record for Seller against their offerings
     private HashMap<String, ArrayList<Game>> gamesOnSale;
 
-    /**
-     * Creates a brand new Market with no active Sellers
+    /** Creates a brand new Market with no active Sellers
      *
      */
     public Marketplace() {
         this.gamesOnSale = new HashMap<String, ArrayList<Game>>();
-
     }
 
     /**
@@ -38,7 +36,7 @@ public class Marketplace {
     /**
      * Gets the current auction sale Status for the Market
      *
-     * @return true if Sale is offered false otherwise
+     * @return true if Sale is offered, false otherwise
      */
     public boolean getAuctionSale(){
         return this.auctionSale;
@@ -59,7 +57,7 @@ public class Marketplace {
     }
 
     /**
-     * Helper to get all the games currently being Sold
+     * Get all the games currently being sold
      *
      * @return The Hashmap of the Market, key: UserName value: ArrayList<Game> they have up for sale
      */
@@ -99,7 +97,7 @@ public class Marketplace {
     }
 
     /**
-     * Helper to get the unique ID associated with the Game
+     * Helper to get the unique ID of the current marketplace's status
      * @return the integer value of the UniqueID
      */
     public int getUid(){
@@ -107,7 +105,7 @@ public class Marketplace {
     }
     
     
-    /** Helper to set the unique ID associated with the Game
+    /** Helper to set the unique ID for the current marketplace's status
      * @param id the unique ID
      */
     public void setUid(Integer id){
