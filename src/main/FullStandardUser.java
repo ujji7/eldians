@@ -10,6 +10,9 @@ public class FullStandardUser extends AbstractUser {
 
 
 
+    /** Construct a buy user using the builder attributes
+     * @param builder User builder that builds the buy user
+     */
     public FullStandardUser(UserBuilder builder) {
         this.username = builder.username;
         this.accountBalance = builder.accountBalance;
@@ -18,49 +21,73 @@ public class FullStandardUser extends AbstractUser {
         this.transactionHistory = builder.transactionHistory;
 
     }
-    
-    public ArrayList<Game> getInventory(){
-        return this.inventory;
-    }
-    
 
+
+    /** User Builder class to build a Full Standard type user. Mandatory attribute is the name.
+     *
+     */
     public static class UserBuilder {
 
-        public String username; //mandatory
-        public String type; // mandatory
-        public double accountBalance; // optional
-        public ArrayList<Game> inventory = new ArrayList<Game>(); //optional
-        public double newFunds; //optional
-        public ArrayList<String> transactionHistory; //optional
-
-
+        private String username; // required
+        public double accountBalance;
+        public ArrayList<Game> inventory = new ArrayList<Game>();
+        public double newFunds;
+        public ArrayList<String> transactionHistory;
+        
+        /** Initialize a user builder with the given name.
+         *
+         * @param name of the user
+         */
         public UserBuilder(String name) {
             this.username = name;
-            this.type = type;
             this.accountBalance = 0.00;
             this.transactionHistory = new ArrayList<>();
         }
 
+        /** Set the builder's account balance to account balance
+         *
+         * @param accountBalance the balance to set the builder at
+         * @return the user builder
+         */
         public UserBuilder balance(double accountBalance){
             this.accountBalance = accountBalance;
             return this;
         }
 
+        /** Set the builder's inventory with the given inventory
+         *
+         * @param inventory the inventory to set the builder at
+         * @return the user builder
+         */
         public UserBuilder inventoryGames(ArrayList<Game> inventory){
             this.inventory.addAll(inventory);
             return this;
         }
 
+        /** Set the builder's new funds with the given new funds
+         *
+         * @param newFunds the newFunds to set the builder at
+         * @return the user builder
+         */
         public UserBuilder newFunds(double newFunds){
             this.newFunds = newFunds;
             return this;
         }
 
+        /** Set the builder's transactionHistory with the given transactionHistory
+         *
+         * @param transactions the transactionHistory to set the builder at
+         * @return the user builder
+         */
         public UserBuilder transactionHistory(ArrayList<String> transactions){
             this.transactionHistory.addAll(transactions);
             return this;
         }
 
+        /** Build and return the Full Standard User
+         *
+         * @return FullStandardUser object with the builder's attributes
+         */
         public FullStandardUser build(){
             FullStandardUser user = new FullStandardUser(this);
             return user;

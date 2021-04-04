@@ -65,7 +65,12 @@ public class DatabaseReadTest {
         System.setOut(originalOut);
     }
 
-    
+    /** Returns a list of integers that are different between both lists.
+     * 
+     * @param search first list of integers 
+     * @param all second list of integers
+     * @return list of difference integers
+     */
     public ArrayList<Integer> unequalIntegers(ArrayList<Integer> search, ArrayList<Integer> all) {
         
         ArrayList<Integer> diff = new ArrayList<Integer>();
@@ -84,6 +89,7 @@ public class DatabaseReadTest {
         return diff;
     }
     
+    // Game file Non Existent
     @Test
     public void testGameNonExistent() {
         ReadingJSON.setGameFileName(fileNameGameNonExistent);
@@ -92,6 +98,7 @@ public class DatabaseReadTest {
         assertEquals(emptyGames, games);
     }
 
+    //game file empty
     @Test
     public void testGameEmpty() {
         ReadingJSON.setGameFileName(fileNameGameEmpty);
@@ -100,6 +107,7 @@ public class DatabaseReadTest {
         assertEquals(emptyGames, games);
     }
 
+    //game file has like .
     @Test
     public void testGameFormat() {
         ReadingJSON.setGameFileName(fileNameGameFormat);
@@ -108,6 +116,7 @@ public class DatabaseReadTest {
         assertEquals(emptyGames, games);
     }
 
+    //game file is not an array of games, but only one
     @Test
     public void testGameOneGame() {
         ReadingJSON.setGameFileName(fileNameGameOneGame);
@@ -116,11 +125,13 @@ public class DatabaseReadTest {
         assertEquals(emptyGames, games);
     }
 
+    // test size of game errors game
     @Test
     public void testGameErrors1() {
         assertEquals( 7, games.size());
     }
 
+    //test that none of the games with errors got created
     @Test
     public void testGameErrors2() {
         ArrayList<Integer> allIds = new ArrayList<Integer>();
@@ -132,6 +143,7 @@ public class DatabaseReadTest {
         assertEquals(new ArrayList<Integer>(), unequalIntegers(search, allIds));
     }
 
+    // test that game object gets created properly
     @Test
     public void testGameErrorsCheckItemType() {
         Game game = null;
@@ -149,6 +161,7 @@ public class DatabaseReadTest {
         assertFalse(game.getHold());
     }
 
+    // check that onhold changes
     @Test
     public void testGameErrorsCheckItemTypeFalseHold() {
         Game game = null;
@@ -166,6 +179,7 @@ public class DatabaseReadTest {
         assertFalse(game.getHold());
     }
     
+    //user file does not exist
     @Test
     public void testUserNonExistent() {
         ReadingJSON.setGameFileName(fileNameGameGood);
@@ -176,6 +190,7 @@ public class DatabaseReadTest {
         assertEquals(emptyUsers, users);
     }
 
+    //user file is empty
     @Test
     public void testUserEmpty() {
         ReadingJSON.setGameFileName(fileNameGameGood);
@@ -186,6 +201,7 @@ public class DatabaseReadTest {
         assertEquals(emptyUsers, users);
     }
 
+    //user file has a ,
     @Test
     public void testUserFormat() {
         ReadingJSON.setGameFileName(fileNameGameGood);
@@ -196,6 +212,7 @@ public class DatabaseReadTest {
         assertEquals(emptyUsers, users);
     }
 
+    //user file doesnt have a list of users, only has one
     @Test
     public void testUserOneUser() {
         ReadingJSON.setGameFileName(fileNameGameGood);
@@ -207,8 +224,9 @@ public class DatabaseReadTest {
     }
 
 
-    
-
+    /** Class that checks for each user error possible
+     * 
+     */
     @Nested
     class UsersErrorsTest {
         List<AbstractUser> users;
@@ -228,6 +246,12 @@ public class DatabaseReadTest {
             users = new ArrayList<>();
         }
 
+        /** Return a list of any strings that are different in both files.
+         * 
+         * @param search first list of strings
+         * @param all second list of strings
+         * @return list of any different strings
+         */
         ArrayList<String> differentStrings(ArrayList<String> search, ArrayList<String> all) {
 
             ArrayList<String> diff = new ArrayList<String>();
@@ -246,6 +270,7 @@ public class DatabaseReadTest {
             return diff;
         }
 
+        //basic test that games and users initialized properly
         @Test
         void sizeTest() {
             assertEquals(4, games.size());
@@ -269,6 +294,7 @@ public class DatabaseReadTest {
             assertEquals(new ArrayList<>(), differentStrings(userNames, correctUsers));
         }
         
+        // test that sellers have no inventory
         @Test
         void sellerInventory() {
             for (AbstractUser u : users) {
@@ -278,6 +304,7 @@ public class DatabaseReadTest {
             }
         }
 
+        // test that with an inventory of wrong type, empty inventory created
         @Test
         void inventoryWrongType() {
             AbstractUser user = null;
@@ -290,6 +317,7 @@ public class DatabaseReadTest {
             assertEquals(new ArrayList<>(), user.getInventory());
         }
 
+        // check that games added to inventory accurately
         @Test
         void checkInventory() {
             AbstractUser user = null;
@@ -304,6 +332,7 @@ public class DatabaseReadTest {
             assertEquals("G2", user.getInventory().get(0).getName());
         }
 
+        //check that for wrong inventory items in inventory, it sets inventory to empty
         @Test
         void inventoryZero() {
             AbstractUser user = null;
@@ -317,6 +346,7 @@ public class DatabaseReadTest {
             assertEquals(0, user.getInventory().size());
         }
 
+        //test that if one of inventory object is incorrect, others are unaffected
         @Test
         void inventoryOneWrong() {
             AbstractUser user = null;
@@ -331,6 +361,9 @@ public class DatabaseReadTest {
     }
 
 
+    /** test for marketplace reading
+     * 
+     */
     @Nested
     class MarketBasicTest {
         List<AbstractUser> users;
@@ -352,12 +385,14 @@ public class DatabaseReadTest {
             System.setOut(originalOut);
         }
 
+        //basic size test
         @Test
         void sizeTest() {
             assertEquals(4, games.size());
             assertEquals(3, users.size());
         }
 
+        //no market file
         @Test
         public void testMarketNonExistent() {
             ReadingJSON.setMarketFileName(fileNameMarketNonExistent);
@@ -367,6 +402,7 @@ public class DatabaseReadTest {
             assertEquals(new HashMap<>(), market.getGamesOnSale());
         }
 
+        //market file empty
         @Test
         public void testMarketEmpty() {
             ReadingJSON.setMarketFileName(fileNameMarketEmpty);
@@ -378,6 +414,7 @@ public class DatabaseReadTest {
         }
         
 
+        //market file is ,
         @Test
         public void testMarketFormat() {
             ReadingJSON.setMarketFileName(fileNameMarketFormat);
@@ -387,6 +424,7 @@ public class DatabaseReadTest {
             assertEquals(new HashMap<>(), market.getGamesOnSale());
         }
 
+        //market has no auction - gets set with false
         @Test
         public void testMarketNoAuction() {
             ReadingJSON.setMarketFileName(fileNameMarketNoAuction);
@@ -396,6 +434,7 @@ public class DatabaseReadTest {
             assertFalse(market.getAuctionSale());
         }
 
+        //market with wrong auction type gets set with false
         @Test
         public void testMarketAuctionWrong() {
             ReadingJSON.setMarketFileName(fileNameMarketAuctionWrong);
@@ -409,6 +448,7 @@ public class DatabaseReadTest {
             assertEquals(2, sellers.size());
         }
 
+        //market with no uid gets set to 0
         @Test
         public void testMarketNoUID() {
             ReadingJSON.setMarketFileName(fileNameMarketNoUID);
@@ -425,6 +465,7 @@ public class DatabaseReadTest {
             assertEquals(3, gamesNames.size());
         }
 
+        //market that is correct gets initialized properly
         @Test
         public void testMarketGood() {
             ReadingJSON.setMarketFileName(fileNameMarketGood);
@@ -444,6 +485,9 @@ public class DatabaseReadTest {
         
     }
 
+    /** This market errors tests specific errors when market is given wrong objects
+     * 
+     */
     @Nested
     class MarketErrorsTest {
         List<AbstractUser> users;
@@ -468,12 +512,14 @@ public class DatabaseReadTest {
             market = new Marketplace();
         }
 
+        // basic test that games and sizes are correct - sanity check
         @Test
         void sizeTest() {
             assertEquals(4, games.size());
             assertEquals(3, users.size());
         }
         
+        // get number of games and uid
         @Test
         public void testMarketBasic() {
             ReadingJSON.setMarketFileName(fileNameMarketGood);
@@ -483,6 +529,7 @@ public class DatabaseReadTest {
             assertEquals(4, market.getUid());
         }
 
+        //duplicate sellers ignored
         @Test
         public void testMarketDuplicateSeller() {
             ReadingJSON.setMarketFileName(fileNameMarketGood);
@@ -500,6 +547,7 @@ public class DatabaseReadTest {
             assertEquals(new ArrayList<>(), unequalIntegers(gameIDS, correctIDS));
         }
 
+        //duplicate ids within a sellers games on sale are ignored - only first one considered
         @Test
         public void testMarketDuplicateID() {
             ReadingJSON.setMarketFileName(fileNameMarketGood);
@@ -517,6 +565,7 @@ public class DatabaseReadTest {
             assertEquals(new ArrayList<>(), unequalIntegers(gameIDS, correctIDS));
         }
 
+        // does not add a game that does not previously exist from game file reading
         @Test
         public void testMarketNoExistGame() {
             ReadingJSON.setMarketFileName(fileNameMarketGood);
@@ -534,6 +583,7 @@ public class DatabaseReadTest {
             assertEquals(new ArrayList<>(), unequalIntegers(gameIDS, correctIDS));
         }
 
+        //buy users not added to marketplace
         @Test
         public void testMarketBuyUser() {
             ReadingJSON.setMarketFileName(fileNameMarketGood);
@@ -543,6 +593,7 @@ public class DatabaseReadTest {
             assertNull(market.getGamesOnSale().get("B1"));
         }
 
+        //non users not added (must be previously from users list
         @Test
         public void testMarketNonUser() {
             ReadingJSON.setMarketFileName(fileNameMarketGood);
