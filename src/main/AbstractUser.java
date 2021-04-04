@@ -4,16 +4,11 @@ import java.util.HashMap;
 //line 401
 //REMOVE ANY UNNECESSARY PRINT STATEMENTS IN CREATE AND BUY
 
-//SELL DOES NOT CHECK FOR GAMES ALREADY SOLD BY SELLER 
-//SELL DOES NOT CHECK FOR IF THE GAME IS IN THEIR INVENTORY
-
 //we need an auction sale method - i implemented it at botfitom check it out
 // also look at readme for add credit - there is another implementations for admin type
 
 
 //I made in game that returns the price with discount applied since we'll probs need it in many places.
-
-//we need an auction sale method - i implemented it at bottom check it out
 
 
 //Back End Error Recording:
@@ -163,8 +158,8 @@ public abstract class AbstractUser {
                 else {
                     double newFunds = (double) Math.round((MAX_FUNDS - this.getAccountBalance()) * 100) / 100;
                     this.setAccountBalance(MAX_FUNDS);
-                    System.out.println("ERROR: \\ < Failed Constraint: " + this.username +
-                            "'s balance was Maxed out!\n$" + newFunds + " was added to the account");
+                    System.out.println("ERROR: \\<Failed Constraint: " + this.username +
+                            "'s balance was Maxed out!\n$" + newFunds + " was added to the account.\\>");
                     this.newFunds += newFunds;
                     fundsAdded = newFunds;
                 }
@@ -177,12 +172,12 @@ public abstract class AbstractUser {
                 // get the amount that can be added
                 double newFunds = (double) Math.round((DAILY_LIMIT - this.newFunds) * 100) / 100;
 
-                System.out.println("ERROR: \\ < Failed Constraint: " + this.username +
+                System.out.println("ERROR: \\<Failed Constraint: " + this.username +
                         "'s daily limit would be reached upon addition of funds!\n" +
-                        "You can only add $" + newFunds + " to the account for the rest of today.");
+                        "You can only add $" + newFunds + " to the account for the rest of today.\\>");
             }
         }
-        System.out.println("ERROR: \\ < Failed Constraint: Amount should be greater than $0");
+        System.out.println("ERROR: \\<Failed Constraint: Amount should be greater than $0.\\>");
     }
 
     
@@ -242,22 +237,22 @@ public abstract class AbstractUser {
      */
     public void buy(AbstractUser seller, Game game, boolean saleToggle, Marketplace market){
         if (!seller.sellingGame(game, market)) {
-            System.out.println("ERROR: \\ < Failed Constraint: " + seller.getUsername() + " is not selling " + 
-                    game.getName() + " on the market.");
+            System.out.println("ERROR: \\<Failed Constraint: " + seller.getUsername() + " is not selling " +
+                    game.getName() + " on the market.\\>");
         } else if (game.getHold()) {
-            System.out.println("ERROR: \\ < Failed Constraint: " + game.getName() + "is currently on hold. Cannot be " +
-                    "purchased today.");
+            System.out.println("ERROR: \\<Failed Constraint: " + game.getName() + "is currently on hold. Cannot be " +
+                    "purchased today.\\>");
         } else if (this.sellingGame(game, market)) {
-            System.out.println("ERROR: \\ < Failed Constraint: " + this.getUsername() + "is selling " + game.getName()
-                    + " on the market, cannot buy it as well.");
+            System.out.println("ERROR: \\<Failed Constraint: " + this.getUsername() + "is selling " + game.getName()
+                    + " on the market, cannot buy it as well.\\>");
         } else if (gameInInventory(game)) { //check that game isn't already in inventory
-            System.out.println("ERROR: \\ < Failed Constraint: "+ this.username + " already owns " + game.getName() +
-                    ". Cannot buy it again.");
+            System.out.println("ERROR: \\<Failed Constraint: "+ this.username + " already owns " + game.getName() +
+                    ". Cannot buy it again.\\>");
         } else {                                                  
             double price = game.getPriceWithDiscount(saleToggle);
             if (!this.canTransferFunds(price)) { 
-                System.out.println("ERROR: \\ < Failed Constraint: "+ this.username + " does not have enough funds " +
-                        "to buy " + game.getName() + ".");
+                System.out.println("ERROR: \\< Failed Constraint: "+ this.username + " does not have enough funds " +
+                        "to buy " + game.getName() + ".\\>");
                 return;
             }  
             System.out.println(this.payAndAddGame(seller, price, game));
@@ -283,36 +278,25 @@ public abstract class AbstractUser {
         if (!this.sellConstraints(game)) return false;
         
         if (this.gameInInventory(game)) {
-            System.out.println("ERROR: \\ < Failed Constraint: " + this.getUsername() + " could not sell " +
-                    game.getName() + " as they have bought this exact game. > //");
+            System.out.println("ERROR: \\<Failed Constraint: " + this.getUsername() + " could not sell " +
+                    game.getName() + " as they have bought this exact game.\\>");
             return false;
         }
 
-        // Check if user is already selling this game
-        if (market.getGamesOnSale().containsKey(this.username)) {
-            for (Game g : market.getGamesOnSale().get(this.username)) {
-                if (g.getName().equals(game.getName())) {
-                    System.out.println("ERROR: \\ < Failed Constraint: " + this.username + " could not sell " +
-                            game.getName() + " as User is already selling this exact game > //");
-                    return false;
-                }
-            }
-        }
-
         HashMap<String, ArrayList<Game>> map = market.getGamesOnSale(); // var for less typing
-        // if user has previously put games on the market, add to list of games
 
+        // if user has previously put games on the market, add to list of games
         if (map.containsKey(this.username)) {
             map.get(this.username).add(game);
             this.transactionHistory.add("User: " + this.username + " is now selling " + game.getName() +
                     " for " + game.getPrice());
             System.out.println("Game: " + game.getName() + " is now being sold by " + this.getUsername() + " for $" +
-                    game.getPrice() + " at a " + game.getDiscount()+"% discount, will be available for purchase tomorrow.");
+                    game.getPrice() + " at a " + game.getDiscount()+"% discount, will be available for purchase " +
+                    "tomorrow.");
 
         } else {
             market.addNewSeller(this.username);
             map.get(this.username).add(game);
-            
             // Report to console and transactionHistory
             this.transactionHistory.add("User: " + this.username + " is now selling " + game.getName() +
                     " for " + game.getPrice());
@@ -328,42 +312,37 @@ public abstract class AbstractUser {
      * @param game, Game being sold.
      */
     private boolean sellConstraints(Game game) {
-
         String gameName = game.getName();
         String userName = this.getUsername();
         double gamePrice = game.getPrice();
         double gameDiscount = game.getDiscount();
-
         // check if game price is gt max game price
         double maxPrice = 999.99;
         if (gamePrice > maxPrice) {
-            System.out.println("ERROR: \\ < Failed Constraint: " + userName + " could not sell " +
-                    gameName + " for $" + gamePrice + " as it exceeds the maximum sale price. > //");
+            System.out.println("ERROR: \\<Failed Constraint: " + userName + " could not sell " +
+                    gameName + " for $" + gamePrice + " as it exceeds the maximum sale price.\\>");
             return false;
         }
-        
         if (gamePrice < 0) {
-            System.out.println("ERROR: \\ < Failed Constraint: " + userName + " could not sell " +
-                    gameName + " for $" + gamePrice + " as the price cannot be negative. > //");
+            System.out.println("ERROR: \\<Failed Constraint: " + userName + " could not sell " +
+                    gameName + " for $" + gamePrice + " as the price cannot be negative.\\>");
             return false;
         }
-        
         // Check if game name is gt max name length
         int maxNameLength = 25;
         if (gameName.length() > maxNameLength) {
-            System.out.println("ERROR: \\ < Failed Constraint: " + userName + " could not sell " +
-                    gameName + " for $" + gamePrice + " as it exceeds the maximum name length. > //");
+            System.out.println("ERROR: \\<Failed Constraint: " + userName + " could not sell " +
+                    gameName + " for $" + gamePrice + " as it exceeds the maximum name length.\\>");
             return false;
         }
         // Check if game discount is gt max discount amount
         double maxDiscount = 90;
         if (gameDiscount > maxDiscount) {
-            System.out.println("ERROR: \\ < Failed Constraint: " + userName + " could not sell " +
+            System.out.println("ERROR: \\<Failed Constraint: " + userName + " could not sell " +
                     gameName + " with " + gameDiscount + "% discount as it exceeds the maximum discount " +
-                    "amount. > //");
+                    "amount.\\>");
             return false;
         }
-
         // passes all checks / follows all constraints
         return true;
     }
@@ -376,7 +355,8 @@ public abstract class AbstractUser {
      * @return true if the refund was made false otherwise
      */
     public boolean refund(AbstractUser buyer, AbstractUser seller, double amount){
-        System.out.println("ERROR: \\ < Failed Constraint: "+ this.username + " does not have the ability to issue a refund.");
+        System.out.println("ERROR: \\<Failed Constraint: "+ this.username + " does not have the ability to issue " +
+                "a refund.\\>");
         return false;
     }
 
@@ -388,8 +368,8 @@ public abstract class AbstractUser {
      * @return null
      */
     public AbstractUser create(String username, String type, double credit){
-        System.out.println("ERROR: \\ < Failed Constraint: "+ this.username + " does not have the ability to create " +
-                "another user");
+        System.out.println("ERROR: \\<Failed Constraint: "+ this.username + " does not have the ability to create " +
+                "another user.\\>");
         return null;
     }
 
@@ -417,7 +397,7 @@ public abstract class AbstractUser {
     public void gift(Game INgame, AbstractUser reciever, Marketplace market){
         // Receiver is a Sell user
         if (reciever instanceof SellUser){
-            System.out.println("ERROR: \\< Failed Constraint: Sell User can not accept any gifts. >");
+            System.out.println("ERROR: \\<Failed Constraint: Sell User can not accept any gifts.\\>");
         }
         else{
             // deep-copying the Game to work with
@@ -440,8 +420,10 @@ public abstract class AbstractUser {
                     }
                     reciever.addGame(game);
                     // updating the transaction history for the users
-                    String senderTran = this.getUsername() + " has gifted: " + gameName + " to " + reciever.getUsername();
-                    String recTran = reciever.getUsername() + " has received " + gameName + " from " + this.getUsername();
+                    String senderTran = this.getUsername() + " has gifted: " + gameName + " to " +
+                            reciever.getUsername();
+                    String recTran = reciever.getUsername() + " has received " + gameName + " from " +
+                            this.getUsername();
                     this.addTranHis(senderTran);
                     reciever.addTranHis(recTran);
                     System.out.println(senderTran);
@@ -449,14 +431,14 @@ public abstract class AbstractUser {
                 }
                 // Sender doesn't have the game
                 else{
-                    System.out.println("ERROR: \\" + this.username + " does not have the " + gameName +
-                            ".\n Gift transaction failed.");
+                    System.out.println("ERROR: \\<Failed Constraint: " + this.username + " does not have the " +
+                            gameName + ". Gift transaction failed.\\>");
                 }
             }
             // Receiver already has the game
             else{
-                System.out.println("ERROR: \\" + reciever.getUsername() + " already has " +gameName+
-                        ".\n Gift transaction failed.");
+                System.out.println("ERROR: \\<Failed Constraint" + reciever.getUsername() + " already has " +gameName+
+                        ". Gift transaction failed.\\>");
             }
         }
     }
@@ -534,15 +516,16 @@ public abstract class AbstractUser {
      *
      */
     public void delete(AbstractUser user, double amount){
-        System.out.println("ERROR: \\< Failed Constraint: Current User is not allowed to delete someone's account. >//");
+        System.out.println("ERROR: \\<Failed Constraint: Current User is not allowed to delete someone's account." +
+                "\\>");
 
     }
     
     /** Prints that the user cannot implement an auction sale.
      */
     public void auctionSale() {
-        System.out.println("ERROR: \\< Failed Constraint: Current User: " + this.getUsername() +
-                "is not allowed to toggle an auction sale. >//");
+        System.out.println("ERROR: \\<Failed Constraint: Current User: " + this.getUsername() +
+                "is not allowed to toggle an auction sale.\\>");
     }
 
     /**
@@ -552,7 +535,8 @@ public abstract class AbstractUser {
      * @return a deep copied Game
      */
     protected Game gameCopy(Game game) {
-        Game gameCopy = new Game(game.getName(), game.getPrice(), game.getSupplierID(), game.getUniqueID(), game.getDiscount());
+        Game gameCopy = new Game(game.getName(), game.getPrice(), game.getSupplierID(), game.getUniqueID(),
+                game.getDiscount());
         return gameCopy;
     }
 }
