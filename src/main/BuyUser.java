@@ -26,8 +26,8 @@ public class BuyUser extends AbstractUser {
      */
     @Override
     public boolean sell(Game game, Marketplace market){
-        System.out.println("ERROR: \\< Failed Constraint: "+ this.username + " does not have the ability to sell " +
-                "games.\\>");
+        System.out.println(FAIL_BEGIN+ this.username + " does not have the ability to sell " +
+                "games" + FAIL_END);
         return false;
     }
 
@@ -42,8 +42,8 @@ public class BuyUser extends AbstractUser {
     @Override
     public void gift(Game inGame, AbstractUser receiver, Marketplace market){
         if (receiver instanceof SellUser){ // Receiver is a Sell user
-            System.out.println("ERROR: \\< Failed Constraint: " + receiver.getUsername() + "is a sell user and cannot "+
-                    "accept gifts. \\>");
+            System.out.println(FAIL_BEGIN + receiver.getUsername() + "is a sell user and cannot "+
+                    "accept gifts" + FAIL_END);
         }
         else{
             Game game = this.gameCopy(inGame); // deep-copying the Game to work with
@@ -65,13 +65,13 @@ public class BuyUser extends AbstractUser {
                     System.out.println(recTran);
                 }
                 else{ // Sender doesn't have the game
-                    System.out.println("ERROR: \\< Failed Constraint: " + this.username + " does not have the " + 
-                            gameName + ". Gift transaction failed.\\>");
+                    System.out.println(FAIL_BEGIN + this.username + " does not have the " + 
+                            gameName + ". Gift transaction failed" + FAIL_END);
                 }
             }
             else{ // Receiver already has the game
-                System.out.println("ERROR: \\< Failed Constraint: " + receiver.getUsername() + " already has " +
-                        gameName+ ". Gift transaction failed. \\>");
+                System.out.println(FAIL_BEGIN + receiver.getUsername() + " already has " +
+                        gameName+ ". Gift transaction failed" + FAIL_END);
             }
         }
     }
@@ -102,7 +102,7 @@ public class BuyUser extends AbstractUser {
             }
         }
         else{
-            System.out.println("ERROR: \\< Failed Constraint: " + game.getName()+ " was not found in the user's inventory.\\>");
+            System.out.println(FAIL_BEGIN + game.getName()+ " was not found in the user's inventory" + FAIL_END);
         }
     }
 

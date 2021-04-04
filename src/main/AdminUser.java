@@ -58,8 +58,8 @@ public class AdminUser extends AbstractUser {
                     newUser = new SellUser.UserBuilder(username).balance(credit).build();
                     break;
                 default: // if user isn't initialized we stop the create function
-                    System.out.println("ERROR: \\< Failed Constraint: " + this.username + " could not be created since " +
-                            "user type does not exist. \\>");
+                    System.out.println(FAIL_BEGIN + this.username + " could not be created since " +
+                            "user type does not exist" + FAIL_END);
                     return null;
             }
             if(!newUser.getUsername().equals("")) {
@@ -68,8 +68,8 @@ public class AdminUser extends AbstractUser {
                 return newUser;
             }
         }
-        System.out.println("ERROR: \\< Failed Constraint: user " + username + " could not be created since "
-                + Double.toString(credit) + " amount is invalid. \\>");
+        System.out.println(FAIL_BEGIN + "user " + username + " could not be created since "
+                + Double.toString(credit) + " amount is invalid" + FAIL_END);
         return null;
     }
 
@@ -149,13 +149,13 @@ public class AdminUser extends AbstractUser {
         else{
             // Seller unable to transfer the funds
             if(!canSendMoney){
-                System.out.println("ERROR: \\ < Failed Constraint: " + seller.getUsername() + " could not make a " +
-                        "refund to " + buyer.getUsername() + " for $" + amount + " due to insufficient funds. \\>");
+                System.out.println(FAIL_BEGIN + seller.getUsername() + " could not make a " +
+                        "refund to " + buyer.getUsername() + " for $" + amount + " due to insufficient funds" + FAIL_END);
             }
             else { // Buyer unable to accept the funds
-                System.out.println("ERROR: \\< Failed Constraint: " + buyer.getUsername() + " could not accept a " +
+                System.out.println(FAIL_BEGIN + buyer.getUsername() + " could not accept a " +
                         "refund from " + seller.getUsername() + " for $" + amount + " due to account maxing out " +
-                        "upon addition of funds. \\>");
+                        "upon addition of funds" + FAIL_END);
             }
         }
         return result;

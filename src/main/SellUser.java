@@ -23,7 +23,7 @@ public class SellUser extends AbstractUser {
      */
     @Override
     public void buy(AbstractUser seller, Game game, boolean saleToggle, Marketplace market){
-        System.out.println("ERROR: \\< Failed Constraint: Sell user: "+ this.username + " cannot buy games.\\>");
+        System.out.println(FAIL_BEGIN + "Sell user: "+ this.username + " cannot buy games" + FAIL_END);
     }
 
     /** Prints to the console that this user cannot get an inventory as theirs is empty. 
@@ -31,7 +31,7 @@ public class SellUser extends AbstractUser {
      */
     @Override
     public ArrayList<Game> getInventory(){
-        System.out.println("ERROR: \\< Failed Constraint: A Sell user does not have inventory. \\>");
+        System.out.println(FAIL_BEGIN + "A Sell user does not have inventory" + FAIL_END);
         return null;
     }
 
@@ -47,8 +47,8 @@ public class SellUser extends AbstractUser {
     public void gift(Game InGame, AbstractUser receiver, Marketplace market){
         // Receiver is a Sell user
         if (receiver instanceof SellUser){
-            System.out.println("ERROR: \\< Failed Constraint: " + receiver.getUsername() + "is a sell user and cannot "+
-                    "accept gifts. \\>");
+            System.out.println(FAIL_BEGIN + receiver.getUsername() + "is a sell user and cannot "+
+                    "accept gifts" + FAIL_END);
         }
         else{
             // deep-copying the Game to work with
@@ -75,14 +75,14 @@ public class SellUser extends AbstractUser {
                 }
                 // Sender doesn't have the game
                 else{
-                    System.out.println("ERROR: \\< Failed Constraint: " + this.username + " does not have game: " + gameName +
-                            " to be gifted. Gift transaction failed. \\>");
+                    System.out.println(FAIL_BEGIN + this.username + " does not have game: " + gameName +
+                            " to be gifted. Gift transaction failed" + FAIL_END);
                 }
             }
             // Receiver already has the game
             else{
-                System.out.println("ERROR: \\< Failed Constraint: " + receiver.getUsername() + " already has " +gameName+
-                        ". Gift transaction failed. \\>");
+                System.out.println(FAIL_BEGIN + receiver.getUsername() + " already has " +gameName+
+                        ". Gift transaction failed" + FAIL_END);
             }
         }
     }
