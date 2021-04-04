@@ -46,8 +46,11 @@ public class TransactionTests {
         System.setOut(new PrintStream(outContent));
 
         adminGame = new Game("AdminGame", 5.00, adminName, 1, 0);
+        adminGame.changeHold();
         buyGame = new Game("BuyGame", 5.00, buyName, 1, 0);
+        buyGame.changeHold();
         fullGame = new Game("FSGame", 5.00, fullName, 1, 0);
+        fullGame.changeHold();
 
         ArrayList<Game> adminGames = new ArrayList<Game>();
         adminGames.add(adminGame);
@@ -238,7 +241,9 @@ public class TransactionTests {
         assertEquals(login, adminUser1);
         assertEquals(startBalance - csgo.getPrice(), adminUser1.getAccountBalance());
         assertEquals(startBalance + csgo.getPrice(), sellUser1.getAccountBalance());
-        assertTrue(adminUser1.getInventory().contains(csgo));
+        Finder finder = new Finder();
+        Game g = finder.findGame(csgo.getName(), adminUser1.getInventory());
+        assertNotNull(g);
     }
 
     @Test
@@ -248,7 +253,9 @@ public class TransactionTests {
         assertEquals(login, buyUser1);
         assertEquals(startBalance - csgo.getPrice(), buyUser1.getAccountBalance());
         assertEquals(startBalance + csgo.getPrice(), sellUser1.getAccountBalance());
-        assertTrue(buyUser1.getInventory().contains(csgo));
+        Finder finder = new Finder();
+        Game g = finder.findGame(csgo.getName(), buyUser1.getInventory());
+        assertNotNull(g);
     }
 
     @Test
@@ -267,7 +274,9 @@ public class TransactionTests {
         assertEquals(login, fullStandardUser1);
         assertEquals(startBalance - csgo.getPrice(), fullStandardUser1.getAccountBalance());
         assertEquals(startBalance + csgo.getPrice(), sellUser1.getAccountBalance());
-        assertTrue(fullStandardUser1.getInventory().contains(csgo));
+        Finder finder = new Finder();
+        Game g = finder.findGame(csgo.getName(), fullStandardUser1.getInventory());
+        assertNotNull(g);
     }
 
     @Test
@@ -496,8 +505,10 @@ public class TransactionTests {
         Gift transac = new Gift(fullGame.getName(), fullStandardUser1.getUsername(), adminUser1.getUsername());
         AbstractUser login = transac.execute(userList, gameList, market, fullStandardUser1);
         assertEquals(login, fullStandardUser1);
-        assertTrue(adminUser1.getInventory().contains(fullGame));
-        assertFalse(buyUser1.getInventory().contains(fullGame));
+        Finder finder = new Finder();
+        Game g = finder.findGame(fullGame.getName(), adminUser1.getInventory());
+        assertNotNull(g);
+        assertFalse(fullStandardUser1.getInventory().contains(fullGame));
     }
 
     @Test
@@ -505,7 +516,9 @@ public class TransactionTests {
         Gift transac = new Gift(adminGame.getName(), adminUser1.getUsername(), fullStandardUser1.getUsername());
         AbstractUser login = transac.execute(userList, gameList, market, adminUser1);
         assertEquals(login, adminUser1);
-        assertTrue(fullStandardUser1.getInventory().contains(adminGame));
+        Finder finder = new Finder();
+        Game g = finder.findGame(adminGame.getName(), fullStandardUser1.getInventory());
+        assertNotNull(g);
         assertFalse(adminUser1.getInventory().contains(adminGame));
     }
 
@@ -514,7 +527,9 @@ public class TransactionTests {
         Gift transac = new Gift(buyGame.getName(), buyUser1.getUsername(), fullStandardUser1.getUsername());
         AbstractUser login = transac.execute(userList, gameList, market, adminUser1);
         assertEquals(login, adminUser1);
-        assertTrue(fullStandardUser1.getInventory().contains(buyGame));
+        Finder finder = new Finder();
+        Game g = finder.findGame(buyGame.getName(), fullStandardUser1.getInventory());
+        assertNotNull(g);
         assertFalse(buyUser1.getInventory().contains(buyGame));
     }
 
@@ -896,7 +911,7 @@ public class TransactionTests {
     public void SellTest5() {
         String result = "WARNING: < Logged in user does not match username: " + "wrong" +
                 ", proceeding using logged in user as the seller. >\r\n";
-        String afterResult = "Seller: wrong does not exist in the market\r\n" +
+        String afterResult = "Seller: wrong does not exist in the market.\r\n" +
                 "Seller: a1 added to the market\r\n" +
                 "Game: newGame is now being sold by a1 for $10.0 at a 20.0% discount, " +
                 "will be available for purchase tomorrow.\r\n";
@@ -920,6 +935,4 @@ public class TransactionTests {
         assertEquals(login, sellUser1);
         assertEquals(market.getGamesOnSale().get(sellUser1.getUsername()).size(), 1);
     }
-
-
 }
