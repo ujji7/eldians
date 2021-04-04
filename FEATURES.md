@@ -159,12 +159,6 @@ game unique ids
 If the entire market file does not follow the specified format, aka an empty file, a file with random words such as
 just "agenda" would lead to the creation of a new, empty Marketplace with auction sale set as false, and uid set to 0.
 
-### Eldians Front End Application:
-Follow the youtube link to access the screen recording information for the front end
-https://youtu.be/RCo_yipNkXc
-
-The GitHub Repository for hosting:
-https://github.com/DanielleCreary-Thomas/eldians-front
 
 
 ## Transaction Creation / TransactionFactory.java and Transaction.java
@@ -173,7 +167,7 @@ The TransactionFactory uses the factory design pattern to create Transaction obj
 
 * The method TransactionFactory.buildTransaction takes in an ArrayList of strings where:
     * The ArrayList is a single line from the daily.txt broken up into attributes.
-    * each string represents anattribute required for the transaction being created (transaction type, username, user type, etc).
+    * each string represents an attribute required for the transaction being created (transaction type, username, user type, etc).
 * The first string in the ArrayList is always the type of transaction, which tells the factory what transaction
 to create and what attributes the rest of the strings in theArrayList represent.
 
@@ -181,6 +175,7 @@ We chose to use the factory design pattern here to simplify the creation of Tran
 Transaction to handle itself through its Transaction.execute method depending on its type. This simplified our
 code as well and made it much easier to implement good unit tests since we could test each Transaction object
 in isolation.
+
 
 
 ## Running the program
@@ -196,6 +191,15 @@ vs database files used different constructors.
 
 
 ### Abstract User
+We chose to use an abstract user because many of the users had the same method.
+They were only implemented differently in certain user types which we chose to override  
+in their respective classes. All users have a:
+- Username 
+- Type (SS = sell standard, BS = buy standard, FS = full standard, AA = admin) 
+- Inventory; which stores all the games they have bought (sellers always have an empty inventory)
+- Account Balance; which stores their current amount of funds in their account
+- New Funds; which is the credit they have added to their account today
+- Transaction History; which lists all the transactions they have completed 
 
 
 
@@ -222,6 +226,20 @@ The Marketplace stores
 The marketplace has built in methods which help simplify transactions executed by Transaction objects and AbstractUser methods. We decided
 to use an object to represent the marketplace for this reason.
 
-### Additional Features
-Every user has a transaction history that lists all the transactions they have done (ex. Buying, selling games, 
+##Application
+We have an application class which executes all the transaction taken from the transaction factory 
+
+##Client 
+Reads the daily.txt file and sends the data to the transaction factory 
+
+##Bonus Features
+### Eldians Front End Application:
+Follow the youtube link to access the screen recording information for the front end
+https://youtu.be/RCo_yipNkXc
+
+The GitHub Repository for hosting:
+https://github.com/DanielleCreary-Thomas/eldians-front
+
+### Additional Features:
+Every user has a transaction history that lists all the transactions they have done (ex. Buying, selling games,
 creating/deleting users, etc)
