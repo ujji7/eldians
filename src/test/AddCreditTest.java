@@ -9,7 +9,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 // source for how to test print statements
 //https://stackoverflow.com/questions/1119385/junit-test-for-system-out-println
@@ -51,7 +50,7 @@ public class AddCreditTest {
     // Admin add credit to
     public void adminAddCreditTo(){
         adminUser1.addCreditTo(100.00, buyUser1);
-        String result = "$100.0 added to dora\nMost updated account balance is $141.58\n";
+        String result = "$100.0 added to dora.\r\nMost updated account balance is $141.58.\r\n";
         assertEquals(result, outContent.toString());
     }
 
@@ -59,7 +58,7 @@ public class AddCreditTest {
     // admin add credit to self
     public void adminAddCreditToSelf(){
         adminUser1.addCreditTo(100.00, adminUser1);
-        String result = "$100.0 added to diego\nMost updated account balance is $142.0\n";
+        String result = "$100.0 added to diego.\r\nMost updated account balance is $142.0.\r\n";
         assertEquals(result, outContent.toString());
     }
 
@@ -67,14 +66,14 @@ public class AddCreditTest {
     // admin add credit
     public void adminAddCredit(){
         adminUser1.addCredit(100.00);
-        String result = "$100.0 added to diego\nMost updated account balance is $142.0\n";
+        String result = "$100.0 added to diego.\r\nMost updated account balance is $142.0.\r\n";
         assertEquals(result, outContent.toString());    }
 
     @Test
     //Regular add credit
     public void standardAddCredit(){
         sellUser1.addCredit(100.00);
-        String result = "$100.0 added to boots\nMost updated account balance is $134.13\n";
+        String result = "$100.0 added to boots.\r\nMost updated account balance is $134.13.\r\n";
         assertEquals(result, outContent.toString());
     }
 
@@ -82,9 +81,8 @@ public class AddCreditTest {
     //add credit passes the max for the day
     public void passDailyMax(){
         fullStandardUser1.addCredit(1001.99);
-        String result = "ERROR: \\ < Failed Constraint: swiper's daily limit would" +
-                " be reached upon addition of funds!\n" +
-                "You can only add $1000.0 to the account for the rest of today.\n";
+        String result = "ERROR: \\< Failed Constraint: swiper's daily limit would be reached upon addition of " +
+                "funds!\n" + "You can only add $1000.0 to the account for the rest of today.\\>\r\n";
         assertEquals(result, outContent.toString());
     }
 
@@ -92,8 +90,8 @@ public class AddCreditTest {
     // passes the user max
     public void passUserMax(){
         buyUser2.addCredit(2.00);
-        String result = "ERROR: \\ < Failed Constraint: benny"+
-                "'s balance was Maxed out!\n$1.99 was added to the account\n";
+        String result = "ERROR: \\< Failed Constraint: benny's balance was Maxed out! $1.99 was added to " +
+                "their account.\\>\r\n";
         assertEquals(result, outContent.toString());
     }
 
@@ -101,7 +99,7 @@ public class AddCreditTest {
     //negative credit standard
     public void negativeCreditStandard(){
         buyUser2.addCredit(-5.00);
-        String result = "ERROR: \\ < Failed Constraint: Amount should be greater than $0\n";
+        String result = "ERROR: \\< Failed Constraint: Amount should be greater than $0.\\>\r\n";
         assertEquals(result, outContent.toString());
     }
 
@@ -109,7 +107,7 @@ public class AddCreditTest {
     //negative credit add credit to
     public void negativeCreditAddCreditTo(){
         adminUser1.addCreditTo(-5.00, buyUser1);
-        String result = "ERROR: \\ < Failed Constraint: Amount should be greater than $0\n";
+        String result = "ERROR: \\< Failed Constraint: Amount should be greater than $0.\\>\r\n";
         assertEquals(result, outContent.toString());
     }
 

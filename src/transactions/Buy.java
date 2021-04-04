@@ -41,9 +41,9 @@ public class Buy implements Transaction {
         Finder find = new Finder();
         AbstractUser buyer = find.findUser(this.buyer, users);
         if (buyer == null) {
-            System.out.println("ERROR: \\<Fatal: Buyer not found in system.>\\");
+            System.out.println("ERROR: \\<Fatal: Buyer not found in system.\\>");
         } else if (buyer != login) { // Make sure the buyer is the person who is logged in
-            System.out.println("ERROR: \\<Fatal: User making the buy transaction is not the logged in user.>\\");
+            System.out.println("ERROR: \\<Fatal: User making the buy transaction is not the logged in user.\\>");
         } else {
             // Find the seller
             AbstractUser seller = find.findUser(this.seller, users);

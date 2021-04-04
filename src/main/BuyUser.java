@@ -42,7 +42,7 @@ public class BuyUser extends AbstractUser {
     @Override
     public void gift(Game inGame, AbstractUser receiver, Marketplace market){
         if (receiver instanceof SellUser){ // Receiver is a Sell user
-            System.out.println(FAIL_BEGIN + receiver.getUsername() + "is a sell user and cannot "+
+            System.out.println(FAIL_BEGIN + receiver.getUsername() + "is a sell user and cannot "+ 
                     "accept gifts" + FAIL_END);
         }
         else{
@@ -96,13 +96,14 @@ public class BuyUser extends AbstractUser {
         if (inMyInv){
             boolean removed = this.removeFromInventory(currGame);
             if (removed) {
-                String tran = game.getName()+ " was removed from the user's inventory.";
+                String tran = game.getName()+ " was removed from " + this.username + "'s inventory.";
                 this.addTranHis(tran);
                 System.out.println(tran);
             }
         }
         else{
-            System.out.println(FAIL_BEGIN + game.getName()+ " was not found in the user's inventory" + FAIL_END);
+            System.out.println(FAIL_BEGIN + game.getName()+ " was not found in " + this.username + "'s inventory" + 
+                    FAIL_END);
         }
     }
 

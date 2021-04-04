@@ -60,8 +60,8 @@ public class RefundTests {
     @Test
     public void testRefundFromUserWithoutFunds() {
         boolean worked = adminUser1.refund(refundUser1, refundUser2, 15.65);
-        String result = "ERROR: \\ < Failed Constraint: " + "Bertholdt" + " could not make a refund to " + "Armin" +
-                " for $" + "15.65" + " due to insufficient funds. > //\r\n";
+        String result = "ERROR: \\< Failed Constraint: Bertholdt could not make a refund to Armin for $15.65 " +
+                "due to insufficient funds.\\>\r\n";
         assertEquals(result, outContent.toString());
         assertEquals(worked, false);
         assertEquals(refundUser1.getAccountBalance(), 0.00);
@@ -86,8 +86,7 @@ public class RefundTests {
     @Test
     public void testBuyRefund() {
         boolean worked = refundBuy.refund(refundSell, refundFS, 1.00);
-        String result = "ERROR: \\ < Failed Constraint: " + refundBuy.getUsername() + " does not have the ability " +
-                "to issue a refund.\r\n";
+        String result = "ERROR: \\< Failed Constraint: Hange does not have the ability to issue a refund.\\>\r\n";
         assertEquals(worked, false);
         assertEquals(result, outContent.toString());
     }
@@ -98,8 +97,7 @@ public class RefundTests {
     @Test
     public void testSellRefund() {
         boolean worked = refundSell.refund(refundBuy, refundFS, 1.00);
-        String result = "ERROR: \\ < Failed Constraint: " + refundSell.getUsername() + " does not have the ability " +
-                "to issue a refund.\r\n";
+        String result = "ERROR: \\< Failed Constraint: Erwin does not have the ability to issue a refund.\\>\r\n";
         assertEquals(worked, false);
         assertEquals(result, outContent.toString());
     }
@@ -110,8 +108,7 @@ public class RefundTests {
     @Test
     public void testFSRefund() {
         boolean worked = refundFS.refund(refundBuy, refundSell, 1.00);
-        String result = "ERROR: \\ < Failed Constraint: " + refundFS.getUsername() + " does not have the ability " +
-                "to issue a refund.\r\n";
+        String result = "ERROR: \\< Failed Constraint: Levi does not have the ability to issue a refund.\\>\r\n";
         assertEquals(worked, false);
         assertEquals(result, outContent.toString());
     }

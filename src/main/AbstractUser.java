@@ -3,8 +3,6 @@ import transactions.Finder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-//line 401
-//REMOVE ANY UNNECESSARY PRINT STATEMENTS IN CREATE AND BUY
 
 //Back End Error Recording:
 //        All recorded errors should be of the form: ERROR: \\<msg\\>
@@ -30,9 +28,9 @@ public abstract class AbstractUser {
     // can change minFunds to allow overdrafts for future improvements
     protected static final double MIN_FUNDS = 0d;
     protected static final double DAILY_LIMIT = 1000d;
-    private final double NEW_FUNDS_TODAY = 0d;
-    protected final String FAIL_BEGIN = "ERROR: \\< Failed Constraint: ";
-    protected final String FAIL_END = ".\\>";
+    private final double newFundsToday = 0d;
+    protected static final String FAIL_BEGIN = "ERROR: \\< Failed Constraint: ";
+    protected static final String FAIL_END = ".\\>";
 
     
     /** Get the current User's unique username
@@ -122,7 +120,7 @@ public abstract class AbstractUser {
      * @return true if amount can be added without exceeding the daily limit
      */
     private boolean dailyLimitCheck(double amount){
-        return this.NEW_FUNDS_TODAY + amount <= DAILY_LIMIT;
+        return this.newFundsToday + amount <= DAILY_LIMIT;
     }
     
     /**
@@ -145,8 +143,7 @@ public abstract class AbstractUser {
         if (!(amount <= MIN_FUNDS)) {
             if (this.dailyLimitCheck(amount)) { // check the constraints of daily limit
                 double fundsAdded;
-                // check if the account will be maxed upon addition of funds
-                if (this.canAcceptFunds(amount)) {
+                if (this.canAcceptFunds(amount)) { // check if the account will be maxed upon addition of funds
                     this.transferFunds(amount);
                     this.newFunds += amount;
                     fundsAdded = amount;
@@ -164,10 +161,8 @@ public abstract class AbstractUser {
                 this.addTranHis(tran);
             }
             // Reject the transaction               @701 Piazza
-            else {
-                // get the amount that can be added
+            else { // get the amount that can be added
                 double newFunds = (double) Math.round((DAILY_LIMIT - this.newFunds) * 100) / 100;
-
                 System.out.println(FAIL_BEGIN + this.username +
                         "'s daily limit would be reached upon addition of funds!\n" +
                         "You can only add $" + newFunds + " to the account for the rest of today" + FAIL_END);
@@ -309,8 +304,8 @@ public abstract class AbstractUser {
         String userName = this.getUsername();
         double gamePrice = game.getPrice();
         double gameDiscount = game.getDiscount();
-        // check if game price is gt max game price
-        double maxPrice = 999.99;
+        
+        double maxPrice = 999.99; // check if game price is gt max game price
         if (gamePrice > maxPrice) {
             System.out.println(FAIL_BEGIN + userName + " could not sell " +
                     gameName + " for $" + gamePrice + " as it exceeds the maximum sale price" + FAIL_END);
@@ -321,23 +316,20 @@ public abstract class AbstractUser {
                     gameName + " for $" + gamePrice + " as the price cannot be negative" + FAIL_END);
             return false;
         }
-        // Check if game name is gt max name length
-        int maxNameLength = 25;
+        int maxNameLength = 25; // Check if game name is gt max name length
         if (gameName.length() > maxNameLength) {
             System.out.println(FAIL_BEGIN + userName + " could not sell " +
                     gameName + " for $" + gamePrice + " as it exceeds the maximum name length" + FAIL_END);
             return false;
         }
-        // Check if game discount is gt max discount amount
-        double maxDiscount = 90;
+        double maxDiscount = 90; // Check if game discount is gt max discount amount
         if (gameDiscount > maxDiscount) {
             System.out.println(FAIL_BEGIN + userName + " could not sell " +
                     gameName + " with " + gameDiscount + "% discount as it exceeds the maximum discount " +
                     "amount" + FAIL_END);
             return false;
         }
-        // passes all checks / follows all constraints
-        return true;
+        return true; // passes all checks / follows all constraints
     }
 
     /**
@@ -432,7 +424,7 @@ public abstract class AbstractUser {
         // Check if the Receiver has the game up for Sale on the Market
         boolean inRecMar = market.checkSellerSellingGame(this.getUsername(), gift.getName());
 
-        return inRecInv && inRecMar;
+        return !inRecInv && !inRecMar;
     }
 
     /**
@@ -446,10 +438,13 @@ public abstract class AbstractUser {
         boolean inSenInv = this.gameInInventory(gift);
         boolean inSenMar = market.checkSellerSellingGame(this.getUsername(), gift.getName());
         boolean notOnHold = market.checkNotOnHold(this.getUsername(), gift.getName());
-        if (inSenInv || inSenMar) {
+        if (inSenInv) {
+            return true;
+        } else if (inSenMar) {
             if (!notOnHold) {
                 System.out.println(FAIL_BEGIN + gift.getName() + " cannot be gifted as " +
                         "it is still on hold" + FAIL_END);
+                return false;
             } else {
                 return true;
             }
@@ -481,8 +476,10 @@ public abstract class AbstractUser {
      * Helper to remove the game from the User's inventory
      *
      * @param game remove the valid game title from the User's inventory
+     * @return true if the game was removed, else false
      */
     protected boolean removeFromInventory(String game){
+      
         ArrayList<Game> currInv = this.inventory;
         // finding and setting the game to be removed
         Game currGame = null;
@@ -508,38 +505,41 @@ public abstract class AbstractUser {
      * Checks and removes the game for the User
      * Method is used by Admin and Full-Standard
      *
-     * @param INgame The game being removed
+     * @param inGame The game being removed
      * @param market The current market
      */
 
-    public void removeGame(Game INgame, Marketplace market){
-        // deep-copying the Game to work with
-        Game game = this.gameCopy(INgame);
+    public void removeGame(Game inGame, Marketplace market){
+        Game game = this.gameCopy(inGame); // deep-copying the Game to work with
         String currGame = game.getName();
-        // check if the User is Selling the Game on the Market
-        boolean iAmOffering = market.checkNotOnHold(this.getUsername(), currGame);
+        boolean iAmOffering = market.checkSellerSellingGame(this.getUsername(), currGame); //check if user selling game
         boolean inMyInv = this.gameInInventory(game);
-        // remove from Market
-        if(iAmOffering){
-            market.removeGame(this.getUsername(), currGame);
-            String tran = currGame+ " was removed from the User's offering on the Market.";
-            this.addTranHis(tran);
-            System.out.println(tran);
+        if(iAmOffering){ // remove from Market
+            boolean hold = market.checkNotOnHold(this.getUsername(), currGame);
+            if (hold) {
+                market.removeGame(this.getUsername(), currGame);
+                String tran = currGame+ " was removed from " + this.username + "'s offering on the market.";
+                this.addTranHis(tran);
+                System.out.println(tran);
+            }
+            else {
+                System.out.println(FAIL_BEGIN + currGame + " cannot be removed as it is on hold in the market" + FAIL_END);
+            }
         }
-        // remove from inventory
-        else if (inMyInv){
-            this.removeFromInventory(currGame);
-            String tran = currGame+ " was removed from the user's inventory.";
-            this.addTranHis(tran);
-            System.out.println(tran);
-        }
-        else if (!inMyInv){
-            System.out.println(currGame+ " was not found in the User's inventory.");
+        else if (inMyInv){ // remove from inventory
+            boolean removed = this.removeFromInventory(currGame);
+            if (removed) {
+                String tran = currGame + " was removed from " + this.username + "'s inventory.";
+                this.addTranHis(tran);
+                System.out.println(tran);
+            }
+            else {
+                System.out.println(FAIL_BEGIN + currGame + " cannot be removed as it is on hold in inventory" + FAIL_END);
+            }
         }
         else {
-            System.out.println("Seller: "+ this.getUsername() +" is currently not offering "+ currGame + ".");
+            System.out.println(FAIL_BEGIN + currGame + " cannot be removed as it cannot be found" +  FAIL_END);
         }
-        // else printing out the error from Market for Game not being currently offered
     }
 
     /** Prints that this user cannot delete another user

@@ -57,8 +57,8 @@ public class Sell implements Transaction {
 
 
         // Generate UniqueID
-        int uid = market.getUid();
         market.incrementUID();
+        int uid = market.getUid();
 
         // Create the game
         Game newGame = new Game(this.gameName, this.salePrice, login.getUsername(), uid, this.discount);
