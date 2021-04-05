@@ -172,6 +172,17 @@ game unique ids
 If the entire market file does not follow the specified format, aka an empty file, a file with random words such as
 just "agenda" would lead to the creation of a new, empty Marketplace with auction sale set as false, and uid set to 0.
 
+##Client
+Reads the daily.txt file and sends the transaction details to the transaction factory to for the Transactions to be made.
+In order for the Client to read the daily.txt the file needs to be placed in the folder that is the source root of the program.
+Client's job is to first read the daily.txt, check for valid formatted transactions then send each transaction to the Transaction Factory to
+get made and then finally send these transaction objects which are received from the factory to the application for execution.
+
+The Client basically deals with all the fatal errors related to the format of the transactions that are received from the dailt.txt file
+We used REGEX to check for the right formatting for each transaction type.
+Unfortunately due to the way we have the Client running and setup we were unable to display the Junit tests for Cient but
+locally on the side we were and did test all the possible scenarios and have included the test sample .txt files used for testing with our submission. 
+
 ## Transaction Creation / TransactionFactory.java and Transaction.java
 
 The TransactionFactory uses the factory design pattern to create Transaction objects.
@@ -240,8 +251,6 @@ to use an object to represent the marketplace for this reason.
 ##Application
 We have an application class which executes all the transaction taken from the transaction factory. 
 
-##Client 
-Reads the daily.txt file and sends the transaction details to the transaction factory to be executed.
 
 ##Bonus Features
 ### Eldians Front End Application:
@@ -257,3 +266,11 @@ https://github.com/DanielleCreary-Thomas/eldians-front
 ### Additional Features:
 Every user has a transaction history that lists all the transactions they have done (ex. Buying, selling games,
 creating/deleting users, etc)
+
+##Testing
+We ran into a slight issue with Junit testing there was an issue with the CRLF vs LF. We tried changing multiple setting
+on intelliJ but nothing seemed to work.
+Here the issue was that the test files which were written on Mac did not pass the tests on windows and vice-versa. So
+here due to shortage of time we were unaable to effectively come up with a solution to resolve this issue. 
+This issue is caused by
+the line break of \n vs \r\n and visibly the output that is received is no different just the issue between CRLF vs LF.
