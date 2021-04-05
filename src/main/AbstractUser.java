@@ -390,7 +390,7 @@ public abstract class AbstractUser {
         if (receiver.canAccept(game, market)) {
             // User can send the gift, game is added to the Receiver's inventory
             if (canSendGame(game, market)) {
-                if(!gameInventoryHold(game)) {
+                if(!gameInventoryHold(InGame)) {
                     // Game needs to be removed from the sender's inventory
                     if (this.gameInInventory(game)) {
                         this.removeFromInventory(game.getName());
