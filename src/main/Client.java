@@ -385,12 +385,13 @@ public class Client {
         return field.replaceAll(spaceReg, "");
     }
 
+    
     /**
      * Starts and runs our Program
      *
      */
     public static void main(String[] args){
-        Client client = new Client("dailyc.txt");
+        Client client = new Client("daily.txt");
 
     }
 }

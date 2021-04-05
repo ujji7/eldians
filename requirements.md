@@ -63,7 +63,10 @@ A workflowy where additional requirements and clraifications are stored:
     - Yes, display an error but execute the transaction.
     
 - Q) What is to be done is the case when a Seller's account will be maxed out upon the transaction?
-    - Execute the transaction and max out the Seller's account
+    - Execute the transaction and max out the Seller's account, print out a warning
+
+- Q) Restrictions to buying games?
+    - cannot buy a game that is sold the same day
 
 ##Refund:
 ####Requirements:
@@ -126,47 +129,21 @@ A workflowy where additional requirements and clraifications are stored:
     - No, in admin mode you need valid username for the transaction to go through
     
 
-### Users:
-#### Requirements:
+## Users:
+### Requirements:
 - username(=< 15 chars, UNIQUE), account balance(=<999,999.99), and inventory of games that they own or have put up for purchase.
-    - thinking some sort of parent class
     - Having a USER abstract class with attribute "name"
       -Having:
-        - buyers 
-        - sellers
-        - full-standard users
-          - (who can buy and sell)
-        - system staff
-          - (admin users) 
-        Extend from the USER with addition attributes,
-            furthermore I am thinking of having another abstract class for buyer/seller/both.
-            So essentially User extends 2 classes(Higher Priv, Lower privlage).
-            Lower priv -> Buy/Sell/Both
-            Higher priv -> Admin, higher priv can just be a normal child class not necessarily an abs class
-            
-    - User(Abstract):
-      - Features: Addfunds
-  
-    - Higher Priv(Admin)
-        - Features: Create User, Delete User given username(username != current admin name)
-        Addfunds(Override), given username and amount.
-        Trigger AuctionSale
-  
-    - Lower Priv(NEED TO FIGURE OUT CLASS STRUCTURE);
-      - Features: Buy, Sell, Addfunds(inherit), refund
-    - Standard Buy only;
-      - Features: Buy, refund, Addfunds(inherit)
-    - Standard Seller
-      - Features: Sell, Addfunds(inherit)
-    - Standard Both
-      - Features: Buy, Sell, Addfunds(inherit), refund
-  
-    -Have a parent User class with all the methodologies
-#### Clarifications:
-- whether users can have a negative account balance [they cannot]).
-- can admin only addfunds, any possibility of withdrawal of funds for user?
-  - Dealt with refund 
-- When does an Admin delete a USER?
+        - buyers can only buy games
+        - sellers can only sell games
+        - full-standard users can buy and sell
+        - Admin can do everything full standard can do plus refund delete and create
+    
+    
+### Clarifications:
+- users cannot have a negative account balance
+- users cannot withdraw funds
+- Admin cannot delete themselves 
 
 ### Code Smells:
 - Code repetition
@@ -180,8 +157,9 @@ A workflowy where additional requirements and clraifications are stored:
 
 ### Game:
 #### Requirements:
-- Game name(=< 25 chracters)
+- Game name(=< 25 characters)
 - Price(=< 999.99),
+- discount less than or equal to 90
 
 #### Clarifications:
 - Q) Upon auctionSale trigger ALL games go on sale or add special attributes/sub-classes?
@@ -192,13 +170,13 @@ A workflowy where additional requirements and clraifications are stored:
 
 ### Transactions:
 #### Requirements:
-  - CREATE-01/DELETE-02: ex: "02 Epic Games      SS 000456.89" Username + Balance + Usertype needs to be valid
+  - Create-01/Delete-02: ex: "02 Epic Games      SS 000456.89" Username + Balance + Usertype needs to be valid
   - Login-00/Logout-10:  ex: "00 Epic Games      SS 000456.89" Username + Balance needs to be valid
   - Add credit-06: ex: "06 Epic Games      SS 000999.89" Username + Credit/day needs to be valid
 
   - Sell-03: ex: "03 My Epic Game              Epic Games 00.00 999.99" Game name, Game name, Username + Game cost needs to be valid
-  - Refund-05 ex: 
-  - Buy-04 ex:
+  - Refund-05 ex: "05 admin2          admin1          000000.01"
+  - Buy-04 ex: "04 Valorant                  admin2          admin1         "
     
   - Need to verify the length for game name in all the transaction logs - the maximum length of a game name is 25 characters
 
@@ -208,8 +186,8 @@ A workflowy where additional requirements and clraifications are stored:
 - throwing exceptions with fatal errors as much as possible instead of no returns
 
 
-### Data Output Structure
+### Data Storage
 #### Requirements:
-- I think having like a standard format would be really clean
+- database must store previous day transactions including users and games
 
 
