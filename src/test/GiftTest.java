@@ -257,7 +257,7 @@ public class GiftTest {
         assertEquals(res, outContent.toString());
     }
 
-    
+
     /**
      * Stan-sell gifting to a stan-sell user
      *
