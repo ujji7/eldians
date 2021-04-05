@@ -160,8 +160,10 @@ If the entire market file does not follow the specified format, aka an empty fil
 just "agenda" would lead to the creation of a new, empty Marketplace with auction sale set as false, and uid set to 0.
 
 ### Eldians Front End Application:
-Follow the youtube link to access the screen recording information for the front end
-https://youtu.be/RCo_yipNkXc
+
+The Weblink to the Front End: https://daniellecreary-thomas.github.io/eldians-front/
+
+Follow the youtube link to access the screen recorded tutorial for the front end: https://youtu.be/RCo_yipNkXc
 
 The GitHub Repository for hosting:
 https://github.com/DanielleCreary-Thomas/eldians-front
