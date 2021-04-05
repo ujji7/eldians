@@ -61,7 +61,7 @@ public class AddCredit implements Transaction {
         }
             else {
                 if(!login.getUsername().equals(this.username)){
-                    System.out.println("ERROR: \\<Fatal: Given User does not match logged in user.\\>");
+                    System.out.println("ERROR: \\<Fatal: User " + this.username + " does not match logged in user.\\>");
                 }
             login.addCredit(this.credit);
         }

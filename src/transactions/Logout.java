@@ -44,12 +44,12 @@ public class Logout implements Transaction{
         }
 
         if (!login.getUsername().equals(this.username)) {
-            System.out.println("WARNING: \\<User logging out does not match username of user currently logged in, " +
-                    "proceeding by logging out user currently logged in.\\>");
+            System.out.println("WARNING: \\<User logging out " + this.username + " does not match username of " +
+                    "user currently logged in, proceeding by logging out user currently logged in.\\>");
         }
 
         if (login.getAccountBalance() != this.funds) {
-            System.out.println("WARNING: \\<User logging out does not have matching funds, " +
+            System.out.println("WARNING: \\<User logging out " + this.username + " does not have matching funds, " +
                     "proceeding with logout.\\>");
         }
 
@@ -57,7 +57,8 @@ public class Logout implements Transaction{
                 (login instanceof main.BuyUser && !this.type.equals("BS")) ||
                 (login instanceof main.FullStandardUser && !this.type.equals("FS")) ||
                 (login instanceof  main.AdminUser && !this.type.equals("AA"))) {
-            System.out.println("WARNING: \\<User logging out is not of correct type, proceeding with loggout.\\>");
+            System.out.println("WARNING: \\<User logging out " + this.username + " is not of correct type, " +
+                    "proceeding with loggout.\\>");
         }
 
         return null;

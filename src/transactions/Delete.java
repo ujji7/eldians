@@ -47,13 +47,14 @@ public class Delete implements Transaction {
         }
         // If deleted user exists but has wrong details, proceed but raise errors.
         if (delete.getAccountBalance() != this.funds) {
-            System.out.println("WARNING: \\<User being deleted does not have matching funds, " +
+            System.out.println("WARNING: \\<User " + this.username + " being deleted does not have matching funds, " +
                     "proceeding with deletion.\\>");
         }
         if((delete instanceof main.SellUser && !this.type.equals("SS")) ||
                 (delete instanceof main.BuyUser && !this.type.equals("BS")) ||
                 (delete instanceof main.FullStandardUser && !this.type.equals("FS"))) {
-            System.out.println("WARNING: \\<User being deleted is not of correct type, proceeding with deletion.\\>");
+            System.out.println("WARNING: \\<User " + this.username + " being deleted is not of correct type, " +
+                    "proceeding with deletion.\\>");
         }
         if(!(login instanceof AdminUser)){
             System.out.println("ERROR: \\<Failed Constraint: Cannot delete " + this.username + " as the user " +
