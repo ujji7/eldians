@@ -21,24 +21,32 @@ public class ReadingJSON {
     private static File Game, User, Market;
     private static String fileNameGame = "games.json"; //games file
     private static String fileNameUser = "users.json"; //users file
-    private static String fileNameMarket = "market.json"; //market file
+    private static String fileNameMarket = "marketjson"; //market file
     private static final String fileNotFoundError = " file not found. An empty ";
     private static final String fileFormatError =" file not in correct format. An empty ";
-    private static final String fileErrorEnd =" will be created.";
-    
+    private static final String fileErrorEnd = " will be created.";
+
+    /** set the game file name to filename
+     * @param filename game filename
+     */
     public static void setGameFileName(String filename) {
         fileNameGame = filename;
     }
-
+    
+    /** set the user file name to filename
+     * @param filename user filename
+     */
     public static void setUserFileName(String filename) {
         fileNameUser = filename;
     }
-
+    
+    /** set the market file name to filename
+     * @param filename market filename
+     */
     public static void setMarketFileName(String filename) {
         fileNameMarket = filename;
     }
     
-
     /** If a file with the name does not exist, creates a file with the name
      *
      * @param file the file to create/look for

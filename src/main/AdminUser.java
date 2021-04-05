@@ -89,8 +89,8 @@ public class AdminUser extends AbstractUser {
      */
     @Override
     public void auctionSale(){
-        this.transactionHistory.add(this.username + "toggled an Auction Sale in the Eldians Marketplace.");
-        System.out.println(this.username + "toggled an Auction Sale in the Eldians Marketplace successfully.");
+        this.transactionHistory.add(this.username + " toggled an Auction Sale in the Eldians Marketplace.");
+        System.out.println(this.username + " toggled an Auction Sale in the Eldians Marketplace successfully.");
     }
 
     /**

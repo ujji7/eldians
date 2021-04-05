@@ -33,8 +33,10 @@ There must be 3 files, one for the game objects, one for the user objects, and o
 the Marketplace object. Indenting and new lines do not matter for the files, as json only looks for brackets '{'
 These 3 files must be stored in the a2-eldians directory (not in src, but outside of it)
 
-games file must be named: games.json, users file must be named users.json and marketplace file must
-be name market.json
+games file is by default named: games.json, users file = users.json and marketplace file is market.json
+
+If you would like to change the name of database files, rename the attributes in the application file. 
+
 
 ### GAMES FILE: (games.json)
 Must be in the given format, where the file begins with a '[' and ends with a ']': \

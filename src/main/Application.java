@@ -19,6 +19,9 @@ public class Application {
     public Marketplace market;
     public ArrayList<Game> gamesList;
     public AbstractUser login;
+    String gameFile = "games.json";
+    String userFile = "users.json";
+    String marketFile = "market.json";
 
     /** Initialize a new application with an empty user list
      * 
@@ -39,19 +42,18 @@ public class Application {
      * 
      */
     private void BODRead() {
-//        ReadingJSON readJson = new ReadingJSON();
+
+        ReadingJSON.setGameFileName(gameFile);
+        ReadingJSON.setUserFileName(userFile);
+        ReadingJSON.setMarketFileName(marketFile);
+        
         List<Game> games = ReadingJSON.readGamesFile();
-//        System.out.println("games: " + games);
         List<AbstractUser> users = ReadingJSON.readUsersFile(games);
-//        System.out.println("users: " + users);
         Marketplace market = ReadingJSON.readMarketFile(games, users);
+        
         userList = (ArrayList<AbstractUser>) users;
         this.gamesList = (ArrayList<Game>) games;
         this.market = market;
-//        Set<String> usersv2 = this.market.getGamesOnSale().keySet();
-//        for (String u : usersv2) {
-//            System.out.println(u + "'s games: " + market.getGamesOnSale().get(u));
-//        }
     }
 
     /** Writes the new games, users and marketplace object to the database at the end of the day.
@@ -59,6 +61,9 @@ public class Application {
      */
     private void EODWrite(){
         DatabaseController databaseController = new DatabaseController();
+        databaseController.setGameFileName(gameFile);
+        databaseController.setUserFileName(userFile);
+        databaseController.setMarketFileName(marketFile);
         try {
             databaseController.writeGame(this.gamesList);
             databaseController.writeUser(userList);
@@ -74,6 +79,8 @@ public class Application {
      * @param transactions an arraylist of transactions to execute
      */
     public void Run(ArrayList<Transaction> transactions) {
+       
+        
         BODRead();
         for (Transaction transac : transactions) {
             if (transac instanceof Login || login != null) {

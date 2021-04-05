@@ -3,12 +3,11 @@ package main;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.io.*;
-import java.util.HashMap;
-import java.util.Set;
 
 
 import com.google.gson.*;
 
+// Code for class and methods adapted from:
 //https://futurestud.io/tutorials/gson-advanced-custom-serialization-part-1
 //https://attacomsian.com/blog/gson-write-json-file
 //https://howtodoinjava.com/java/library/json-simple-read-write-json-examples/
@@ -22,11 +21,15 @@ import com.google.gson.*;
  * Userlist and marketplace into JSON
  */
 public class DatabaseController {
-    private static final String FILENAMEGAME = "games.json";
     private FileWriter fileGame, fileUser, fileMarketplace;
-    private static final String FILENAMEUSER = "users.json";
-    private static final String FILENAMEMARKETPLACE = "market.json";
+    private static String fileNameGame = "games.json";
+    private static String fileNameUser = "users.json";
+    private static String fileNameMarketplace = "market.json";
     private Gson gson;
+
+
+
+
 
     /**
      * Database Controller constructor
@@ -34,14 +37,35 @@ public class DatabaseController {
      */
     public DatabaseController() {
         try {
-            fileGame = new FileWriter(FILENAMEGAME);
-            fileUser = new FileWriter(FILENAMEUSER);
-            fileMarketplace = new FileWriter(FILENAMEMARKETPLACE);
+            fileGame = new FileWriter(fileNameGame);
+            fileUser = new FileWriter(fileNameUser);
+            fileMarketplace = new FileWriter(fileNameMarketplace);
             GsonBuilder builder = new GsonBuilder().setPrettyPrinting();
             gson = builder.create();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /** set the game file name to filename
+     * @param filename game filename
+     */
+    public void setGameFileName(String filename) {
+        fileNameGame = filename;
+    }
+
+    /** set the user file name to filename
+     * @param filename user filename
+     */
+    public void setUserFileName(String filename) {
+        fileNameUser = filename;
+    }
+
+    /** set the market file name to filename
+     * @param filename market filename
+     */
+    public void setMarketFileName(String filename) {
+        fileNameMarketplace = filename;
     }
 
     /**
@@ -120,8 +144,6 @@ public class DatabaseController {
 //        filename.seek(filename.length());
         filename.write(data);
     }
-
-
 }
 
 /**
