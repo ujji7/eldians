@@ -255,9 +255,9 @@ public class GiftTest {
                 "Game: G1 is now being sold by ad1 for $5.0 at a 0.0% discount, will be available for purchase tomorrow.\n" +
                 "ERROR: \\< Failed Constraint: ad1 already has G1. Gift transaction failed.\\>\n";
         assertEquals(res, outContent.toString());
-
     }
 
+    
     /**
      * Stan-sell gifting to a stan-sell user
      *
