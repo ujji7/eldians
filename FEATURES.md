@@ -1,8 +1,8 @@
 # Features
 
-### Planning
+## Planning
 
-To see a UML Diagram of how we built our system, look at EldiaTrade(5).pdf located in this repository.
+To see a UML Diagram of how we built our system, look at EldiaTrade (5).pdf located in this repository.
 
 ## Setup for the system:
 ###GSON Repository
@@ -30,6 +30,13 @@ Now any errors with Json files (such as ReadingJSON) should disappear.
 ### Remove Trailing spaces on Intellij
 File > Settings > Editor > General > Scroll down to On Save \
 Ensure that "Remove trailing spaces on" is unchecked.
+
+### Running the program 
+Need database files and daily.txt file to run the program. Explained below in more detail.
+
+To run our program, navigate to src/main/client as the client is our main method. Run client.main.
+
+Within the main method is the name of the daily.txt file to read for transactions. Set it appropriately.
 
 ## DATABASE READING/WRITING: 
 Done using GSON library that is used to convert Java Objects into a JSON representation and vice versa:
@@ -165,8 +172,6 @@ game unique ids
 If the entire market file does not follow the specified format, aka an empty file, a file with random words such as
 just "agenda" would lead to the creation of a new, empty Marketplace with auction sale set as false, and uid set to 0.
 
-
-
 ## Transaction Creation / TransactionFactory.java and Transaction.java
 
 The TransactionFactory uses the factory design pattern to create Transaction objects.
@@ -233,14 +238,17 @@ The marketplace has built in methods which help simplify transactions executed b
 to use an object to represent the marketplace for this reason.
 
 ##Application
-We have an application class which executes all the transaction taken from the transaction factory 
+We have an application class which executes all the transaction taken from the transaction factory. 
 
 ##Client 
-Reads the daily.txt file and sends the data to the transaction factory 
+Reads the daily.txt file and sends the transaction details to the transaction factory to be executed.
 
 ##Bonus Features
 ### Eldians Front End Application:
-Follow the youtube link to access the screen recording information for the front end
+
+The Weblink to the Front End: https://daniellecreary-thomas.github.io/eldians-front/
+
+Follow the youtube link to access the screen recorded tutorial for the front end: 
 https://youtu.be/RCo_yipNkXc
 
 The GitHub Repository for hosting:
