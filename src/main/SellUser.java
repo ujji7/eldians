@@ -54,24 +54,28 @@ public class SellUser extends AbstractUser {
             // deep-copying the Game to work with
             Game game = this.gameCopy(InGame);
             String gameName = game.getName();
-            // Check if the Receiver has the game up for Sale on the Market
-            boolean inRecMar = !market.checkSellerSellingGame(receiver.getUsername(), gameName);
-
-            // if the User can accept the game then check if the sender can send the game
-            if(inRecMar){
+            // if the Receiver can accept the game then check if the sender can send the game
+            if(receiver.canAccept(game, market)){
                 boolean inSenMar = market.checkSellerSellingGame(this.getUsername(), gameName);
-                // User can send the gift, game is added to the Receiver's inventory
+                // User can send the gift and it is not on hold, game is added to the Receiver's inventory
                 if (inSenMar){
-                   // Game added to the receiver's inventory and updating the transaction history for the users
-                    String senderTran = this.getUsername() + " has gifted: " + gameName + " to " + 
-                            receiver.getUsername() + ".";
-                    String recTran = receiver.getUsername() + " has received " + gameName + " from " + 
-                            this.getUsername() + ".";
-                    this.addTranHis(senderTran);
-                    receiver.addTranHis(recTran);
-                    receiver.addGame(game);
-                    System.out.println(senderTran);
-                    System.out.println(recTran);
+                    boolean isNotOnHold = market.checkNotOnHold(this.getUsername(), gameName);
+                    if(isNotOnHold) {
+                        // Game added to the receiver's inventory and updating the transaction history for the users
+                        String senderTran = this.getUsername() + " has gifted: " + gameName + " to " +
+                                receiver.getUsername() + ".";
+                        String recTran = receiver.getUsername() + " has received " + gameName + " from " +
+                                this.getUsername() + ".";
+                        this.addTranHis(senderTran);
+                        receiver.addTranHis(recTran);
+                        receiver.addGame(game);
+                        System.out.println(senderTran);
+                        System.out.println(recTran);
+                    }
+                    else{
+                        System.out.println(FAIL_BEGIN + gameName + " is currently on Hold on Market until the next day. " +
+                                this.username + " cannot gift the game. " + "Gift transaction failed" + FAIL_END);
+                    }
                 }
                 // Sender doesn't have the game
                 else{

@@ -50,20 +50,21 @@ public class Login implements Transaction{
         AbstractUser log = find.findUser(this.username, users);
 
         if (log == null) {
-            System.out.println("ERROR: \\<Fatal: User not found in database.\\>");
+            System.out.println("ERROR: \\<Fatal: User " + this.username + " not found in database.\\>");
             return null;
         }
 
         // If user exists but details are wrong, proceed and warn the user
         if (log.getAccountBalance() != this.funds) {
-            System.out.println("WARNING: \\<User logging in does not have matching funds, " +
+            System.out.println("WARNING: \\<User logging in " + this.username + " does not have matching funds, " +
                     "proceeding with login.\\>");
         }
         if ((log instanceof main.SellUser && !this.type.equals("SS")) ||
                 (log instanceof main.BuyUser && !this.type.equals("BS")) ||
                 (log instanceof main.FullStandardUser && !this.type.equals("FS")) ||
                 (log instanceof main.AdminUser && !this.type.equalsIgnoreCase("AA"))) {
-            System.out.println("WARNING: \\<User logging in is not of correct type, proceeding with login.\\>");
+            System.out.println("WARNING: \\<User logging in " + this.username + " is not of correct type, " +
+                    "proceeding with login.\\>");
         }
 
         return log;

@@ -41,20 +41,21 @@ public class Buy implements Transaction {
         Finder find = new Finder();
         AbstractUser buyer = find.findUser(this.buyer, users);
         if (buyer == null) {
-            System.out.println("ERROR: \\<Fatal: Buyer not found in system.\\>");
+            System.out.println("ERROR: \\<Fatal: Buyer " + this.buyer + " not found in system.\\>");
         } else if (buyer != login) { // Make sure the buyer is the person who is logged in
-            System.out.println("ERROR: \\<Fatal: User making the buy transaction is not the logged in user.\\>");
+            System.out.println("ERROR: \\<Fatal: User " + this.buyer + " making the buy transaction is not the " +
+                    "logged in user.\\>");
         } else {
             // Find the seller
             AbstractUser seller = find.findUser(this.seller, users);
             if (seller == null) {
-                System.out.println("ERROR: \\<Fatal: Seller not found in database.\\>");
+                System.out.println("ERROR: \\<Fatal: Seller " + this.seller + " not found in database.\\>");
             } else {
 
                 // Find the game
                 Game gameOnSale = find.findGame(this.game, games);
                 if (gameOnSale == null) {
-                    System.out.println("ERROR: \\<Fatal: Game not found in database.\\>");
+                    System.out.println("ERROR: \\<Fatal: Game " + this.game + " not found in database.\\>");
                 } else {
 
                     // Make the purchase

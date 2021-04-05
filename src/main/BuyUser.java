@@ -48,21 +48,25 @@ public class BuyUser extends AbstractUser {
         else{
             Game game = this.gameCopy(inGame); // deep-copying the Game to work with
             String gameName = game.getName();
-            boolean inRecInv = !receiver.gameInInventory(game); // check if receiver has the game in their inventory
-            // Check if the Receiver has the game up for Sale on the Market
-            boolean inRecMar = !market.checkSellerSellingGame(receiver.getUsername(), gameName);
             // if the User can accept the game then check if the sender can send the game
-            if(inRecInv && inRecMar){
+            if(receiver.canAccept(game, market)){
                 boolean inSenInv = this.gameInInventory(game); // user can send gift, game is added to Receiver's inventory
                 if (inSenInv){ // Game needs to be removed from the sender's inventory and added to the receiver's
-                    this.removeFromInventory(gameName);
-                    receiver.addGame(game);
-                    String senderTran = this.getUsername() + " has gifted: " + gameName + " to " + receiver.getUsername();
-                    String recTran = receiver.getUsername() + " has received " + gameName + " from " + this.getUsername();
-                    this.addTranHis(senderTran); // updating the transaction history for the users
-                    receiver.addTranHis(recTran);
-                    System.out.println(senderTran);
-                    System.out.println(recTran);
+                    if(!this.gameInventoryHold(inGame)){
+                        this.removeFromInventory(gameName);
+                        receiver.addGame(game);
+                        String senderTran = this.getUsername() + " has gifted: " + gameName + " to " + receiver.getUsername();
+                        String recTran = receiver.getUsername() + " has received " + gameName + " from " + this.getUsername();
+                        this.addTranHis(senderTran); // updating the transaction history for the users
+                        receiver.addTranHis(recTran);
+                        System.out.println(senderTran);
+                        System.out.println(recTran);
+                    }
+                    // Sender has the game on hold
+                    else{
+                        System.out.println(FAIL_BEGIN + gameName + " is on Hold and will be up for processing the next day."
+                                + " Gift transaction failed" + FAIL_END);
+                    }
                 }
                 else{ // Sender doesn't have the game
                     System.out.println(FAIL_BEGIN + this.username + " does not have the " + 

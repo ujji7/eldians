@@ -43,13 +43,13 @@ public class Create implements Transaction {
                 users.add(newUser);
                 return login;
             }
-            System.out.println("ERROR: \\<Failed Constraint: New User could not be created since" +
+            System.out.println("ERROR: \\<Failed Constraint: New User "+ this.username + " could not be created since" +
                     " a User already exists with given name.\\>");
             return login;
         }
 
-        System.out.println("ERROR: \\<Failed Constraint: New User could not be created since" +
-                " a logged in user does not have permissions.\\>");
+        System.out.println("ERROR: \\<Failed Constraint: New User " + this.username + " could not be created since" +
+                " the logged in user does not have permissions.\\>");
         return login;
     }
 }
