@@ -401,7 +401,7 @@ public class GiftTest {
 
 
     /**
-     * Stan-Buy gifting a game they were gifted and the gift is no longer on hold to a stan-Buy user
+     * Stan-Buy gifting a game they were gifted and the gift is no longer on hold to a stan-Buy user                          aljsdkasjdflkahflkjhad
      *
      */
     @Test
@@ -409,7 +409,6 @@ public class GiftTest {
         SeSenU1.sell(G1, market);
         G1.changeHold();
         SeSenU1.gift(G1, BuSenU1, market);
-        G1.changeHold();
         // find the Game
         Game game = finder.findGame("G1", BuSenU1.getInventory());
         // change the on-Hold for the game
@@ -437,8 +436,22 @@ public class GiftTest {
      */
     @Test
     public void sBuyGiftOnRecMark(){
+        adminUser1.sell(G1, market);
+        G1.changeHold();
 
+        BuSenU1.buy(adminUser1, G1, false, market);
+        Game game = finder.findGame("G1", BuSenU1.getInventory());
+        // change the on-Hold for the game
+        game.changeHold();
 
+        BuSenU1.gift(G1, adminUser1, market);
+
+        String res;
+        res = "Seller: ad1 added to the market\n" +
+                "Game: G1 is now being sold by ad1 for $5.0 at a 0.0% discount, will be available for purchase tomorrow.\n" +
+                "b2 has bought G1 from ad1 for $5.0.\n" +
+                "ERROR: \\< Failed Constraint: ad1 already has G1. Gift transaction failed.\\>\n";
+        assertEquals(res, outContent.toString());
     }
 
 
@@ -449,7 +462,20 @@ public class GiftTest {
      */
     @Test
     public void sBuyGiftOnRecIn(){
-
+        adminUser1.sell(G1, market);
+        G1.changeHold();
+        adminUser2.buy(adminUser1, G1, false, market);
+        BuSenU1.buy(adminUser1, G1, false, market);
+        Game game = finder.findGame("G1", BuSenU1.getInventory());
+        // change the on-Hold for the game
+        game.changeHold();
+        BuSenU1.gift(G1, adminUser2, market);
+        String res = "Seller: ad1 added to the market\n" +
+                "Game: G1 is now being sold by ad1 for $5.0 at a 0.0% discount, will be available for purchase tomorrow.\n" +
+                "ad2 has bought G1 from ad1 for $5.0.\n" +
+                "b2 has bought G1 from ad1 for $5.0.\n" +
+                "ERROR: \\< Failed Constraint: ad2 already has G1. Gift transaction failed.\\>\n";
+        assertEquals(res, outContent.toString());
 
     }
 
