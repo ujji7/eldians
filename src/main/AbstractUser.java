@@ -390,11 +390,17 @@ public abstract class AbstractUser {
         if (receiver.canAccept(game, market)) {
             // User can send the gift, game is added to the Receiver's inventory
             if (canSendGame(game, market)) {
-                // Game needs to be removed from the sender's inventory
-                if (this.gameInInventory(game)) {
-                    this.removeFromInventory(game.getName());
+                if(!gameInventoryHold(game)) {
+                    // Game needs to be removed from the sender's inventory
+                    if (this.gameInInventory(game)) {
+                        this.removeFromInventory(game.getName());
+                    }
+                    sendGame(receiver, game);
                 }
-                sendGame(receiver, game);
+                else{
+                    System.out.println(FAIL_BEGIN + this.username + " is currently not offering " +
+                            game.getName() + " as Game is on Hold. Gift transaction failed" + FAIL_END);
+                }
             }
             // Sender doesn't have the game
             else {

@@ -16,8 +16,8 @@ public class GiftTest {
     AdminUser adminUser1, adminUser2;
     BuyUser BuRecU1, BuSenU1, BuRecFailU1, BuSenFailU1;
     SellUser SeRecRejU1, SeSenU1, SeSenFailU1;
-    FullStandardUser FSSenU1, FSSenFailU1, FS3, FS4;
-    Game G1, G2, G3, G4, G5, G6, G7;
+    FullStandardUser FSSenU1, FS3, FS4;
+    Game G1, G2, G4, G6;
     Marketplace market;
     Finder finder;
 
@@ -38,16 +38,12 @@ public class GiftTest {
         SeSenU1 = new SellUser.UserBuilder("s2").balance(34.13).build();
         SeSenFailU1 = new SellUser.UserBuilder("s3").balance(34.13).build();
         FSSenU1 = new FullStandardUser.UserBuilder("fs1").balance(20).build();
-        FSSenFailU1 = new FullStandardUser.UserBuilder("fs2").balance(20).build();
         FS3 = new FullStandardUser.UserBuilder("fs3").balance(20).build();
         FS4 = new FullStandardUser.UserBuilder("fs4").balance(20).build();
         G1 = new Game("G1", 5, "ad1", 1, 00.0);
         G2 = new Game("G2", 5, "s2", 2, 00.00);
-        G3 = new Game("G3", 5, "s3", 3, 00.0);
-        G4 = new Game("G4", 5, "fs1", 4, 00.0);
-        G5 = new Game("G5", 5, "fs2", 5, 00.0);
+        G4 = new Game("G6", 5, "ad1", 4, 00.0);
         G6 = new Game("G6", 5, "fs3", 6, 00.0);
-        G7 = new Game("G7", 5, "fs4", 7, 00.0);
         market = new Marketplace();
         finder = new Finder();
     }
@@ -79,33 +75,6 @@ public class GiftTest {
         assertEquals(result1, outContent.toString());
 
     }
-
-
-    /**
-     * Admin gifting from their inventory to Full Standard
-     *
-     */
-    @Test
-    public void adminGiftFromInventory(){
-        adminUser1.sell(G1,market);
-        G1.changeHold();
-        adminUser2.buy(adminUser1, G1, false, market);
-        // find the Game
-        Game game = finder.findGame("G1", adminUser2.getInventory());
-        // change the on-Hold for the game
-        game.changeHold();
-        adminUser2.gift(game, BuRecU1, market );
-        String res1, res2, res3, res4, res5;
-        res1 = "Seller: ad1 added to the market\n";
-        res2 = "Game: G1 is now being sold by ad1 for $5.0 at a 0.0% discount, will be available for purchase tomorrow.\n";
-        res3 = "ad2 has bought G1 from ad1 for $5.0.\n";
-        res4 = "ad2 has gifted: G1 to b1\n";
-        res5 = "b1 has received G1 from ad2\n";
-
-        String res = res1+res2+res3+res4+res5;
-        assertEquals(res, outContent.toString());
-    }
-
 
 
     /**
@@ -286,8 +255,8 @@ public class GiftTest {
                 "Game: G1 is now being sold by ad1 for $5.0 at a 0.0% discount, will be available for purchase tomorrow.\n" +
                 "ERROR: \\< Failed Constraint: ad1 already has G1. Gift transaction failed.\\>\n";
         assertEquals(res, outContent.toString());
-
     }
+
 
     /**
      * Stan-sell gifting to a stan-sell user
@@ -374,6 +343,7 @@ public class GiftTest {
         res = "Seller: ad1 added to the market\n" +
                 "Game: G1 is now being sold by ad1 for $5.0 at a 0.0% discount, will be available for purchase tomorrow.\n" +
                 "b2 has bought G1 from ad1 for $5.0.\n" +
+                "G1 cannot be removed as it is on hold.\n" +
                 "ERROR: \\< Failed Constraint: G1 is on Hold and will be up for processing the next day. Gift transaction failed.\\>\n";
 
         assertEquals(res, outContent.toString());
@@ -395,13 +365,14 @@ public class GiftTest {
                 "Game: G1 is now being sold by s2 for $5.0 at a 0.0% discount, will be available for purchase tomorrow.\n" +
                 "s2 has gifted: G1 to b2.\n" +
                 "b2 has received G1 from s2.\n" +
+                "G1 cannot be removed as it is on hold.\n" +
                 "ERROR: \\< Failed Constraint: G1 is on Hold and will be up for processing the next day. Gift transaction failed.\\>\n";
         assertEquals(res, outContent.toString());
     }
 
 
     /**
-     * Stan-Buy gifting a game they were gifted and the gift is no longer on hold to a stan-Buy user                          aljsdkasjdflkahflkjhad
+     * Stan-Buy gifting a game they were gifted and the gift is no longer on hold to a stan-Buy user
      *
      */
     @Test
@@ -553,12 +524,12 @@ public class GiftTest {
         adminUser1.sell(G1, market);
         G1.changeHold();
         FS3.buy(adminUser1, G1, false, market);
-        System.out.println("12321");
 
         FS3.gift(G1, adminUser2, market);
-        System.out.println("809=-09");
-        String res = "akjldl";
-
+        String res = "Seller: ad1 added to the market\n" +
+                "Game: G1 is now being sold by ad1 for $5.0 at a 0.0% discount, will be available for purchase tomorrow.\n" +
+                "fs3 has bought G1 from ad1 for $5.0.\n" +
+                "ERROR: \\< Failed Constraint: fs3 is currently not offering G1 as Game is on Hold. Gift transaction failed.\\>\n";
         assertEquals(res, outContent.toString());
     }
 
@@ -569,28 +540,35 @@ public class GiftTest {
      */
     @Test
     public void fsGiftonHold(){
+        adminUser1.sell(G1, market);
+        G1.changeHold();
+        adminUser1.gift(G1, FS3, market);
+
+        FS3.gift(G1, adminUser2, market);
+        String res = "Seller: ad1 added to the market\n" +
+                "Game: G1 is now being sold by ad1 for $5.0 at a 0.0% discount, will be available for purchase tomorrow.\n" +
+                "ad1 has gifted: G1 to fs3\n" +
+                "fs3 has received G1 from ad1\n" +
+                "ERROR: \\< Failed Constraint: fs3 is currently not offering G1 as Game is on Hold. Gift transaction failed.\\>\n";
+
+        assertEquals(res, outContent.toString());
 
     }
 
-
     /**
-     * Full-Stan gifting a game they were gifted and is no longer on hold
-     *
-     */
-    @Test
-    public void fsGiftAGift(){
-
-
-    }
-
-    /**
-     * Full-Stan gifting a game that is on hold on Market
+     * Full-Stan gifting a game that is on hold on Market                                                                       -Come back
      *
      */
     @Test
     public void fsGiftHoldOnMark(){
+        FS3.sell(G6, market);
 
-
+        FS3.gift(G6, adminUser2, market);
+        String res = "Seller: fs3 added to the market\n" +
+                "Game: G6 is now being sold by fs3 for $5.0 at a 0.0% discount, will be available for purchase tomorrow.\n" +
+                "ERROR: \\< Failed Constraint: G6 cannot be gifted as it is still on hold.\\>\n" +
+                "ERROR: \\< Failed Constraint: fs3 is currently not offering G6. Gift transaction failed.\\>\n";
+        assertEquals(res, outContent.toString());
     }
 
     /**
@@ -599,7 +577,10 @@ public class GiftTest {
      */
     @Test
     public void fsGiftDNE(){
+        FS3.gift(G1,adminUser2, market);
+        String res = "ERROR: \\< Failed Constraint: fs3 is currently not offering G1. Gift transaction failed.\\>\n";
 
+        assertEquals(res, outContent.toString());
 
     }
 
@@ -609,8 +590,16 @@ public class GiftTest {
      */
     @Test
     public void fsGiftToSS(){
+        FS3.sell(G6, market);
+        G6.changeHold();
 
+        FS3.gift(G6, SeSenU1,market);
+        String res = "Seller: fs3 added to the market\n" +
+                "Game: G6 is now being sold by fs3 for $5.0 at a 0.0% discount, will be available for purchase tomorrow.\n" +
+                "ERROR: \\< Failed Constraint:  Sell User can not accept any gifts.\\>\n";
+        assertEquals(res, outContent.toString());
     }
+
 
     /**
      * Full-Stan gifting a game the receiver has in their inventory
@@ -618,8 +607,18 @@ public class GiftTest {
      */
     @Test
     public void fsGiftInFail(){
+        FS3.sell(G6, market);
+        G6.changeHold();
+        adminUser1.buy(FS3, G6, false, market);
 
+        FS3.gift(G6, adminUser1,market);
+        String res = "Seller: fs3 added to the market\n" +
+                "Game: G6 is now being sold by fs3 for $5.0 at a 0.0% discount, will be available for purchase tomorrow.\n" +
+                "ad1 has bought G6 from fs3 for $5.0.\n" +
+                "ERROR: \\< Failed Constraint: ad1 already has G6. Gift transaction failed.\\>\n";
+        assertEquals(res, outContent.toString());
     }
+
 
     /**
      * Full-Stan gifting a game the receiver has up for Sale on Market
@@ -628,8 +627,17 @@ public class GiftTest {
      */
     @Test
     public void fsGiftMarFail(){
+        adminUser1.sell(G4, market);
+        FS3.sell(G6, market);
+        G6.changeHold();
+        FS3.gift(G6, adminUser1,market);
 
-
+        String res = "Seller: ad1 added to the market\n" +
+                "Game: G6 is now being sold by ad1 for $5.0 at a 0.0% discount, will be available for purchase tomorrow.\n" +
+                "Seller: fs3 added to the market\n" +
+                "Game: G6 is now being sold by fs3 for $5.0 at a 0.0% discount, will be available for purchase tomorrow.\n" +
+                "ERROR: \\< Failed Constraint: ad1 already has G6. Gift transaction failed.\\>\n";
+        assertEquals(res, outContent.toString());
     }
 
 
@@ -640,19 +648,33 @@ public class GiftTest {
      */
     @Test
     public void fsGiftToAdmin(){
+        FS3.sell(G6, market);
+        G6.changeHold();
+        FS3.gift(G6, adminUser1,market);
 
-
+        String res = "Seller: fs3 added to the market\n" +
+                "Game: G6 is now being sold by fs3 for $5.0 at a 0.0% discount, will be available for purchase tomorrow.\n" +
+                "fs3 has gifted: G6 to ad1\n" +
+                "ad1 has received G6 from fs3\n";
+        assertEquals(res, outContent.toString());
     }
+
 
     /**
      * Full-Stan gifting a game to full-Stan
      *
-     *
      */
     @Test
     public void fsGiftToFs(){
+        FS3.sell(G6, market);
+        G6.changeHold();
+        FS3.gift(G6, FSSenU1,market);
 
-
+        String res = "Seller: fs3 added to the market\n" +
+                "Game: G6 is now being sold by fs3 for $5.0 at a 0.0% discount, will be available for purchase tomorrow.\n" +
+                "fs3 has gifted: G6 to fs1\n" +
+                "fs1 has received G6 from fs3\n";
+        assertEquals(res, outContent.toString());
     }
 
     /**
@@ -661,7 +683,14 @@ public class GiftTest {
      */
     @Test
     public void fsGiftToSb(){
+        FS3.sell(G6, market);
+        G6.changeHold();
+        FS3.gift(G6, BuSenU1,market);
 
-
+        String res = "Seller: fs3 added to the market\n" +
+                "Game: G6 is now being sold by fs3 for $5.0 at a 0.0% discount, will be available for purchase tomorrow.\n" +
+                "fs3 has gifted: G6 to b2\n" +
+                "b2 has received G6 from fs3\n";
+        assertEquals(res, outContent.toString());
     }
 }
